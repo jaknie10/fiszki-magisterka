@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#0b1120">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Egzamin Magisterski AIR - Fiszki Pojęciowe</title>
   <style>
     :root {
@@ -60,7 +58,6 @@
       font-size: 0.8rem;
     }
 
-    /* Nawigacja / Zakładki pod kciuk */
     .tabs {
       display: flex;
       width: 100%;
@@ -108,7 +105,6 @@
       flex: 1;
     }
 
-    /* Pasek kontrolny */
     .controls-bar {
       display: flex;
       justify-content: space-between;
@@ -153,7 +149,6 @@
       margin-left: 0.5rem;
     }
 
-    /* Pasek postępu */
     .progress-container {
       width: 100%;
       background: var(--border);
@@ -170,7 +165,7 @@
       transition: width 0.3s;
     }
 
-    /* Karta Fiszki – zoptymalizowana pod pionowe ekrany */
+    /* Karta Fiszki */
     .flashcard-wrapper {
       perspective: 1000px;
       width: 100%;
@@ -259,7 +254,6 @@
       text-align: center;
     }
 
-    /* Przyciski oceny – duże, wygodne pod kciuk */
     .flashcard-actions {
       display: flex;
       gap: 0.6rem;
@@ -296,7 +290,7 @@
     }
     .btn-known:active { background: rgba(34, 197, 94, 0.35); transform: scale(0.98); }
 
-    /* Widok Kompendium na telefonie */
+    /* Widok Kompendium */
     .list-toolbar {
       display: flex;
       flex-direction: column;
@@ -319,13 +313,15 @@
       display: flex;
       gap: 0.4rem;
       width: 100%;
+      flex-wrap: wrap;
     }
 
     .accordion-controls .btn-sm {
       flex: 1;
       text-align: center;
       padding: 0.5rem 0.3rem;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
+      white-space: nowrap;
     }
 
     .question-accordion-item {
@@ -418,7 +414,6 @@
       border-color: var(--accent);
     }
 
-    /* Modal edycji na pełny ekran telefonu */
     .modal {
       display: none;
       position: fixed;
@@ -472,9 +467,7 @@
       margin-bottom: 0.6rem;
       font-size: 1.25rem;
     }
-    .finished-box p {
-      font-size: 0.88rem;
-    }
+    .finished-box p { font-size: 0.88rem; }
   </style>
 </head>
 <body>
@@ -490,7 +483,7 @@
   </nav>
 
   <main class="container">
-    <!-- WIDOK 1: FISZKI POJĘCIOWE -->
+    <!-- WIDOK 1: FISZKI -->
     <section id="view-quiz" class="view-content active">
       <div class="controls-bar">
         <div class="module-select-box">
@@ -516,7 +509,7 @@
           <div class="flashcard" id="flashcard">
             <div class="card-face card-front">
               <span class="card-badge" id="card-badge">Zagadnienie</span>
-              <h2 class="card-title" id="card-title">Ładowanie zagadnienia...</h2>
+              <h2 class="card-title" id="card-title">Ładowanie pytań z pliku pytania.json...</h2>
               <p class="card-prompt" id="card-prompt">...</p>
               <div class="card-hint">👆 Dotknij karty, aby sprawdzić omówienie</div>
             </div>
@@ -547,7 +540,7 @@
       </div>
     </section>
 
-    <!-- WIDOK 2: BAZA WIEDZY (KOMPENDIUM) -->
+    <!-- WIDOK 2: KOMPENDIUM -->
     <section id="view-list" class="view-content">
       <div class="list-toolbar">
         <div class="list-filter-row">
@@ -561,9 +554,12 @@
           </select>
         </div>
         <div class="accordion-controls">
-          <button class="btn-sm" onclick="expandAll(true)">Rozwiń wszystkie</button>
-          <button class="btn-sm" onclick="expandAll(false)">Zwiń wszystkie</button>
-          <button class="btn-sm" onclick="resetToDefaults()">♻️ Domyślne</button>
+          <button class="btn-sm" onclick="expandAll(true)">Rozwiń</button>
+          <button class="btn-sm" onclick="expandAll(false)">Zwiń</button>
+          <button class="btn-sm" style="color: var(--accent); border-color: var(--accent);" onclick="exportJSON()">⬇️ Eksport JSON</button>
+          <button class="btn-sm" onclick="triggerImport()">⬆️ Import</button>
+          <button class="btn-sm" onclick="reloadFromJSON()">♻️ Reset do pliku</button>
+          <input type="file" id="import-file" accept=".json" style="display: none;" onchange="handleFileImport(event)">
         </div>
       </div>
 
@@ -587,456 +583,49 @@
   </div>
 
   <script>
-    const DEFAULT_DATA = [
-      // -------------------------------------------------------------------------
-      // INFORMATYKA I GOSPODARKA ELEKTRONICZNA (CZĘŚĆ 1)
-      // -------------------------------------------------------------------------
-      {
-        id: "inf_c_1",
-        module: "inf1",
-        category: "Zagadnienie 1 | Sprzęt wbudowany",
-        title: "Mikrokontrolery i platformy sterujące (AVR, PIC, PLC, FPGA, RPi)",
-        prompt: "Jak scharakteryzować i porównać poszczególne platformy pod kątem ich filozofii działania i zastosowania?",
-        body: "1. Mikrokontrolery ogólnego przeznaczenia (MCU):\n" +
-              "   • AVR / XMega: Tanie, 8/16-bitowe układy RISC (Microchip/Atmel). Prosta architektura, baza Arduino. Odczyt czujników i szybkie prototypowanie.\n" +
-              "   • PIC: Wysoka odporność na zakłócenia elektromagnetyczne (EMC) i niski pobór prądu w uśpieniu (nanoWatt). Przemysł AGD i automotive.\n\n" +
-              "2. Systemy przemysłowe i rekonfigurowalne:\n" +
-              "   • PLC: Gotowy, pancerny komputer przemysłowy na szynę DIN z zabezpieczonymi wejściami 24V. Programowany językiem drabinkowym (LD). Odporny na pył, zakłócenia i wibracje na liniach produkcyjnych.\n" +
-              "   • FPGA: Programowalna macierz bramek logicznych. Kod HDL fizycznie rekonfiguruje połączenia w krzemie. Brak opóźnień programowych, pełna równoległość (radary, telekomunikacja 5G, akceleracja AI).\n\n" +
-              "3. Komputery jednopłytkowe (SBC):\n" +
-              "   • Raspberry Pi: Procesor ARM z systemem Linux. W IoT pełni rolę Bramy Brzegowej (Edge Gateway) agregującej dane z czujników, lokalnej bazy danych lub węzła przetwarzania wizji."
-      },
-      {
-        id: "inf_c_2a",
-        module: "inf1",
-        category: "Zagadnienie 2a | Układy cyfrowe",
-        title: "Architektury układów cyfrowych: Stała vs Programowalna vs Mikroprocesorowa",
-        prompt: "Czym różnią się te trzy podejścia pod względem elastyczności, kosztów i wydajności?",
-        body: "1. Układy o ustalonej strukturze (ASIC / stałe bramki):\n" +
-              "   • Połączenia tranzystorów są niezmiennie wytrawione w krzemie podczas produkcji.\n" +
-              "   • Bardzo wysoki koszt projektu maski krzemowej, ale najniższy koszt jednostkowy w masowej skali. Najwyższa wydajność i energooszczędność, zerowa elastyczność zmian.\n\n" +
-              "2. Układy o programowalnej strukturze (PLD, CPLD, FPGA):\n" +
-              "   • Wewnętrzna siatka połączeń logicznych definiowana programowo po wyprodukowaniu układu (kodem HDL).\n" +
-              "   • Brak kosztownych masek, pełna elastyczność i możliwość aktualizacji logiki w gotowym urządzeniu. Wyższy koszt chipa niż ASIC.\n\n" +
-              "3. Układy mikroprocesorowe (CPU, MCU):\n" +
-              "   • Stała architektura sprzętowa (ALU, rejestry, dekoder), która realizuje zmienny program przechowywany w pamięci.\n" +
-              "   • Najwyższa elastyczność programistyczna, ale sekwencyjne wykonywanie instrukcji narzuca ograniczenia czasowe."
-      },
-      {
-        id: "inf_c_2b",
-        module: "inf1",
-        category: "Zagadnienie 2b | Infrastruktura",
-        title: "Wirtualizacja w informatyce: Hiperwizory, konteneryzacja i chmury",
-        prompt: "Jakie są poziomy wirtualizacji zasobów, dlaczego się ją stosuje i gdzie jest kluczowa?",
-        body: "1. Filozofia i korzyści:\n" +
-              "   • Uruchamianie wielu niezależnych środowisk logicznych na jednym fizycznym serwerze.\n" +
-              "   • Zwiększenie utylizacji sprzętu (oszczędność prądu i maszyn), łatwe migawki (snapshots), izolacja awarii i błyskawiczne skalowanie.\n\n" +
-              "2. Główne metody realizacji:\n" +
-              "   • Hiperwizor Typu 1 (Bare-metal, np. Proxmox, VMware ESXi): Działa bezpośrednio na sprzęcie serwera; standard w centrach danych.\n" +
-              "   • Hiperwizor Typu 2 (Hosted, np. VirtualBox): Działa jako program w zwykłym systemie operacyjnym (testy deweloperskie).\n" +
-              "   • Konteneryzacja (Docker, Kubernetes): Wirtualizacja na poziomie jądra – kontenery współdzielą kernel gospodarza, izolując jedynie procesy. Start w milisekundy i minimalny narzut pamięci.\n\n" +
-              "3. Zastosowanie: Chmury publiczne (AWS, Azure), potoki CI/CD i mikroserwisy."
-      },
-      {
-        id: "inf_c_3",
-        module: "inf1",
-        category: "Zagadnienie 3 | Inżynieria 3D",
-        title: "Modelowanie 3D oraz obieg dokumentacji w ekosystemie CAD/CAM",
-        prompt: "Jak wygląda przejście od koncepcji inżynierskiej do wytworzenia gotowego elementu?",
-        body: "1. CAD (Computer-Aided Design) – Projektowanie:\n" +
-              "   • Tworzenie parametrycznych modeli 3D części bryłowych i złożeń.\n" +
-              "   • Zasady dokumentacji wykonawczej: jednoznaczność wymiarowa (brak przewymiarowania), tolerancje geometryczne i pasowania, chropowatość powierzchni oraz rzutowanie europejskie (metoda kąta pierwszego).\n\n" +
-              "2. CAM (Computer-Aided Manufacturing) – Wytwarzanie:\n" +
-              "   • Pobranie geometrii z CAD i zdefiniowanie parametrów obróbki (dobór frezów, prędkości skrawania, posuwów).\n" +
-              "   • Postprocessing: Wygenerowanie uniwersalnego kodu maszynowego (G-Code) sterującego osiami frezarek CNC, tokarek lub drukarek 3D."
-      },
-      {
-        id: "inf_c_4_6",
-        module: "inf1",
-        category: "Zagadnienia 4 i 6 | Łączność bezprzewodowa",
-        title: "Sieci personalne (PAN) i bardzo krótkiego zasięgu (NFC, BLE, Zigbee, UWB)",
-        prompt: "Jakie technologie tworzą łączność osobistą i lokalną oraz jak dobrać standard do zadania?",
-        body: "1. Zasięg dotykowy i zbliżeniowy:\n" +
-              "   • NFC (13,56 MHz, do paru cm): Płatności zbliżeniowe telefonem, szybkie parowanie Bluetooth jednym dotknięciem, pasywne tagi RFID.\n\n" +
-              "2. Łączność osobista i domowa:\n" +
-              "   • BLE (Bluetooth Low Energy, 2,4 GHz): Tryby głębokiego uśpienia i krótkie pakiety pozwalają na pracę na baterii pastylkowej przez lata (smartwatche, monitory tętna, beacony nawigacyjne).\n" +
-              "   • Zigbee & Z-Wave: Topologia siatki (Mesh) – węzły retransmitują pakiety, zwiększając zasięg. Z-Wave (pasmo 868 MHz) unika zakłóceń z Wi-Fi 2,4 GHz.\n\n" +
-              "3. Precyzyjne pozycjonowanie:\n" +
-              "   • UWB (Ultra-Wideband): Pasmo >500 MHz, impulsowa transmisja umożliwia centymetrowy pomiar odległości metodą Time of Flight (cyfrowe klucze samochodowe, Apple AirTag)."
-      },
-      {
-        id: "inf_c_5",
-        module: "inf1",
-        category: "Zagadnienie 5 | Radiolokacja",
-        title: "Metody i techniki geolokalizacji radiowej w terenie otwartym i wewnątrz budynków",
-        prompt: "Jak fizycznie wyznacza się położenie węzła radiowego na zewnątrz oraz wewnątrz obiektów?",
-        body: "1. Przestrzeń otwarta (Outdoor):\n" +
-              "   • GNSS (GPS, Galileo): Zegary atomowe na satelitach nadają sygnał czasu. Odbiornik mierzy czas dotarcia fali (Time of Arrival) i metodą trilateracji wyznacza pozycję. Wymaga min. 4 satelitów (X, Y, Z oraz korekta błędu zegara kwarcowego w odbiorniku).\n" +
-              "   • Sieci komórkowe (GSM/LTE): Identyfikacja stacji bazowej (Cell-ID) oraz triangulacja/trilateracja na podstawie wielu stacji BTS.\n\n" +
-              "2. Wewnątrz budynków (Indoor Positioning – brak sygnału GNSS):\n" +
-              "   • RSSI: Estymacja odległości na podstawie spadku mocy sygnału Wi-Fi/BLE (mało dokładna przez odbicia od ścian).\n" +
-              "   • Fingerprinting: Porównywanie bieżącego odczytu z wcześniej zmierzoną 'mapą radiową' budynku.\n" +
-              "   • UWB (TDoA / ToF): Precyzyjny pomiar nanosekundowych różnic czasu dotarcia impulsów (dokładność poniżej 10 cm).\n" +
-              "   • Kątowe AoA / AoD: Wyznaczanie kąta nadejścia fali przez macierz anten w BLE 5.1."
-      },
-      {
-        id: "inf_c_7_10",
-        module: "inf1",
-        category: "Zagadnienia 7 i 10 | Sieci NGN i przyszłości",
-        title: "Ewolucja sieci: NGN, NGA, SDN oraz przetwarzanie brzegowe (Edge Computing)",
-        prompt: "W jakim kierunku ewoluuje architektura sieci teleinformatycznych pod kątem masowego IoT?",
-        body: "1. NGN (Next Generation Network) & NGA:\n" +
-              "   • Koncepcja All-IP: Unifikacja wszystkich usług (VoIP, streaming, telemetria) w jeden wspólny protokół pakietowy IP.\n" +
-              "   • NGA: Zapewnienie gigabitowego dostępu szerokopasmowego (światłowody FTTH/GPON oraz sieci komórkowe 5G).\n\n" +
-              "2. Architektury sieci przyszłości:\n" +
-              "   • SDN (Software-Defined Networking): Programowe rozdzielenie płaszczyzny sterowania (Control Plane) od płaszczyzny danych (Data Plane). Centralny kontroler programuje trasy ruchu na przełącznikach.\n" +
-              "   • NFV: Wirtualizacja funkcji sieciowych (zastąpienie fizycznych firewalli i routerów maszynami wirtualnymi).\n" +
-              "   • Edge Computing: Przeniesienie mocy obliczeniowej z chmury na krawędź sieci (blisko użytkownika), redukujące opóźnienia do kilku milisekund (niezbędne dla autonomicznych aut i telechirurgii)."
-      },
-      {
-        id: "inf_c_9",
-        module: "inf1",
-        category: "Zagadnienie 9 | Ekosystem IoT",
-        title: "Architektura Internetu Rzeczy: Warstwy, protokoły transmisyjne i korzyści",
-        prompt: "Jak zbudowany jest kompletny system IoT i jak przepływają w nim dane?",
-        body: "1. Warstwy systemu IoT:\n" +
-              "   • Percepcji (Device): Sensory mierzące wielkości fizyczne, mikrokontrolery, aktuatory.\n" +
-              "   • Łączności (Network): Sieci LPWAN (LoRaWAN, NB-IoT) do transmisji na kilometry przy mikroskopijnym poborze prądu, sieci lokalne (BLE, Zigbee, Wi-Fi).\n" +
-              "   • Przetwarzania i Aplikacji: Bramy brzegowe (Edge), brokerzy danych, chmury analityczne, panele HMI/Dashboardy.\n\n" +
-              "2. Protokoły komunikacji IoT:\n" +
-              "   • MQTT: Lekki wzorzec Publish/Subscribe z centralnym brokerem. Minimalny narzut nagłówka (2 bajty) i gwarancje QoS (0, 1, 2).\n" +
-              "   • CoAP: Komunikacja Request/Response oparta na UDP dla urządzeń o skrajnie ograniczonej pamięci.\n\n" +
-              "3. Wartość biznesowa: Predykcyjne utrzymanie ruchu (Predictive Maintenance), automatyzacja i dekarbonizacja procesów."
-      },
-
-      // -------------------------------------------------------------------------
-      // INFORMATYKA I GOSPODARKA ELEKTRONICZNA (CZĘŚĆ 2)
-      // -------------------------------------------------------------------------
-      {
-        id: "inf_c_11",
-        module: "inf2",
-        category: "Zagadnienie 11 | Bezpieczeństwo i prywatność",
-        title: "Dylematy bezpieczeństwa i ochrony prywatności w ekosystemie IoT",
-        prompt: "Dlaczego urządzenia IoT są głównym celem ataków i jak budować zaufanie?",
-        body: "1. Podstawowe problemy bezpieczeństwa IoT:\n" +
-              "   • Niewielka moc obliczeniowa uniemożliwia stosowanie ciężkich algorytmów kryptograficznych.\n" +
-              "   • Fabryczne zaniedbania: Domyślne hasła, brak bezpiecznego mechanizmu zdalnej aktualizacji firmware (OTA).\n" +
-              "   • Zagrożenie botnetami: Tysiące przejętych urządzeń (kamer, routerów) tworzy botnety (np. Mirai) paraliżujące infrastrukturę sieciową atakami DDoS.\n\n" +
-              "2. Zagrożenie prywatności:\n" +
-              "   • Sensory wkraczają w przestrzeń intymną (mikrofony asystentów, kamery domowe, profile zużycia energii w mieszkaniu zdradzające obecność domowników).\n\n" +
-              "3. Filozofia 'Security by Design':\n" +
-              "   • Sprzętowe korzenie zaufania (Hardware Root of Trust, układy TPM, Secure Element).\n" +
-              "   • Wymóg szyfrowania TLS/DTLS oraz regulacje prawne wymuszające odpowiedzialność producentów (Cyber Resilience Act, RODO)."
-      },
-      {
-        id: "inf_c_12",
-        module: "inf2",
-        category: "Zagadnienie 12 | Rzeczywistość wirtualna",
-        title: "Technologie immersyjne: Wirtualna (VR), Rozszerzona (AR) i Mieszana (MR)",
-        prompt: "Jak scharakteryzować technologie immersyjne, ich sprzęt oraz obszary wdrożeń?",
-        body: "1. Porównanie pojęciowe:\n" +
-              "   • VR (Virtual Reality): Całkowite odcięcie wzrokowe i słuchowe od świata realnego na rzecz cyfrowej sceny 3D (gogle nieprzezroczyste, np. Meta Quest, PCVR).\n" +
-              "   • AR (Augmented Reality): Cyfrowe obiekty, wskaźniki i tekst nałożone na rzeczywisty obraz widziany przez kamerę smartfona lub przezroczyste szkła (HoloLens).\n" +
-              "   • MR (Mixed Reality): Cyfrowe i fizyczne obiekty współistnieją i wchodzą w fizyczne interakcje w czasie rzeczywistym.\n\n" +
-              "2. Zastosowania inżynierskie i naukowe:\n" +
-              "   • Trening i edukacja medyczna/wojskowa (bezpieczne symulowanie sytuacji krytycznych bez ryzyka wypadku).\n" +
-              "   • Dziedzictwo kulturowe i architektura: Prezentacja i dokumentacja trudno dostępnych obiektów zabytkowych (jak projekt Fortify3D z wykorzystaniem 3D Gaussian Splatting).\n" +
-              "   • Przemysł: Cyfrowy asystent serwisanta nakładający instrukcje montażu wprost na diagnozowaną maszynę."
-      },
-      {
-        id: "inf_c_13",
-        module: "inf2",
-        category: "Zagadnienie 13 | Aspekty społeczne",
-        title: "Wykluczenie cyfrowe: Ujęcie tradycyjne a wykluczenie w erze IoT",
-        prompt: "W jaki sposób nowoczesne technologie Internetu Rzeczy paradoksalnie pogłębiają bariery społeczne?",
-        body: "1. Ujęcie tradycyjne:\n" +
-              "   • Bariera infrastrukturalna: Brak fizycznego łącza internetowego lub komputera w gospodarstwie domowym.\n" +
-              "   • Bariera kompetencyjna: Brak elementarnych umiejętności obsługi systemu operacyjnego czy przeglądarki (szczególnie u seniorów).\n\n" +
-              "2. Wykluczenie w dobie IoT (Smart City / Smart Home):\n" +
-              "   • Przymus smartfonizacji: Likwidacja tradycyjnych okienek na rzecz aplikacji (np. parkometry, transport miejski, systemy opieki zdrowotnej dostępne tylko przez aplikację).\n" +
-              "   • Niejasność algorytmiczna: Użytkownicy nie rozumieją, kiedy ich dane są zbierane i jak automatyczne systemy podejmują decyzje.\n" +
-              "   • Wykluczenie ekonomiczne: Korzyści z dynamicznych taryf energii i optymalizacji kosztów są dostępne tylko dla osób posiadających kapitał na drogie instalacje smart-grid."
-      },
-      {
-        id: "inf_c_14",
-        module: "inf2",
-        category: "Zagadnienie 14 | Przestrzenie inteligentne",
-        title: "Ekosystemy Smart City, Smart Building (BMS) i Smart Mobility",
-        prompt: "Jakie koncepcje i technologie łączą inteligentne przestrzenie miejskie, budynkowe i pojazdy?",
-        body: "1. Inteligentne miasto (Smart City):\n" +
-              "   • Optymalizacja zasobów miejskich na żywo: adaptacyjne sterowanie ruchem, inteligentne oświetlenie uliczne LED gasnące przy braku ruchu, czujniki napełnienia kubłów na śmieci optymalizujące trasy śmieciarek.\n\n" +
-              "2. Inteligentny budynek (BMS - Building Management System):\n" +
-              "   • Zintegrowane zarządzanie instalacjami technicznymi: HVAC (ogrzewanie/wentylacja), oświetlenie, rolety, kontrola dostępu. Cel: maksymalizacja komfortu i obniżenie zużycia energii.\n\n" +
-              "3. Inteligentny pojazd i mobilność:\n" +
-              "   • Komunikacja V2X (Vehicle-to-Everything): Wymiana danych pojazdu z innymi autami (V2V) i infrastrukturą drogową (V2I), zaawansowane systemy ADAS i dążenie do pełnej autonomii."
-      },
-      {
-        id: "inf_c_15_16",
-        module: "inf2",
-        category: "Zagadnienia 15 i 16 | Interakcja człowiek-komputer",
-        title: "Projektowanie interfejsów HMI oraz interfejsów naturalnych (NUI)",
-        prompt: "Jak ewoluuje kontakt człowieka z maszyną i z jakimi barierami mierzy się inżynier?",
-        body: "1. Klasyczne interfejsy HMI (Human-Machine Interface):\n" +
-              "   • Wyzwania: Zapobieganie przeciążeniu poznawczemu (Cognitive Overload), standaryzacja kolorystyki alarmów, natychmiastowe sprzężenie zwrotne na akcję operatora, ergonomia zapobiegająca wypadkom (Poka-Yoke).\n\n" +
-              "2. Interfejsy naturalne (NUI – Natural User Interface):\n" +
-              "   • Definicja: Komunikacja wykorzystująca naturalne odruchy człowieka: mowę (NLP/LLM), gesty rąk w powietrzu, śledzenie wzroku (Eye Tracking), pozycję ciała lub samą obecność (radary fal milimetrowych mmWave).\n" +
-              "   • Główne trudności: Szum akustyczny i optyczny otoczenia, fałszywe aktywacje (przypadkowe gesty w trakcie rozmowy), duże zapotrzebowanie na moc obliczeniową i zmienność cech anatomicznych użytkowników."
-      },
-      {
-        id: "inf_c_17",
-        module: "inf2",
-        category: "Zagadnienie 17 | Ekonomia IoT",
-        title: "Modele biznesowe sprzedaży sprzętu i usług Internetu Rzeczy",
-        prompt: "Jak firmy zarabiają na rozwiązaniach IoT – od sprzedaży pudełkowej po Product-as-a-Service?",
-        body: "1. Tradycyjny Hardware-only: Jednorazowa sprzedaż urządzenia z marżą; model podatny na erozję cenową przez konkurencję.\n\n" +
-              "2. Hardware + SaaS (Subskrypcja): Urządzenie sprzedawane po kosztach produkcji, a stały przychód generuje comiesięczny abonament za dostęp do chmury, archiwizacji danych i aplikacji mobilnej (np. kamery bezpieczeństwa).\n\n" +
-              "3. Product-as-a-Service (PaaS): Klient nie kupuje maszyny, lecz płaci za efekt jej działania (np. linie lotnicze płacą za godziny pracy silnika odrzutowego; magazyn płaci za metry sześcienne chłodu). Sensory IoT monitorują stan i zużycie w czasie rzeczywistym.\n\n" +
-              "4. Monetyzacja danych: Sprzedaż zagregowanych, zanonimizowanych analiz zachowań i trendów rynkowych podmiotom trzecim."
-      },
-      {
-        id: "inf_c_18_20",
-        module: "inf2",
-        category: "Zagadnienia 18, 19 i 20 | Finanse i zarządzanie projektami",
-        title: "Ocena efektywności inwestycji (NPV, IRR), budżetowanie (CAPEX/OPEX) i marketing internetowy",
-        prompt: "Jak inżynier ocenia opłacalność wdrożenia IT oraz koszty przedsięwzięcia?",
-        body: "1. Finansowe wskaźniki efektywności inwestycji:\n" +
-              "   • NPV (Wartość Bieżąca Netto): Zdyskontowane przyszłe przepływy pieniężne minus nakład początkowy. Zasada: Inwestycja opłacalna, gdy NPV > 0.\n" +
-              "   • IRR (Wewnętrzna Stopa Zwrotu): Stopa dyskontowa, przy której NPV = 0. Musi być wyższa niż koszt pozyskania kapitału/kredytu.\n\n" +
-              "2. Szacowanie kosztów (CAPEX vs OPEX):\n" +
-              "   • CAPEX: Jednorazowe wydatki inwestycyjne na start (serwery, switche, kable, montaż).\n" +
-              "   • OPEX: Stałe koszty operacyjne eksploatacji (prąd, łącza internetowe, licencje, administracja i serwis).\n\n" +
-              "3. Kampanie internetowe (Performance Marketing):\n" +
-              "   • Kluczowe metryki: CTR (klikalność), CPC (koszt kliknięcia), CPA/CAC (koszt pozyskania klienta), ROAS (zwrot z wydatków na reklamę). Optymalizacja oparta na testach A/B."
-      },
-
-      // -------------------------------------------------------------------------
-      // FIZYKA I SENSORYKA (CZĘŚĆ 1)
-      // -------------------------------------------------------------------------
-      {
-        id: "fiz_c_1",
-        module: "fiz1",
-        category: "Zagadnienie 1 | Konwersja A/C",
-        title: "Przetwarzanie analogowo-cyfrowe (ADC): Próbkowanie, kwantyzacja i architektury",
-        prompt: "Jak zamienić ciągły sygnał fizyczny na postać cyfrową i jakie zjawiska temu towarzyszą?",
-        body: "1. Trzy etapy konwersji ADC:\n" +
-              "   • Próbkowanie w czasie: Zgodnie z twierdzeniem Nyquista-Shannona częstotliwość próbkowania musi spełniać warunek: fs >= 2 * fmax.\n" +
-              "   • Aliasing: Jeśli fs < 2*fmax, składowe wysokoczęstotliwościowe nakładają się na pasmo podstawowe, tworząc fałszywe zniekształcenia. Zabezpieczenie: analogowy filtr antyaliasingowy (dolnoprzepustowy) na wejściu ADC.\n" +
-              "   • Kwantyzacja w wartości: Zaokrąglenie napięcia próbki do skończonej liczby poziomów bitowych (generuje nieunikniony szum kwantyzacji zależny od rozdzielczości przetwornika).\n" +
-              "   • Kodowanie: Przypisanie poziomowi słowa binarnego.\n\n" +
-              "2. Technologie przetworników ADC:\n" +
-              "   • SAR (Sukcesywna aproksymacja): Zrównoważona szybkość i rozdzielczość (10–16 bit); standard w mikrokontrolerach.\n" +
-              "   • Flash: Równoległa macierz komparatorów, najszybsza (gigasample/s), prądożerna (oscyloskopy).\n" +
-              "   • Sigma-Delta: Bardzo wysoka rozdzielczość (16–24 bit) dzięki nadpróbkowaniu (audio, wagi laboratoryjne)."
-      },
-      {
-        id: "fiz_c_2",
-        module: "fiz1",
-        category: "Zagadnienie 2 | Konwersja C/A",
-        title: "Przetwarzanie cyfrowo-analogowe (DAC): Zasada działania, drabinki R-2R i rekonstrukcja",
-        prompt: "Jak zamienić kod binarny na gładki sygnał napięciowy?",
-        body: "1. Zasada działania przetwornika DAC:\n" +
-              "   • Przekształcenie słowa binarnego na proporcjonalną wartość napięcia lub prądu.\n" +
-              "   • Drabinka rezystorowa R-2R: Powszechnie stosowana struktura wykorzystująca rezystory o zaledwie dwóch wartościach (R i 2R). Prądy w kolejnych gałęziach dzielą się binarnie przez 2, a klucze sterowane bitami sumują odpowiednie składowe.\n\n" +
-              "2. Wyzwania i zjawiska pasożytnicze:\n" +
-              "   • Sygnał schodkowy (ZOH - Zero-Order Hold): Wyjście przetwornika DAC to ostre schodki napięcia, co w dziedzinie częstotliwości oznacza obecność niepożądanych harmonicznych o wysokich częstotliwościach.\n" +
-              "   • Filtr rekonstrukcyjny: Analogowy filtr dolnoprzepustowy na wyjściu wygładza schodki i odcina częstotliwości pasożytnicze powyżej pasma użytecznego.\n" +
-              "   • Glitche: Krótkie szpilki napięciowe wynikające z nieidealnie jednoczesnego przełączania kluczy tranzystorowych."
-      },
-      {
-        id: "fiz_c_3_4_5",
-        module: "fiz1",
-        category: "Zagadnienia 3, 4 i 5 | Podstawy sensoryki",
-        title: "Czujniki i sensory: Pomiary zjawisk fizycznych, sensory aktywne vs pasywne",
-        prompt: "Czym jest sensor, jak klasyfikujemy czujniki i jakie zasady fizyczne wykorzystują?",
-        body: "1. Pojęcie czujnika/sensora:\n" +
-              "   • Element pomiarowy, który przetwarza badaną wielkość nieelektryczną (temperaturę, ciśnienie, pole magnetyczne, przyspieszenie) na użyteczny sygnał elektryczny (napięcie, prąd, pojemność, rezystancję).\n\n" +
-              "2. Fundamentalny podział: Aktywne vs Pasywne:\n" +
-              "   • Czujniki aktywne (generacyjne): Do wygenerowania sygnału NIE potrzebują zewnętrznego zasilania; bezpośrednio zamieniają energię zjawiska w energię elektryczną.\n" +
-              "     Przykłady: Termopara (zjawisko Seebecka), kryształ piezoelektryczny (napięcie pod naciskiem), ogniwo fotowoltaiczne.\n" +
-              "   • Czujniki pasywne (parametryczne): Wymagają doprowadzenia zewnętrznego zasilania; mierzona wielkość modyfikuje ich parametr elektryczny.\n" +
-              "     Przykłady: Termistor (zmiana rezystancji z temperaturą), fotorezystor, tensometr foliowy (zmiana rezystancji pod wpływem naprężenia mechanicznego).\n\n" +
-              "3. Metody pomiaru: Bezpośrednie (porównanie z wzorcem) oraz pośrednie (pomiar wielkości skojarzonej równaniem matematycznym)."
-      },
-      {
-        id: "fiz_c_6",
-        module: "fiz1",
-        category: "Zagadnienie 6 | Sensoryka mobilna",
-        title: "Sensoryka w urządzeniach personalnych (Smartfony, Wearables)",
-        prompt: "Jakie czujniki zintegrowane są we współczesnych telefonach i zegarkach?",
-        body: "1. Ruch, położenie i orientacja przestrzenna (układy IMU w technologii MEMS):\n" +
-              "   • Akcelerometr: Wykrywanie przyspieszenia liniowego i wektora grawitacji (krokomierz, zmiana orientacji pion/poziom).\n" +
-              "   • Żyroskop: Pomiar prędkości kątowej obrotu w 3 osiach (sterowanie w grach, stabilizacja aparatu, śledzenie głowy w goglach VR).\n" +
-              "   • Magnetometr: Pomiar ziemskiego pola magnetycznego (funkcja kompasu w nawigacji).\n\n" +
-              "2. Badanie otoczenia:\n" +
-              "   • Czujnik oświetlenia otoczenia (automatyczna regulacja jasności matrycy), czujnik zbliżeniowy (wygaszanie ekranu przy uchu), barometr (dokładne określanie piętra/wysokości npm).\n\n" +
-              "3. Sensoryka biomedyczna:\n" +
-              "   • Optyczne czujniki fotopletyzmograficzne PPG w zegarkach (puls, nasycenie krwi tlenem SpO2), czujniki EKG oraz sensory ToF/FaceID (mapowanie twarzy 3D w podczerwieni)."
-      },
-      {
-        id: "fiz_c_7",
-        module: "fiz1",
-        category: "Zagadnienie 7 | Aktuatory",
-        title: "Elementy wykonawcze (aktuatory) w automatyce i ich fizyczne zasady działania",
-        prompt: "Jak sygnał elektryczny z układu sterowania zamienia się w ruch lub siłę mechaniczną?",
-        body: "1. Zasada elektromagnetyczna (Siła Lorentza i indukcja):\n" +
-              "   • Silniki elektryczne (DC, BLDC, krokowe): Prąd płynący przez uzwojenie w polu magnetycznym generuje moment obrotowy.\n" +
-              "   • Przekaźniki i elektrozawory: Cewka elektromagnesu wytwarza pole magnetyczne przyciągające ferromagnetyczną zworę (załączanie styków lub otwarcie przepływu medium).\n\n" +
-              "2. Zasada piezoelektryczna (Odwrotne zjawisko piezoelektryczne):\n" +
-              "   • Przyłożenie napięcia do kryształu wywołuje jego natychmiastową, mikroskopijną deformację mechaniczną.\n" +
-              "   • Zastosowanie: Precyzyjne pozycjonery o dokładności nanometrów (mikroskopy AFM), zawory wtryskiwaczy Common Rail, głowice drukarek atramentowych.\n\n" +
-              "3. Systemy fluidalne: Siłowniki pneumatyczne i hydrauliczne – ruch posuwisty wywołany ciśnieniem sprężonego powietrza lub oleju."
-      },
-      {
-        id: "fiz_c_8_9",
-        module: "fiz1",
-        category: "Zagadnienia 8 i 9 | Cyfrowy projekt sprzętowy",
-        title: "Klasyfikacja układów cyfrowych (Kombinacyjne vs Sekwencyjne) oraz języki HDL",
-        prompt: "Jak projektuje się i opisuje układy cyfrowe na poziomie bramek i rejestrów?",
-        body: "1. Dwa fundamentalne typy układów logicznych:\n" +
-              "   • Układy kombinacyjne: Stan wyjścia zależy WYŁĄCZNIE od aktualnego stanu wejść (układ bez pamięci: sumatory, multipleksery, komparatory, transkodery).\n" +
-              "   • Układy sekwencyjne: Stan wyjścia zależy od stanu wejść ORAZ od poprzedniego stanu układu. Układ posiada pamięć (przerzutniki D, JK, liczniki, rejestry, automaty stanów Moore'a/Mealy'ego).\n\n" +
-              "2. Języki opisu sprzętu (HDL - Hardware Description Language):\n" +
-              "   • VHDL: Wywodzi się z projektów wojskowych (Ada). Bardzo silne, rygorystyczne typowanie danych; chroni przed błędami w wielkich projektach krytycznych (lotnictwo, wojsko, Europa).\n" +
-              "   • Verilog: Składnia zbliżona do języka C; bardziej zwięzły i elastyczny, popularny w komercyjnym projektowaniu chipów ASIC w USA.\n" +
-              "   • Poziomy opisu: Behawioralny (algorytm), RTL (Register-Transfer Level – rejestry i logika) oraz strukturalny (siatka połączeń modułów)."
-      },
-      {
-        id: "fiz_c_10",
-        module: "fiz1",
-        category: "Zagadnienie 10 | Fizyka kwantowa i optoelektronika",
-        title: "Zjawisko fotoelektryczne (Zewnętrzne vs Wewnętrzne) i jego zastosowanie",
-        prompt: "Jak światło oddziałuje z materią na poziomie kwantowym w elementach optoelektronicznych?",
-        body: "1. Zjawisko fotoelektryczne zewnętrzne:\n" +
-              "   • Wybicie elektronów poza powierzchnię metalu do próżni lub gazu po pochłonięciu fotonu o energii większej niż praca wyjścia (E = h*nu >= W).\n" +
-              "   • Zastosowanie: Fotopowielacze (detekcja pojedynczych kwantów światła w spektroskopii i medycynie), noktowizory tradycyjne.\n\n" +
-              "2. Zjawisko fotoelektryczne wewnętrzne:\n" +
-              "   • Pochłonięcie fotonu powoduje przejście elektronu z pasma walencyjnego do pasma przewodnictwa wewnątrz półprzewodnika (powstanie wolnej pary elektron-dziura).\n" +
-              "   • Efekt fotowoltaiczny: Rozdzielenie ładunków na złączu p-n generuje siłę elektromotoryczną (ogniwa słoneczne PV).\n" +
-              "   • Efekt fotoprzewodnictwa: Zmiana przewodności pod wpływem światła (fotodiody, fototranzystory, matryce CMOS/CCD w aparatach cyfrowych)."
-      },
-
-      // -------------------------------------------------------------------------
-      // FIZYKA I SENSORYKA (CZĘŚĆ 2)
-      // -------------------------------------------------------------------------
-      {
-        id: "fiz_c_11",
-        module: "fiz2",
-        category: "Zagadnienie 11 | Sygnały akustyczne i wizyjne",
-        title: "Cyfrowe formowanie, kodowanie i kompresja sygnałów audio i obrazu",
-        prompt: "Jak zamienić dźwięk i światło na strumień danych cyfrowych i jak je kompresować?",
-        body: "1. Sygnały akustyczne (Audio):\n" +
-              "   • Standard PCM: Bezstratna dyskretyzacja w czasie i wartości (np. CD-Audio: 44,1 kHz, 16 bitów, stereo).\n" +
-              "   • Kompresja stratna (MP3, AAC, Opus): Oparta na modelu psychoakustycznym słuchu ludzkiego – algorytm bezpowrotnie odrzuca dźwięki zamaskowane (maskowanie częstotliwościowe i czasowe).\n\n" +
-              "2. Sygnały wizyjne (Obraz cyfrowy):\n" +
-              "   • Akwizycja: Soczewka ogniskuje światło na matrycy CMOS z filtrem Bayera (50% zieleni, 25% czerwieni, 25% niebieskiego – zieleń odpowiada za ludzkie postrzeganie ostrości).\n" +
-              "   • Kompresja obrazu (JPEG): Podział na bloki 8x8 pikseli, Dyskretna Transformata Kosinusowa (DCT), kwantyzacja wysokich częstotliwości przestrzennych oraz kodowanie Huffmana."
-      },
-      {
-        id: "fiz_c_12",
-        module: "fiz2",
-        category: "Zagadnienie 12 | Kolorometria cyfrowa",
-        title: "Cyfrowe modele barw (RGB, CMYK, HSV) i ich algorytmiczne konwersje",
-        prompt: "W jakich przestrzeniach barwnych reprezentuje się kolory i dlaczego używamy różnych modeli?",
-        body: "1. Podstawowe przestrzenie barwne:\n" +
-              "   • RGB (Model addytywny): Sumowanie świateł R, G, B (suma daje biel). Baza dla monitorów, wyświetlaczy i sensorów kamer.\n" +
-              "   • CMYK (Model subtraktywny): Mieszanie barwników pochłaniających światło na papierze (C+M+Y = czerń). Standard poligrafii i druku.\n" +
-              "   • HSV / HSL: Reprezentacja cylindryczna odpowiadająca ludzkiej percepcji: Odcień (Hue – kąt na kole barw), Nasycenie (Saturation), Jasność (Value/Lightness).\n\n" +
-              "2. Znaczenie w wizji maszynowej:\n" +
-              "   • Model HSV pozwala na skuteczne śledzenie kolorowych obiektów przy zmieniającym się oświetleniu (odcień Hue pozostaje stały, zmienia się tylko parametr Value).\n" +
-              "   • Konwersja do skali szarości uwzględnia czułość oka: Y = 0.299*R + 0.587*G + 0.114*B."
-      },
-      {
-        id: "fiz_c_13_14",
-        module: "fiz2",
-        category: "Zagadnienia 13 i 14 | Wizja komputerowa",
-        title: "Rozpoznawanie wzorców w obrazie nieruchomym oraz detekcja ruchu w wideo",
-        prompt: "Jakie algorytmy pozwalają maszynie 'widzieć' obiekty i wykrywać ich przemieszczanie?",
-        body: "1. Rozpoznawanie wzorców (Obraz statyczny):\n" +
-              "   • Dopasowanie szablonu (Template Matching): Przesuwanie wycinka piksel po pikselu; działa tylko przy niezmiennej skali i orientacji.\n" +
-              "   • Deskryptory punktów kluczowych (SIFT, SURF, ORB): Wyszukiwanie cech lokalnych niezmienniczych względem obrotu, skali i oświetlenia.\n" +
-              "   • Konwolucyjne sieci neuronowe (CNN, np. YOLO): Samouczące się modele deep learningowe lokalizujące i klasyfikujące obiekty w czasie rzeczywistym.\n\n" +
-              "2. Detekcja ruchu w sekwencji wideo:\n" +
-              "   • Różnicowanie kadrów (Frame Differencing): Odejmowanie pikseli sąsiednich klatek. Błyskawiczne, ale gubi obiekty, które się zatrzymały.\n" +
-              "   • Odejście tła (Background Subtraction / GMM): Statystyczne modelowanie stałego tła za pomocą mieszanin gaussowskich; wykrywa obiekt nawet po zatrzymaniu.\n" +
-              "   • Przepływ optyczny (Optical Flow): Wyznaczanie wektorów prędkości przesunięcia punktów obrazu w czasie."
-      },
-      {
-        id: "fiz_c_15_16",
-        module: "fiz2",
-        category: "Zagadnienia 15 i 16 | Teoria sygnałów",
-        title: "Rekonstrukcja sygnałów oraz cyfrowa filtracja (Filtry FIR vs IIR)",
-        prompt: "Jak matematycznie i inżyniersko filtruje się oraz odtwarza sygnały cyfrowe?",
-        body: "1. Cyfrowa rekonstrukcja sygnału:\n" +
-              "   • Podstawa teoretyczna: Wzór interpolacyjny Whittakera-Kotielnikowa-Shannona z wykorzystaniem funkcji sinc (idealny filtr dolnoprzepustowy).\n" +
-              "   • Realizacja inżynierska: Zastosowanie ekstrapolatora zerowego rzędu (ZOH) w przetworniku DAC oraz analogowego filtru dolnoprzepustowego wygładzającego schodki.\n\n" +
-              "2. Filtry cyfrowe: FIR vs IIR:\n" +
-              "   • Filtry FIR (o skończonej odpowiedzi impulsowej, nieliniowe bez sprzężenia zwrotnego):\n" +
-              "     Zalety: Zawsze bezwarunkowo stabilne, posiadają idealnie liniową fazę (brak zniekształceń kształtu fali).\n" +
-              "     Wady: Wymagają wysokiego rzędu (dużo operacji mnożenia, duże obciążenie CPU/DSP).\n" +
-              "   • Filtry IIR (o nieskończonej odpowiedzi impulsowej, rekurencyjne ze sprzężeniem zwrotnym):\n" +
-              "     Zalety: Bardzo stroma charakterystyka tłumienia przy niskim rzędzie filtru (małe zapotrzebowanie na pamięć i moc).\n" +
-              "     Wady: Mogą być niestabilne, mają nieliniową fazę wprowadzającą zniekształcenia fazowe."
-      },
-      {
-        id: "fiz_c_17_18",
-        module: "fiz2",
-        category: "Zagadnienia 17 i 18 | Łącze radiowe",
-        title: "Parametry łącza radiowego: Budżet łącza (zasięg) oraz wskaźniki jakości transmisji",
-        prompt: "Jakie wielkości fizyczne określają zasięg fali radiowej oraz jakość przesyłu danych?",
-        body: "1. Zasięg łącza radiowego (Równanie budżetu łącza / Wzór Friisa):\n" +
-              "   • Bilans mocy: Prx [dBm] = Ptx [dBm] + Gtx [dBi] + Grx [dBi] - Straty trasy (Path Loss) [dB].\n" +
-              "   • Parametry: Ptx (moc nadajnika), Gtx/Grx (zysk anteny nadawczej/odbiorczej).\n" +
-              "   • Tłumienie trasy: Rośnie z kwadratem odległości oraz z kwadratem częstotliwości (stąd pasma sub-GHz mają znacznie większy zasięg niż 2,4 GHz czy 5 GHz).\n" +
-              "   • Warunek odbioru: Otrzymana moc Prx musi być większa niż czułość odbiornika Srx (np. > -105 dBm).\n\n" +
-              "2. Jakość transmisji w łączu radiowym:\n" +
-              "   • SNR (Signal-to-Noise Ratio): Stosunek mocy sygnału użytecznego do mocy szumu termicznego otoczenia.\n" +
-              "   • SINR: Uwzględnia szum oraz zakłócenia od innych nadajników pracujących w tym samym kanale.\n" +
-              "   • BER (Bit Error Rate): Stopa błędów bitowych = stosunek bitów błędnych do wszystkich odebranych.\n" +
-              "   • EVM (Error Vector Magnitude): Odchylenie punktów konstelacji modulacji cyfrowej od pozycji idealnych."
-      },
-      {
-        id: "fiz_c_19_20",
-        module: "fiz2",
-        category: "Zagadnienia 19 i 20 | Telefonia komórkowa",
-        title: "Zasada działania sieci komórkowych: Architektura, procedura Handover i ewolucja standardów (2G–5G)",
-        prompt: "Jak zorganizowana jest sieć komórkowa i jak ewoluowała transmisja głosu oraz danych?",
-        body: "1. Fundamenty architektury komórkowej:\n" +
-              "   • Podział na komórki: Obszar pokryty jest siecią stacji bazowych (BTS). Pozwala na wielokrotne wykorzystanie tych samych kanałów częstotliwościowych w odległych komórkach.\n" +
-              "   • Handover: Bezprzerwowa procedura automatycznego przełączania aktywnej rozmowy lub sesji transmisji danych między stacjami bazowymi w trakcie poruszania się abonenta.\n\n" +
-              "2. Ewolucja transmisji głosu:\n" +
-              "   • 2G (GSM) & 3G: Klasyczna komutacja łączy (dedykowany obwód na czas rozmowy).\n" +
-              "   • 4G (LTE) -> VoLTE: Głos przesyłany jako spakietowane dane IP (VoIP) z gwarantowanym priorytetem QoS.\n" +
-              "   • 5G -> VoNR: Natywny przesył mowy przez ultraniskie opóźnienia sieci 5G.\n\n" +
-              "3. Ewolucja transmisji danych:\n" +
-              "   • 2.5G (GPRS/EDGE) -> 3G (HSPA+): Transmisja pakietowa, wejście w erę mobilnego Internetu (kilkanaście Mb/s).\n" +
-              "   • 4G (LTE-A): Modulacja OFDMA, wieloantenowe systemy MIMO, agregacja pasm radiowych (do paruset Mb/s).\n" +
-              "   • 5G (New Radio): Praca na falach milimetrowych (mmWave), Massive MIMO, Beamforming (kierunkowe formowanie wiązki), podział sieci (Network Slicing), transfery >1 Gb/s i opóźnienia rzędu 1 ms."
-      }
-    ];
-
     let questions = [];
     let currentModule = "all";
     let queue = [];
     let initialCount = 0;
     let editingId = null;
 
-    function init() {
-      const saved = localStorage.getItem("air_exam_mobile_v4");
-      if (saved) {
+    async function init() {
+      // 1. Sprawdź, czy są lokalne modyfikacje w przeglądarce
+      const localSaved = localStorage.getItem("air_exam_questions_json_v1");
+      if (localSaved) {
         try {
-          questions = JSON.parse(saved);
+          questions = JSON.parse(localSaved);
+          finishInit();
+          return;
         } catch(e) {
-          questions = [...DEFAULT_DATA];
+          console.error("Błąd parsowania lokalnych danych", e);
         }
-      } else {
-        questions = [...DEFAULT_DATA];
       }
+
+      // 2. Jeśli nie ma w pamięci lokalnej, pobierz bezpośrednio z pytania.json
+      await fetchQuestionsFromJSON();
+    }
+
+    async function fetchQuestionsFromJSON() {
+      try {
+        const res = await fetch("pytania.json");
+        if (!res.ok) throw new Error("Nie można pobrać pytania.json");
+        questions = await res.json();
+        saveToStorage();
+        finishInit();
+      } catch (err) {
+        console.error("Błąd ładowania pytania.json:", err);
+        document.getElementById("card-title").innerText = "Błąd wczytywania pliku pytania.json. Upewnij się, że plik znajduje się w tym samym folderze.";
+      }
+    }
+
+    function finishInit() {
       setupModuleQueue();
       renderQuestionsList();
     }
 
     function saveToStorage() {
-      localStorage.setItem("air_exam_mobile_v4", JSON.stringify(questions));
+      localStorage.setItem("air_exam_questions_json_v1", JSON.stringify(questions));
     }
 
     function triggerHaptic(type = 'light') {
@@ -1094,14 +683,16 @@
       const currentId = queue[0];
       const qData = questions.find(item => item.id === currentId);
 
-      document.getElementById("card-badge").innerText = qData.category;
-      document.getElementById("card-title").innerText = qData.title;
-      document.getElementById("card-prompt").innerText = qData.prompt || "";
-      document.getElementById("card-explanation").innerText = qData.body;
-      document.getElementById("count-left").innerText = queue.length;
+      if (qData) {
+        document.getElementById("card-badge").innerText = qData.category;
+        document.getElementById("card-title").innerText = qData.title;
+        document.getElementById("card-prompt").innerText = qData.prompt || "";
+        document.getElementById("card-explanation").innerText = qData.body;
+        document.getElementById("count-left").innerText = queue.length;
 
-      const progress = ((initialCount - queue.length) / initialCount) * 100;
-      document.getElementById("progress-bar").style.width = `${progress}%`;
+        const progress = initialCount > 0 ? ((initialCount - queue.length) / initialCount) * 100 : 0;
+        document.getElementById("progress-bar").style.width = `${progress}%`;
+      }
     }
 
     function flipCard() {
@@ -1203,12 +794,49 @@
       updateQuizView();
     }
 
-    function resetToDefaults() {
-      if (confirm("Czy na pewno chcesz przywrócić domyślne kompendium i zresetować swoje notatki?")) {
-        questions = [...DEFAULT_DATA];
-        saveToStorage();
-        renderQuestionsList();
-        setupModuleQueue();
+    // EKSPORT I IMPORT JSON
+    function exportJSON() {
+      triggerHaptic('success');
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(questions, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "pytania.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function triggerImport() {
+      document.getElementById('import-file').click();
+    }
+
+    function handleFileImport(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (Array.isArray(imported)) {
+            questions = imported;
+            saveToStorage();
+            finishInit();
+            alert("Pomyślnie zaimportowano bazę pytań!");
+          } else {
+            alert("Błąd: Plik nie zawiera poprawnej tablicy zagadnień.");
+          }
+        } catch(err) {
+          alert("Błąd odczytu pliku JSON: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    async function reloadFromJSON() {
+      if (confirm("Czy na pewno chcesz pobrać plik pytania.json na nowo i nadpisać lokalne zmiany w przeglądarce?")) {
+        localStorage.removeItem("air_exam_questions_json_v1");
+        await fetchQuestionsFromJSON();
       }
     }
 
