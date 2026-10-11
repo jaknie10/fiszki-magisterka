@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Egzamin Magisterski AIR - Fiszki</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-front: #1e293b;
+      --card-back: #0f2b48;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --border: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 1rem;
+    }
+
+    header {
+      width: 100%;
+      max-width: 800px;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Nawigacja / Zakładki */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #0f172a;
+      border-color: var(--accent);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+    }
+
+    /* Widok Fiszek */
+    .view-content {
+      display: none;
+    }
+
+    .view-content.active {
+      display: block;
+    }
+
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      background: var(--card-bg);
+      padding: 0.8rem 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    select, input[type="text"] {
+      background: #0b1329;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    select:focus, input[type="text"]:focus {
+      border-color: var(--accent);
+    }
+
+    /* Pasek postępu */
+    .progress-container {
+      width: 100%;
+      background: var(--border);
+      border-radius: 6px;
+      height: 8px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    /* Karta fiszki */
+    .flashcard-wrapper {
+      perspective: 1000px;
+      width: 100%;
+      height: 380px;
+      cursor: pointer;
+      margin-bottom: 1.5rem;
+    }
+
+    .flashcard {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 14px;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+    }
+
+    .flashcard.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 14px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border: 1px solid var(--border);
+      overflow-y: auto;
+    }
+
+    .card-front {
+      background: var(--card-front);
+      text-align: center;
+    }
+
+    .card-back {
+      background: var(--card-back);
+      transform: rotateY(180deg);
+      text-align: left;
+    }
+
+    .card-badge {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+      font-weight: bold;
+    }
+
+    .card-question {
+      font-size: 1.3rem;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .card-answer {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      white-space: pre-line;
+      color: #e2e8f0;
+    }
+
+    .card-hint {
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* Przyciski oceny fiszki */
+    .flashcard-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 0.9rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .btn-repeat {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .btn-repeat:hover {
+      background: rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-known {
+      background: rgba(34, 197, 94, 0.15);
+      color: #86efac;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    .btn-known:hover {
+      background: rgba(34, 197, 94, 0.3);
+    }
+
+    /* Widok Listy Pytań */
+    .list-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+      justify-content: space-between;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .question-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      padding: 1.2rem;
+      transition: border-color 0.2s;
+    }
+
+    .question-item:hover {
+      border-color: var(--accent);
+    }
+
+    .q-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.6rem;
+      gap: 0.5rem;
+    }
+
+    .q-item-title {
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 1.05rem;
+    }
+
+    .q-item-badge {
+      font-size: 0.75rem;
+      background: #0b1329;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .q-item-answer {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #cbd5e1;
+      white-space: pre-line;
+      margin-bottom: 0.8rem;
+    }
+
+    .q-item-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+    }
+
+    .btn-sm {
+      padding: 0.35rem 0.7rem;
+      font-size: 0.8rem;
+      border-radius: 5px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: #0b1329;
+      color: var(--text-muted);
+    }
+    .btn-sm:hover {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    /* Modal edycji */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      z-index: 100;
+    }
+    .modal.active { display: flex; }
+    .modal-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 600px;
+    }
+    .modal-box h3 { margin-bottom: 1rem; color: var(--accent); }
+    .modal-box textarea {
+      width: 100%;
+      background: #0b1329;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.8rem;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      outline: none;
+      resize: vertical;
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.8rem;
+    }
+
+    /* Komunikat o ukończeniu */
+    .finished-box {
+      text-align: center;
+      padding: 3rem 1rem;
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .finished-box h2 {
+      color: var(--success);
+      margin-bottom: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🎓 Egzamin Magisterski AIR</h1>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">Fiszki powtórkowe i baza pytań egzaminacyjnych</p>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" onclick="switchTab('quiz')">🗂️ Tryb Fiszek</button>
+    <button class="tab-btn" onclick="switchTab('list')">📋 Baza Pytań i Edycja</button>
+  </nav>
+
+  <main class="container">
+    <!-- WIDOK 1: FISZKI (QUIZLET) -->
+    <section id="view-quiz" class="view-content active">
+      <div class="controls-bar">
+        <div>
+          <label style="font-size: 0.85rem; color: var(--text-muted);">Segment nauki: </label>
+          <select id="module-select" onchange="changeModule()">
+            <option value="all">Wszystkie moduły (40 pytań)</option>
+            <option value="inf1">Informatyka cz. 1 (Pytania 1–10)</option>
+            <option value="inf2">Informatyka cz. 2 (Pytania 11–20)</option>
+            <option value="fiz1">Fizyka i Sensoryka cz. 1 (Pytania 1–10)</option>
+            <option value="fiz2">Fizyka i Sensoryka cz. 2 (Pytania 11–20)</option>
+          </select>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-muted);">
+          Pozostało w sesji: <strong id="count-left" style="color: var(--accent);">0</strong>
+        </div>
+      </div>
+
+      <div class="progress-container">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+
+      <div id="quiz-area">
+        <div class="flashcard-wrapper" onclick="flipCard()">
+          <div class="flashcard" id="flashcard">
+            <div class="card-face card-front">
+              <span class="card-badge" id="card-badge">Moduł</span>
+              <h2 class="card-question" id="card-question">Ładowanie pytania...</h2>
+              <div class="card-hint">💡 Kliknij, aby zobaczyć odpowiedź</div>
+            </div>
+            <div class="card-face card-back">
+              <span class="card-badge">Odpowiedź / Kluczowe punkty</span>
+              <div class="card-answer" id="card-answer">...</div>
+              <div class="card-hint">💡 Kliknij, aby obrócić z powrotem</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flashcard-actions">
+          <button class="btn btn-repeat" onclick="handleAnswer(false)">
+            🔄 Jeszcze nie (powtórz)
+          </button>
+          <button class="btn btn-known" onclick="handleAnswer(true)">
+            ✅ Znam (opanowane)
+          </button>
+        </div>
+      </div>
+
+      <div id="finished-area" class="finished-box" style="display: none;">
+        <h2>🎉 Brawo! Segment opanowany!</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Przejrzałeś i poprawnie oznaczyłeś wszystkie pytania w tej partii.</p>
+        <button class="btn btn-known" style="max-width: 250px; margin: 0 auto;" onclick="restartModule()">
+          Rozpocznij powtórkę od nowa
+        </button>
+      </div>
+    </section>
+
+    <!-- WIDOK 2: BAZA PYTAŃ -->
+    <section id="view-list" class="view-content">
+      <div class="list-header">
+        <input type="text" id="search-input" class="search-box" placeholder="🔍 Szukaj po tytule lub treści..." oninput="renderQuestionsList()">
+        <button class="btn-sm" onclick="resetToDefaults()">♻️ Przywróć domyślne pytania</button>
+      </div>
+      <div id="questions-list"></div>
+    </section>
+  </main>
+
+  <!-- MODAL EDYCJI -->
+  <div class="modal" id="edit-modal">
+    <div class="modal-box">
+      <h3>Edycja pytania</h3>
+      <label style="font-size: 0.8rem; color: var(--text-muted);">Pytanie / Zagadnienie:</label>
+      <textarea id="edit-q-text" rows="3"></textarea>
+      <label style="font-size: 0.8rem; color: var(--text-muted);">Odpowiedź / Notatki:</label>
+      <textarea id="edit-a-text" rows="8"></textarea>
+      <div class="modal-actions">
+        <button class="btn-sm" onclick="closeEditModal()">Anuluj</button>
+        <button class="btn-sm" style="background: var(--accent); color: #0f172a; border-color: var(--accent); font-weight: bold;" onclick="saveEditedQuestion()">Zapisz zmiany</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // BAZA PYTAŃ
+    const DEFAULT_DATA = [
+      // INFORMATYKA CZ. 1
+      {
+        id: "inf1",
+        module: "inf1",
+        category: "Informatyka cz. 1",
+        q: "1. Rodzaje i przeznaczenie mikrokontrolerów (PIC, PLC, FPGA, AVR, XMega, Raspberry, ...)",
+        a: "• AVR / XMega: 8-bitowe (lub 8/16-bit XMega) układy RISC (Microchip/Atmel). Proste, tanie, popularne w prototypowaniu (Arduino Uno = ATmega328P). Zastosowanie: prosta automatyka, odczyt czujników.\n• PIC: Rodzina Microchip (8-, 16- i 32-bit). Wysoka odporność na zakłócenia przemysłowe, niski pobór mocy. Zastosowanie: motoryzacja, AGD, sterowniki przetwornic.\n• PLC: Programowalne sterowniki logiczne. Gotowe komputery przemysłowe w wytrzymałych obudowach, programowane m.in. językiem drabinkowym (LD). Zastosowanie: linie produkcyjne, maszyny fabryczne.\n• FPGA: Programowalne macierze bramek logicznych (konfiguracja sprzętowa, a nie kod programowy). Równoległe przetwarzanie w czasie rzeczywistym. Zastosowanie: radary, kryptografia, akceleracja AI.\n• Raspberry Pi: Komputer jednopłytkowy (SBC) z procesorem ARM i systemem Linux. Zastosowanie: bramki IoT (IoT Gateway), domowe serwery, przetwarzanie obrazu."
+      },
+      {
+        id: "inf2a",
+        module: "inf1",
+        category: "Informatyka cz. 1",
+        q: "2a. Typy układów cyfrowych: o ustalonej strukturze, programowalnej strukturze, mikroprocesorowe",
+        a: "• Układy o ustalonej strukturze (ASIC): Dedykowane chipy o stałej logice zaprojektowanej na etapie produkcji (np. bramki 74xx, sprzętowe dekodery wideo). Najwyższa wydajność i najniższy koszt jednostkowy przy masowej skali, brak możliwości modyfikacji.\n• Układy o programowalnej strukturze (PLD, CPLD, FPGA): Struktura połączeń logicznych konfigurowana po wyprodukowaniu za pomocą języków HDL (VHDL, Verilog). Elastyczne, idealne do prototypowania i algorytmów równoległych.\n• Układy mikroprocesorowe (CPU/MCU): Stała budowa sprzętowa (ALU, rejestry, dekoder instrukcji), a ich funkcję określa sekwencja rozkazów programu pobierana z pamięci."
+      },
+      {
+        id: "inf2b",
+        module: "inf1",
+        category: "Informatyka cz. 1",
+        q: "2b. Wirtualizacja w informatyce, sposoby realizacji, korzyści, obszary zastosowań",
+        a: "• Definicja: Uruchamianie wielu niezależnych środowisk logicznych (maszyn/kontenerów) na jednym fizycznym serwerze.\n• Sposoby realizacji:\n  - Pełna wirtualizacja (Hiperwizor Typu 1, bare-metal: Proxmox, VMware ESXi) - bezpośrednio na sprzęcie.\n  - Wirtualizacja hostowana (Hiperwizor Typu 2: VirtualBox) - aplikacja na zwykłym OS.\n  - Konteneryzacja (Docker) - współdzielenie jądra systemu, bardzo lekka i szybka.\n• Korzyści: Lepsze wykorzystanie zasobów, niższe koszty sprzętu i prądu, błyskawiczne tworzenie kopii zapasowych, izolacja awarii.\n• Zastosowanie: Chmury publiczne (AWS, Azure), środowiska testowe CI/CD, serwerownie."
+      },
+      {
+        id: "inf3",
+        module: "inf1",
+        category: "Informatyka cz. 1",
+        q: "3. Modelowanie 3D - zasady redagowania i edycji dokumentacji CAD/CAM",
+        a: "• CAD (Computer-Aided Design): Komputerowe wspomaganie projektowania (tworzenie geometrii 2D/3D części i złożeń).\n• CAM (Computer-Aided Manufacturing): Przekształcenie modelu CAD w ścieżki narzędzia i kod maszynowy (G-code) dla obrabiarek CNC i drukarek 3D.\n• Zasady tworzenia dokumentacji CAD:\n  - Zachowanie norm technicznych (ISO/PN, metoda rzutowania europejskiego/amerykańskiego).\n  - Kompletne i jednoznaczne wymiarowanie (tolerancje wymiarowe i geometryczne, chropowatość powierzchni).\n  - Parametryczność (zmiana jednego wymiaru uaktualnia cały model i powiązany rysunek 2D).\n  - Poprawna tabliczka rysunkowa (materiał, skala, tolerancje ogólne, autor, wersja)."
+      },
+      {
+        id: "inf4",
+        module: "inf1",
+        category: "Informatyka cz. 1",
+        q: "4. Standardy sieci personalnych (PAN) i bardzo krótkiego zasięgu",
+        a: "• NFC: Zasięg do paru cm, 13.56 MHz. Płatności zbliżeniowe, szybkie parowanie urządzeń, tagi RFID.\n• Bluetooth / BLE: Zasięg 10–100 m, 2.4 GHz. Wersja BLE zapewnia wielomiesięczną pracę na baterii pastylkowej. Wearables, akcesoria, czujniki domowe.\n• Zigbee (IEEE 802.15.4): Topologia siatki (Mesh), mały pobór energii. Zastosowanie: Smart Home (żarówki Philips Hue, czujniki).\n• Z-Wave: Pasmo sub-GHz (868 MHz w UE), odporne na zakłócenia z sieci Wi-Fi. Zastosowanie: automatyka domowa.\n• UWB (Ultra-Wideband): Bardzo szerokie pasmo, dokładność lokalizacji przestrzennej rzędu centymetrów. Zastosowanie: cyfrowe kluczyki w autach, Apple AirTag."
+      },
+      {
+        id: "inf5",
+        module: "inf1",
+        category: "Informatyka cz. 1",
+        q: "5. Metody geolokalizacji radiowej: (a) w otwartej przestrzeni, (b) wewnątrz budynków",
+        a: "• (a) W otwartej przestrzeni:\n  - GNSS (GPS, Galileo, GLONASS): Pomiar czasu dotarcia sygnału (ToF/ToA) z min. 4 satelitów (X, Y, Z + korekta zegara).\n  - Sieci komórkowe (GSM/LTE): Identyfikator stacji bazowej (Cell-ID), triangulacja na podstawie siły sygnału z kilku wież BTS.\n• (b) Wewnątrz budynków (Indoor Positioning):\n  - RSSI: Estymacja odległości na podstawie tłumienia mocy sygnału Wi-Fi / Bluetooth.\n  - Fingerprinting: Porównywanie bieżącego odczytu z wcześniejszą 'mapą radiową' obiektu.\n  - ToF / TDoA (UWB): Precyzyjny pomiar różnicy czasu nadejścia fal radiowych (centymetrowa dokładność).\n  - AoA / AoD: Wyznaczanie kąta nadejścia fali za pomocą macierzy anten (standard BLE 5.1)."
+      },
+      {
+        id: "inf6",
+        module: "inf1",
+        category: "Informatyka cz. 1",
+        q: "6. Obszar zastosowań sieci personalnych, w szczególności BT/BLE",
+        a: "• Urządzenia noszone (Wearables): Smartwatche, pulsometry, monitory snu – przesyłanie małych pakietów danych przy znikomym zużyciu energii.\n• Inteligentny dom (Smart Home): Inteligentne zamki, głowice termostatyczne, sterowanie oświetleniem (Bluetooth Mesh).\n• Mikrolokalizacja i Beacony: Systemy nawigacji w halach targowych i muzeach, powiadomienia kontekstowe w sklepach.\n• Śledzenie aktywów (Asset Tracking): Lokalizatory bagażu i sprzętu firmowego."
+      },
+      {
+        id: "inf7",
+        module: "inf1",
+        category: "Informatyka cz. 1",
+        q: "7. Technologie sieci nowej generacji NGN/NGA",
+        a: "• NGN (Next Generation Network): Sieci oparte w całości na protokole IP (All-IP), w których warstwa transportowa jest całkowicie rozdzielona od usług (głos, wideo, dane przesyłane w jednym kanale pakietowym, np. VoIP, IPTV).\n• NGA (Next Generation Access): Sieci dostępu szerokopasmowego o bardzo wysokiej przepustowości (>30–100 Mb/s).\n• Główne technologie:\n  - Światłowody FTTH (Fiber to the Home / standardy GPON/XGS-PON).\n  - Sieci komórkowe 5G (masowa łączność czujników mMTC, ultraniskie opóźnienia URLLC, slicing sieci)."
+      },
+      {
+        id: "inf8",
+        module: "inf1",
+        category: "Informatyka cz. 1",
+        q: "8. Personalne urządzenia mobilne: cechy, parametry, systemy operacyjne, języki",
+        a: "• Cechy: Stała łączność bezprzewodowa, energooszczędność, ekran dotykowy, wbudowane sensory (GPS, akcelerometr, kamera).\n• Parametry techniczne: Wielordzeniowe procesory SoC (architektura ARM), pamięci LPDDR, ekrany OLED/AMOLED, modemy 5G/Wi-Fi 6, baterie litowo-polimerowe.\n• Systemy operacyjne: Android (oparty na jądrze Linux), iOS.\n• Języki programowania: Kotlin i Java (natywny Android), Swift (natywny iOS), Dart/TypeScript (frameworki wieloplatformowe Flutter, React Native)."
+      },
+      {
+        id: "inf9",
+        module: "inf1",
+        category: "Informatyka cz. 1",
+        q: "9. „Internet Rzeczy” (IoT) - korzyści, obszary aplikacyjne oraz technologie",
+        a: "• Korzyści: Automatyzacja, optymalizacja zużycia energii i surowców, predykcyjne utrzymanie ruchu (Predictive Maintenance), podejmowanie decyzji na podstawie danych w czasie rzeczywistym.\n• Obszary: Smart City, Przemysł 4.0 (IIoT), inteligentne rolnictwo, medycyna (IoMT), logistyka i zarządzanie flotą.\n• Technologie:\n  - Sieci LPWAN: LoRaWAN, NB-IoT, LTE-M.\n  - Protokoły komunikacji: MQTT (lekki publish/subscribe), CoAP, HTTP/REST.\n  - Przetwarzanie: Chmura (Cloud) oraz krawędź sieci (Edge Computing)."
+      },
+      {
+        id: "inf10",
+        module: "inf1",
+        category: "Informatyka cz. 1",
+        q: "10. Architektura „Internetu Przyszłości”, aplikacje i usługi",
+        a: "• Architektura:\n  - SDN (Software-Defined Networking): Rozdzielenie płaszczyzny sterowania (kontroler sieci) od przesyłania danych (przełączniki).\n  - NFV (Network Functions Virtualization): Zastąpienie fizycznych urządzeń sieciowych instancjami wirtualnymi w chmurze.\n  - Edge & Fog Computing: Przetwarzanie danych blisko urządzeń końcowych, redukujące opóźnienia do kilku milisekund.\n• Aplikacje i usługi: Pojazdy autonomiczne (V2X), telechirurgia, inteligentne sieci elektroenergetyczne (Smart Grid), cyfrowe bliźniaki całych miast."
+      },
+
+      // INFORMATYKA CZ. 2
+      {
+        id: "inf11",
+        module: "inf2",
+        category: "Informatyka cz. 2",
+        q: "11. Ochrona prywatności czy bezpieczeństwo i zaufanie - podstawowy problem IoT",
+        a: "• Główne zagrożenia: Masowość tanich urządzeń ze słabymi zabezpieczeniami (domyślne hasła, brak aktualizacji), ataki botnetowe DDoS (np. Mirai), podsłuch transmisji.\n• Dylemat prywatności: Sensory IoT monitorują prywatne życie (kamery domowe, lokalizacja, profile zużycia energii w mieszkaniu).\n• Zapewnienie zaufania i bezpieczeństwa:\n  - Szyfrowanie end-to-end (TLS/DTLS).\n  - Sprzętowe moduły bezpieczeństwa (Secure Element, TPM, bezpieczny rozruch Secure Boot).\n  - Podejście 'Security by Design' i wymogi prawne (RODO, europejski Cyber Resilience Act)."
+      },
+      {
+        id: "inf12",
+        module: "inf2",
+        category: "Informatyka cz. 2",
+        q: "12. Techniki, urządzenia i obszary zastosowań wirtualnej (VR) i rozszerzonej (AR) rzeczywistości",
+        a: "• VR (Virtual Reality): Pełne zanurzenie w wygenerowanym środowisku 3D (odcięcie od świata realnego). Urządzenia: gogle Meta Quest, HTC Vive, Apple Vision Pro.\n• AR (Augmented Reality): Nakładanie elementów cyfrowych na obraz świata rzeczywistego. Urządzenia: smartfony (ARCore/ARKit), okulary Microsoft HoloLens.\n• Zastosowania:\n  - Edukacja i dziedzictwo kulturowe (wirtualne wycieczki, rekonstrukcje 3DGS - np. Fort III Twierdzy Poznań).\n  - Przemysł i serwis (wirtualne instrukcje naprawy nakładane na maszynę w czasie rzeczywistym).\n  - Medycyna (symulacje operacji), szkolenia militarne/BHP, gry."
+      },
+      {
+        id: "inf13",
+        module: "inf2",
+        category: "Informatyka cz. 2",
+        q: "13. Wykluczenie cyfrowe w ujęciu tradycyjnym oraz w kontekście technologii IoT",
+        a: "• Ujęcie tradycyjne: Brak dostępu do komputera i łącza internetowego (bariera infrastrukturalna/finansowa) lub brak umiejętności cyfrowych (bariera kompetencyjna, np. u osób starszych).\n• W kontekście IoT:\n  - Przymus korzystania z automatycznych systemów (np. inteligentne liczniki, aplikacje miejskie) wykluczający osoby bez smartfona.\n  - Niejasność algorytmów (brak zrozumienia, jak zbierane i przetwarzane są dane w domu).\n  - Wykluczenie ekonomiczne z inteligentnych usług optymalizacji kosztów (np. inteligentne taryfy prądu wymagające drogich instalacji)."
+      },
+      {
+        id: "inf14",
+        module: "inf2",
+        category: "Informatyka cz. 2",
+        q: "14. Idea „inteligentnego miasta”, budynku, pojazdu - technologie i trendy",
+        a: "• Smart City: Optymalizacja zasobów miejskich (inteligentne sterowanie sygnalizacją świetlną, monitoring napełnienia kubłów na śmieci, dynamiczne parkingi).\n• Smart Building (BMS): Centralne zarządzanie klimatyzacją, ogrzewaniem, oświetleniem i dostępem w celu redukcji śladu węglowego i kosztów.\n• Inteligentny pojazd: Łączność V2X (pojazd z infrastrukturą drogową), asystenci jazdy ADAS, mapowanie otoczenia w czasie rzeczywistym.\n• Trendy: Sztuczna inteligencja na krawędzi (Edge AI), cyfrowe bliźniaki (Digital Twins), dekarbonizacja i oszczędzanie energii."
+      },
+      {
+        id: "inf15",
+        module: "inf2",
+        category: "Informatyka cz. 2",
+        q: "15. Interfejs człowiek-maszyna (HMI) - główne problemy i wyzwania",
+        a: "• Przeciążenie poznawcze (Cognitive Overload): Zbyt duża ilość prezentowanych danych utrudniająca szybką decyzję operatora.\n• Responsywność i opóźnienia: Brak natychmiastowej odpowiedzi systemu rodzi frustrację i błędy operatora.\n• Dostępność (Accessibility): Projektowanie dla osób o różnych potrzebach (standardy WCAG, kontrast, obsługa jedną ręką).\n• Bezpieczeństwo w systemach krytycznych: Ergonomia zapobiegająca przypadkowemu wciśnięciu złego przycisku w maszynie lub panelu medycznym."
+      },
+      {
+        id: "inf16",
+        module: "inf2",
+        category: "Informatyka cz. 2",
+        q: "16. Interfejsy naturalne (NUI) - dźwięk, postawa, gesty, obecność",
+        a: "• Definicja: Interfejsy wykorzystujące naturalne zachowania ludzkie (mowa, ruch rąk, wzrok) zamiast urządzeń pośredniczących (klawiatura, mysz).\n• Formy: Komendy głosowe (NLP/LLM), rozpoznawanie gestów dłoni w powietrzu (kamery ToF, sensory podczerwieni), wykrywanie obecności (radary mmWave, czujniki mikrofalowe).\n• Problemy implementacji: Szum tła (hałas otoczenia, zmienne oświetlenie), przypadkowe aktywacje (fałszywe gesty), duże zapotrzebowanie na moc obliczeniową, różnice kulturowe i anatomiczne użytkowników."
+      },
+      {
+        id: "inf17",
+        module: "inf2",
+        category: "Informatyka cz. 2",
+        q: "17. Modele biznesowe sprzedaży urządzeń i usług Internetu Rzeczy",
+        a: "• Sprzedaż sprzętu (Hardware-only): Tradycyjna jednorazowa sprzedaż fizycznego urządzenia (zysk na marży).\n• Hardware + Subskrypcja (SaaS): Tani zakup sprzętu, ale opłata abonamentowa za dostęp do chmury, aplikacji i analizy danych (np. kamery domowe).\n• Product-as-a-Service (PaaS): Klient płaci za efekt działania, nie będąc właścicielem urządzenia (np. opłata za metry sześcienne sprężonego powietrza, a nie zakup kompresora; oświetlenie jako usługa).\n• Monetyzacja danych: Sprzedaż zagregowanych, zanonimizowanych danych analitycznych partnerom zewnętrznym."
+      },
+      {
+        id: "inf18",
+        module: "inf2",
+        category: "Informatyka cz. 2",
+        q: "18. Wskaźniki oceny efektywności finansowo-ekonomicznej przedsięwzięć inwestycyjnych",
+        a: "• NPV (Net Present Value): Suma zdyskontowanych przyszłych przepływów pieniężnych minus nakłady początkowe. Projekt opłacalny, gdy NPV > 0.\n• IRR (Internal Rate of Return): Stopa dyskontowa, dla której NPV = 0. Im wyższa od kosztu kapitału, tym inwestycja bardziej dochodowa.\n• PP / DPP (Payback Period): Okres zwrotu z inwestycji (prosty lub zdyskontowany).\n• ROI (Return on Investment): Prosty wskaźnik zwrotu = (Zysk netto / Koszt inwestycji) * 100%."
+      },
+      {
+        id: "inf19",
+        module: "inf2",
+        category: "Informatyka cz. 2",
+        q: "19. Projektowanie, optymalizacja i implementacja kampanii internetowych",
+        a: "• Etapy kampanii:\n  1. Ustalenie celów (zasięg, ruch, sprzedaż) i grupy docelowej (tworzenie persony).\n  2. Dobór kanałów: reklama w wyszukiwarkach (Google Ads), social media (Meta Ads, LinkedIn), e-mail marketing.\n  3. Wdrożenie: kreacje graficzne, strony docelowe (landing page), instalacja kodów śledzących (Google Tag Manager, piksele analityczne).\n• Optymalizacja: Testy A/B kreacji, analiza wskaźników CPC (koszt kliknięcia), CTR (klikalność), CAC (koszt pozyskania klienta), ROAS (zwrot z wydatków na reklamę)."
+      },
+      {
+        id: "inf20",
+        module: "inf2",
+        category: "Informatyka cz. 2",
+        q: "20. Studium wykonalności i szacowanie kosztów (np. sieć komputerowa na danym obszarze)",
+        a: "• Studium wykonalności (Feasibility Study):\n  - Techniczna: audyt obiektu (Site Survey), uwarunkowania architektoniczne, dobór urządzeń.\n  - Prawno-formalna: zgody budowlane, normy ppoż., ochrona danych.\n  - Ekonomiczna: opłacalność przedsięwzięcia.\n• Szacowanie kosztów:\n  - CAPEX (nakłady inwestycyjne): kable strukturalne, szafy teletechniczne, przełączniki, routery, punkty Wi-Fi, robocizna montażu.\n  - OPEX (koszty operacyjne): łącze internetowe, prąd, licencje, wsparcie serwisowe i administracja siecią."
+      },
+
+      // FIZYKA I SENSORYKA CZ. 1
+      {
+        id: "fiz1",
+        module: "fiz1",
+        category: "Fizyka i Sensoryka cz. 1",
+        q: "1. Przetwarzanie analogowo-cyfrowe (ADC) - główne problemy i technologie",
+        a: "• Etapy: Próbkowanie (dyskretyzacja w czasie wg Nyquista: fs >= 2*fmax), kwantyzacja (zaokrąglenie do poziomów bitowych), kodowanie binarne.\n• Problemy: Aliasing (rozwiązanie: analogowy filtr antyaliasingowy), szum kwantyzacji (zależy od liczby bitów przetwornika), nieliniowość.\n• Technologie ADC:\n  - SAR (sukcesywna aproksymacja): szybki, tani, wbudowany w większość mikrokontrolerów.\n  - Flash: najszybszy (równoległy), drogi i prądożerny, używany w oscyloskopach cyfrowych.\n  - Sigma-Delta: bardzo wysoka precyzja (16-24 bit), idealny do audio i pomiarów mostków tensometrycznych."
+      },
+      {
+        id: "fiz2",
+        module: "fiz1",
+        category: "Fizyka i Sensoryka cz. 1",
+        q: "2. Przetwarzanie cyfrowo-analogowe (DAC) - główne problemy i technologie",
+        a: "• Zasada: Zamiana słowa cyfrowego na proporcjonalne napięcie lub prąd wyjściowy.\n• Problemy: Zniekształcenia schodkowe (wymagany analogowy filtr rekonstrukcyjny na wyjściu), zjawisko glitch (szpilki napięciowe przy przełączaniu bitów), nieliniowość DNL/INL.\n• Technologie DAC:\n  - Drabinka rezystorowa R-2R: wymaga tylko dwóch precyzyjnych wartości rezystorów, bardzo popularna.\n  - Wagowy przetwornik rezystorowy: rezystory o wagach kolejnych potęg dwójki.\n  - PWM z filtrem dolnoprzepustowym RC: tani pseudoprzetwornik realizowany programowo w mikrokontrolerach."
+      },
+      {
+        id: "fiz3",
+        module: "fiz1",
+        category: "Fizyka i Sensoryka cz. 1",
+        q: "3. Metody i techniki pomiaru zjawisk fizycznych, przykładowe urządzenia",
+        a: "• Metody pomiaru:\n  - Bezpośrednie: bezpośrednie porównanie z wzorcem (np. suwmiarka, waga odważnikowa).\n  - Pośrednie: pomiar innej wielkości fizycznej powiązanej znanym wzorem matematycznym (np. wyznaczanie temperatury z rezystancji termistora, pomiar prędkości z efektu Dopplera).\n• Urządzenia pomiarowe: multimetr cyfrowy (napięcie, prąd, rezystancja), oscyloskop (przebiegi napięcia w czasie), dalmierz laserowy / LiDAR (pomiar czasu przelotu światła ToF), kamera termowizyjna (pomiar promieniowania podczerwonego)."
+      },
+      {
+        id: "fiz4",
+        module: "fiz1",
+        category: "Fizyka i Sensoryka cz. 1",
+        q: "4. Pojęcie czujnika/sensora, przykłady i zastosowania",
+        a: "• Definicja: Element wejściowy układu pomiarowego, który przekształca badaną wielkość nieelektryczną (fizyczną, chemiczną) na użyteczny sygnał elektryczny (napięcie, prąd, zmianę częstotliwości).\n• Przykłady i zastosowania:\n  - Akcelerometr / IMU: pomiar przyspieszenia i orientacji (smartfony, stabilizacja dronów).\n  - Czujnik Halla: detekcja pola magnetycznego (pomiar prędkości obrotowej kół w ABS).\n  - Termopara: pomiar bardzo wysokich temperatur w piecach hutniczych.\n  - Tensometr: pomiar naprężeń i masy (wagi elektroniczne, monitoring mostów)."
+      },
+      {
+        id: "fiz5",
+        module: "fiz1",
+        category: "Fizyka i Sensoryka cz. 1",
+        q: "5. Podstawowe różnice między czujnikami aktywnymi a pasywnymi",
+        a: "• Czujniki aktywne (generacyjne):\n  - NIE wymagają zewnętrznego źródła zasilania do wygenerowania sygnału.\n  - Bezpośrednio zamieniają energię zjawiska w energię elektryczną.\n  - Przykłady: termopara (zjawisko Seebecka), kryształ piezoelektryczny, ogniwo fotowoltaiczne.\n• Czujniki pasywne (parametryczne):\n  - WYMAGAJĄ doprowadzenia zewnętrznego zasilania (napięcia/prądu pomiarowego).\n  - Pod wpływem mierzonej wielkości zmienia się ich parametr elektryczny (R, C, L).\n  - Przykłady: termistor, fotorezystor, tensometr rezystancyjny."
+      },
+      {
+        id: "fiz6",
+        module: "fiz1",
+        category: "Fizyka i Sensoryka cz. 1",
+        q: "6. Obszary aplikacyjne technologii sensorów w personalnych urządzeniach mobilnych",
+        a: "• Ruch i orientacja: akcelerometr (krokomierz, zmiana orientacji ekranu pion/poziom), żyroskop (sterowanie w grach, stabilizacja wideo), magnetometr (cyfrowy kompas).\n• Otoczenie i interfejs: czujnik oświetlenia (automatyczna regulacja jasności ekranu), czujnik zbliżeniowy (wyłączanie ekranu podczas rozmowy przy uchu), barometr (dokładniejszy pomiar wysokości).\n• Biometria i zdrowie: optyczny/ultradźwiękowy czytnik linii papilarnych, sensor ToF/FaceID (mapa twarzy 3D), fotopletyzmograf PPG w smartwatchach (tętno i nasycenie SpO2)."
+      },
+      {
+        id: "fiz7",
+        module: "fiz1",
+        category: "Fizyka i Sensoryka cz. 1",
+        q: "7. Elementy wykonawcze (aktuatory) w automatyce oraz fizyczna zasada ich działania",
+        a: "• Definicja: Elementy przekształcające sygnał sterujący w działanie fizyczne (ruch, siłę, przepływ).\n• Przykłady i zasady fizyczne:\n  - Silniki elektryczne (DC, BLDC, krokowe): zjawisko indukcji elektromagnetycznej i siła Lorentza (ruch przewodnika z prądem w polu magnetycznym).\n  - Przekaźniki i elektrozawory: pole magnetyczne cewki przyciąga ferromagnetyczną zworę (otwarcie/zamknięcie styku lub zaworu).\n  - Aktuatory piezoelektryczne: odkształcenie kryształu pod wpływem przyłożonego napięcia (odwrotne zjawisko piezoelektryczne - precyzyjne mikropozycjonery).\n  - Siłowniki pneumatyczne/hydrauliczne: siła wywołana ciśnieniem sprężonego gazu lub cieczy."
+      },
+      {
+        id: "fiz8",
+        module: "fiz1",
+        category: "Fizyka i Sensoryka cz. 1",
+        q: "8. Typy układów cyfrowych i metody ich opisu oraz implementacji",
+        a: "• Układy kombinacyjne: Stan wyjścia zależy wyłącznie od aktualnego stanu wejść (brak pamięci, np. sumatory, multipleksery, komparatory).\n• Układy sekwencyjne: Stan wyjścia zależy od stanu wejść oraz stanu poprzedniego (posiadają pamięć, np. przerzutniki, rejestry, liczniki).\n• Metody opisu: tablice prawdy, siatki Karnaugh, równania algebry Boole'a, grafy przejść automatów (Moore'a/Mealy'ego), języki HDL.\n• Metody implementacji: bramki dyskretne (układy scalone SSI/MSI), układy programowalne CPLD/FPGA, wyspecjalizowane układy ASIC."
+      },
+      {
+        id: "fiz9",
+        module: "fiz1",
+        category: "Fizyka i Sensoryka cz. 1",
+        q: "9. Języki opisu układów cyfrowych (HDL)",
+        a: "• VHDL: Silnie sformalizowany, ścisła kontrola typów danych, składnia bazująca na języku Ada. Popularny w Europie oraz w aplikacjach lotniczych i militarnych.\n• Verilog: Składnia zbliżona do języka C, bardziej elastyczny, szybszy w prototypowaniu. Popularny w USA i komercyjnym projektowaniu układów ASIC.\n• SystemVerilog: Nowoczesne rozszerzenie Veriloga dodające mechanizmy obiektowe do zaawansowanej weryfikacji sprzętu.\n• Poziomy abstrakcji opisu: behawioralny (algorytmiczny), RTL (Register-Transfer Level - rejestry i przepływy danych), strukturalny (połączenia modułów i bramek)."
+      },
+      {
+        id: "fiz10",
+        module: "fiz1",
+        category: "Fizyka i Sensoryka cz. 1",
+        q: "10. Zjawisko fotoelektryczne i jego wykorzystanie praktyczne",
+        a: "• Fotoelektryczne zewnętrzne: Wybijanie elektronów z powierzchni ciała pod wpływem fotonów o energii większej niż praca wyjścia (E = h*nu).\n  - Zastosowanie: fotopowielacze (detektory pojedynczych fotonów), noktowizory.\n• Fotoelektryczne wewnętrzne: Przeniesienie elektronów z pasma walencyjnego do pasma przewodnictwa w półprzewodniku (powstanie par elektron-dziura).\n  - Zastosowanie: ogniwa fotowoltaiczne (produkcja prądu), fotodiody i fototranzystory (odbiorniki podczerwieni, światłowody), matryce CMOS/CCD aparatów cyfrowych."
+      },
+
+      // FIZYKA I SENSORYKA CZ. 2
+      {
+        id: "fiz11a",
+        module: "fiz2",
+        category: "Fizyka i Sensoryka cz. 2",
+        q: "11a. Cyfrowe kodowanie i kompresja sygnałów akustycznych",
+        a: "• Zapis bez kompresji (PCM): Próbkowanie sygnału audio i kwantyzacja (standard CD-Audio: 44.1 kHz, 16 bitów, stereo).\n• Kompresja bezstratna (FLAC, ALAC): Redukcja objętości o ok. 40–50% na zasadzie kodowania predykcyjnego i entropijnego bez utraty ani jednego bitu danych.\n• Kompresja stratna (MP3, AAC, Opus): Wykorzystuje psychoakustyczny model słuchu ludzkiego – usuwa dźwięki niesłyszalne i wykorzystuje zjawisko maskowania częstotliwościowego oraz czasowego (drastyczna redukcja pliku, np. 10-krotna)."
+      },
+      {
+        id: "fiz11b",
+        module: "fiz2",
+        category: "Fizyka i Sensoryka cz. 2",
+        q: "11b. Cyfrowe formowanie, zapis i przetwarzanie obrazu",
+        a: "• Formowanie: Obraz z soczewki pada na matrycę z filtrem kolorów (filtr Bayera), ładunki są sczytywane i digitalizowane przez przetworniki ADC.\n• Formaty zapisu: Bezstratne (RAW, PNG, BMP), stratne (JPEG – oparty na Dyskretnej Transformacie Kosinusowej DCT i kwantyzacji współczynników częstotliwości).\n• Podstawowe przetwarzanie: Filtracja splotowa (wygładzanie filtrem Gaussa, wyostrzanie), binaryzacja progowa, wykrywanie krawędzi (filtry Sobela, Canny'ego)."
+      },
+      {
+        id: "fiz12",
+        module: "fiz2",
+        category: "Fizyka i Sensoryka cz. 2",
+        q: "12. Cyfrowe modele barw i algorytmy ich konwersji",
+        a: "• RGB: Addytywny model barw (mieszanie świateł R, G, B) – wyświetlacze, sensory kamer.\n• CMYK: Subtraktywny model barw (pigmenty pochłaniające światło) – drukarnie.\n• HSV / HSL: Składowe zbliżone do ludzkiego pojmowania koloru (odcień Hue, nasycenie Saturation, jasność Value/Lightness) – wygodny w algorytmach detekcji barw w wizji komputerowej.\n• Konwersja z RGB do skali szarości: Y = 0.299*R + 0.587*G + 0.114*B (wagi wynikają z największej czułości ludzkiego oka na barwę zieloną)."
+      },
+      {
+        id: "fiz13",
+        module: "fiz2",
+        category: "Fizyka i Sensoryka cz. 2",
+        q: "13. Metody rozpoznawania wzorca w obrazie nieruchomym",
+        a: "• Dopasowywanie szablonu (Template Matching): Przesuwanie wzorca piksel po pikselu i liczenie korelacji (działa tylko przy stałej skali i orientacji).\n• Deskryptory punktów kluczowych: SIFT, SURF, ORB – wyszukiwanie charakterystycznych cech odpornych na obrót, skalę i oświetlenie.\n• Klasyfikatory kaskadowe (Haar Cascades): Szybkie wykrywanie twarzy na podstawie prostokątnych cech jasnościowych.\n• Głębokie konwolucyjne sieci neuronowe (CNN): Współczesny standard (modele YOLO, ResNet) – automatyczne uczenie się reprezentacji i klasyfikacja z lokalizacją."
+      },
+      {
+        id: "fiz14",
+        module: "fiz2",
+        category: "Fizyka i Sensoryka cz. 2",
+        q: "14. Metody rozpoznawania ruchu i zmian w obrazie ruchomym",
+        a: "• Różnicowanie kadrów (Frame Differencing): Proste odejmowanie kolejnych klatek wideo (|Klatka[t] - Klatka[t-1]| > Próg). Bardzo szybkie, lecz gubi obiekty, które się zatrzymały.\n• Odejście tła (Background Subtraction / GMM): Statystyczne modelowanie statycznego tła (np. mieszaninami gaussowskimi) i wyodrębnianie obiektów pierwszoplanowych.\n• Przepływ optyczny (Optical Flow): Wyznaczanie wektorów prędkości i kierunku przesunięcia punktów obrazu między klatkami (np. metoda Lucasa-Kanade)."
+      },
+      {
+        id: "fiz15",
+        module: "fiz2",
+        category: "Fizyka i Sensoryka cz. 2",
+        q: "15. Cyfrowa rekonstrukcja sygnału",
+        a: "• Cel: Dokładne odtworzenie ciągłego sygnału analogowego z dyskretnego ciągu próbek.\n• Teoria: Interpolacja Whittakera-Kotielnikowa-Shannona przy użyciu funkcji sinc (filtra idealnego dolnoprzepustowego w dziedzinie częstotliwości).\n• Praktyka inżynierska: Zastosowanie ekstrapolatora zerowego rzędu (ZOH) w przetworniku DAC (tworzącego sygnał schodkowy) oraz analogowego filtru dolnoprzepustowego (wygładzającego schodki i usuwającego widma pasożytnicze powyżej częstotliwości Nyquista)."
+      },
+      {
+        id: "fiz16",
+        module: "fiz2",
+        category: "Fizyka i Sensoryka cz. 2",
+        q: "16. Cyfrowa filtracja sygnałów (FIR vs IIR)",
+        a: "• Filtry FIR (o skończonej odpowiedzi impulsowej):\n  - Zawsze bezwarunkowo stabilne.\n  - Posiadają idealnie liniową fazę (brak zniekształceń fazowych sygnału).\n  - Wymagają wyższego rzędu i większej mocy obliczeniowej.\n• Filtry IIR (o nieskończonej odpowiedzi impulsowej):\n  - Posiadają sprzężenie zwrotne (rekurencję).\n  - Osiągają stromą charakterystykę tłumienia przy znacznie niższym rzędzie niż FIR.\n  - Mogą być niestabilne i mają nieliniową fazę."
+      },
+      {
+        id: "fiz17",
+        module: "fiz2",
+        category: "Fizyka i Sensoryka cz. 2",
+        q: "17. Parametry urządzeń nadawczo-odbiorczych określające zasięg łącza radiowego",
+        a: "• Moc nadajnika (Ptx): Wyrażana w dBm lub watach.\n• Zysk anten (Gtx, Grx): Zysk energetyczny anteny nadawczej i odbiorczej w dBi.\n• Czułość odbiornika (Srx): Minimalna moc sygnału na wejściu odbiornika pozwalająca na dekodowanie danych (np. -105 dBm).\n• Równanie budżetu łącza (Wzór Friisa): Prx = Ptx + Gtx + Grx - Straty trasy (Path Loss).\n• Częstotliwość fali: Niższe pasma (sub-GHz, np. 868 MHz) cechuje mniejsze tłumienie w przeszkodach i większy zasięg niż pasma wyższe (2.4 GHz, 5 GHz)."
+      },
+      {
+        id: "fiz18",
+        module: "fiz2",
+        category: "Fizyka i Sensoryka cz. 2",
+        q: "18. Parametry urządzeń nadawczo-odbiorczych określające jakość transmisji w łączu radiowym",
+        a: "• SNR (Signal-to-Noise Ratio): Stosunek mocy sygnału użytecznego do mocy szumu tła.\n• SINR (Signal-to-Interference-plus-Noise Ratio): Uwzględnia szum oraz zakłócenia od innych nadajników.\n• BER (Bit Error Rate): Stopa błędów bitowych (stosunek bitów błędnych do odebranych ogółem).\n• EVM (Error Vector Magnitude): Miara dokładności modulacji cyfrowej (odchylenie punktów konstelacji od ideału).\n• Jitter i opóźnienie (Latency): Wahania czasu dostarczania pakietów w czasie."
+      },
+      {
+        id: "fiz19",
+        module: "fiz2",
+        category: "Fizyka i Sensoryka cz. 2",
+        q: "19. Zasada działania telefonii komórkowej w zakresie transmisji głosu, główne standardy",
+        a: "• Zasada: Podział obszaru na komórki (stacje BTS) z ponownym wykorzystaniem częstotliwości w oddalonych stacjach. Mechanizm Handover płynnie przełącza rozmowę między wieżami w trakcie poruszania się.\n• Ewolucja standardów głosu:\n  - 2G (GSM): komutacja łączy, cyfrowe kodowanie głosu w szczelinach czasowych TDMA/FDMA.\n  - 3G (UMTS): komutacja łączy, wprowadzenie kodeków szerokopasmowych (AMR-WB - HD Voice).\n  - 4G (LTE) -> VoLTE: rezygnacja z komutacji łączy; głos przesyłany pakietowo przez IP (VoIP) z priorytetem QoS.\n  - 5G -> VoNR: natywny przesył głosu przez sieć pakietową 5G o minimalnych opóźnieniach."
+      },
+      {
+        id: "fiz20",
+        module: "fiz2",
+        category: "Fizyka i Sensoryka cz. 2",
+        q: "20. Zasada działania telefonii komórkowej w zakresie transmisji danych, główne standardy",
+        a: "• Zasada: Komutacja pakietów; dane są dzielone na pakiety IP i przesyłane wspólnym kanałem radiowym z dynamicznym przydziałem pasma.\n• Standardy:\n  - 2.5G (GPRS / EDGE): pakiety w GSM, prędkości rzędu dziesiątek/setek kb/s.\n  - 3G (HSPA / HSPA+): prędkości do kilkudziesięciu Mb/s, początek ery mobilnego Internetu.\n  - 4G (LTE / LTE-A): modulacja OFDMA, technologia antenowa MIMO, agregacja pasm, prędkości do kilkuset Mb/s.\n  - 5G (NR): fale milimetrowe (mmWave), Massive MIMO, formowanie wiązki (Beamforming), prędkości > 1 Gb/s i opóźnienia rzędu paru milisekund."
+      }
+    ];
+
+    // STAN APLIKACJI
+    let questions = [];
+    let currentModule = "all";
+    let queue = [];
+    let currentCardIndex = 0;
+    let initialCount = 0;
+    let editingId = null;
+
+    // INICJALIZACJA
+    function init() {
+      const saved = localStorage.getItem("air_exam_questions");
+      if (saved) {
+        try {
+          questions = JSON.parse(saved);
+        } catch(e) {
+          questions = [...DEFAULT_DATA];
+        }
+      } else {
+        questions = [...DEFAULT_DATA];
+      }
+      setupModuleQueue();
+      renderQuestionsList();
+    }
+
+    function saveToStorage() {
+      localStorage.setItem("air_exam_questions", JSON.stringify(questions));
+    }
+
+    // NAWIGACJA ZAKŁADEK
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
+
+      if (tab === 'quiz') {
+        document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+        document.getElementById('view-quiz').classList.add('active');
+      } else {
+        document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+        document.getElementById('view-list').classList.add('active');
+        renderQuestionsList();
+      }
+    }
+
+    // LOGIKA QUIZU
+    function setupModuleQueue() {
+      currentModule = document.getElementById("module-select").value;
+      if (currentModule === "all") {
+        queue = questions.map(q => q.id);
+      } else {
+        queue = questions.filter(q => q.module === currentModule).map(q => q.id);
+      }
+      initialCount = queue.length;
+      updateQuizView();
+    }
+
+    function changeModule() {
+      setupModuleQueue();
+    }
+
+    function restartModule() {
+      setupModuleQueue();
+    }
+
+    function updateQuizView() {
+      const cardEl = document.getElementById("flashcard");
+      cardEl.classList.remove("flipped");
+
+      if (queue.length === 0) {
+        document.getElementById("quiz-area").style.display = "none";
+        document.getElementById("finished-area").style.display = "block";
+        document.getElementById("count-left").innerText = "0";
+        document.getElementById("progress-bar").style.width = "100%";
+        return;
+      }
+
+      document.getElementById("quiz-area").style.display = "block";
+      document.getElementById("finished-area").style.display = "none";
+
+      const currentId = queue[0];
+      const qData = questions.find(item => item.id === currentId);
+
+      document.getElementById("card-badge").innerText = qData.category;
+      document.getElementById("card-question").innerText = qData.q;
+      document.getElementById("card-answer").innerText = qData.a;
+      document.getElementById("count-left").innerText = queue.length;
+
+      const progress = ((initialCount - queue.length) / initialCount) * 100;
+      document.getElementById("progress-bar").style.width = `${progress}%`;
+    }
+
+    function flipCard() {
+      document.getElementById("flashcard").classList.toggle("flipped");
+    }
+
+    function handleAnswer(known) {
+      if (queue.length === 0) return;
+
+      const currentId = queue.shift();
+      if (!known) {
+        // Jeśli nie znamy - wraca na koniec kolejki
+        queue.push(currentId);
+      }
+      updateQuizView();
+    }
+
+    // LISTA PYTAŃ I EDYCJA
+    function renderQuestionsList() {
+      const listEl = document.getElementById("questions-list");
+      const search = document.getElementById("search-input").value.toLowerCase();
+      listEl.innerHTML = "";
+
+      const filtered = questions.filter(item => 
+        item.q.toLowerCase().includes(search) || item.a.toLowerCase().includes(search)
+      );
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 2rem;">Brak wyników wyszukiwania.</p>`;
+        return;
+      }
+
+      filtered.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "question-item";
+        div.innerHTML = `
+          <div class="q-item-header">
+            <span class="q-item-title">${item.q}</span>
+            <span class="q-item-badge">${item.category}</span>
+          </div>
+          <div class="q-item-answer">${item.a}</div>
+          <div class="q-item-actions">
+            <button class="btn-sm" onclick="openEditModal('${item.id}')">✏️ Edytuj treść</button>
+          </div>
+        `;
+        listEl.appendChild(div);
+      });
+    }
+
+    function openEditModal(id) {
+      editingId = id;
+      const item = questions.find(q => q.id === id);
+      document.getElementById("edit-q-text").value = item.q;
+      document.getElementById("edit-a-text").value = item.a;
+      document.getElementById("edit-modal").classList.add("active");
+    }
+
+    function closeEditModal() {
+      document.getElementById("edit-modal").classList.remove("active");
+      editingId = null;
+    }
+
+    function saveEditedQuestion() {
+      if (!editingId) return;
+      const item = questions.find(q => q.id === editingId);
+      item.q = document.getElementById("edit-q-text").value.trim();
+      item.a = document.getElementById("edit-a-text").value.trim();
+
+      saveToStorage();
+      closeEditModal();
+      renderQuestionsList();
+      updateQuizView(); // synchronizacja na żywo z fiszkami
+    }
+
+    function resetToDefaults() {
+      if (confirm("Czy na pewno chcesz przywrócić domyślne pytania i zresetować swoje edycje?")) {
+        questions = [...DEFAULT_DATA];
+        saveToStorage();
+        renderQuestionsList();
+        setupModuleQueue();
+      }
+    }
+
+    // START
+    window.onload = init;
+  </script>
+</body>
+</html>
