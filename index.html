@@ -2,8 +2,11 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Egzamin Magisterski AIR - Kompendium i Fiszki Pojęciowe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1120">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Egzamin Magisterski AIR - Fiszki Pojęciowe</title>
   <style>
     :root {
       --bg: #0b1120;
@@ -17,6 +20,7 @@
       --success: #22c55e;
       --danger: #ef4444;
       --border: #334155;
+      --safe-bottom: env(safe-area-inset-bottom, 12px);
     }
 
     * {
@@ -24,6 +28,7 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
@@ -33,39 +38,49 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 1.5rem 1rem;
+      padding: 0.75rem 0.75rem calc(var(--safe-bottom) + 1rem) 0.75rem;
     }
 
     header {
       width: 100%;
-      max-width: 860px;
-      margin-bottom: 1.5rem;
+      max-width: 600px;
+      margin-bottom: 0.75rem;
       text-align: center;
     }
 
     h1 {
-      font-size: 1.6rem;
+      font-size: 1.3rem;
       font-weight: 700;
       color: var(--accent);
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.2rem;
     }
 
+    header p {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    /* Nawigacja / Zakładki pod kciuk */
     .tabs {
       display: flex;
-      justify-content: center;
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
+      width: 100%;
+      max-width: 600px;
+      gap: 0.5rem;
+      margin-bottom: 0.85rem;
     }
 
     .tab-btn {
+      flex: 1;
       background: var(--card-bg);
       border: 1px solid var(--border);
       color: var(--text-muted);
-      padding: 0.6rem 1.4rem;
-      border-radius: 8px;
+      padding: 0.65rem 0.5rem;
+      border-radius: 10px;
       font-weight: 600;
+      font-size: 0.85rem;
       cursor: pointer;
       transition: all 0.2s;
+      text-align: center;
     }
 
     .tab-btn.active {
@@ -76,26 +91,32 @@
 
     .container {
       width: 100%;
-      max-width: 860px;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
     }
 
     .view-content {
       display: none;
+      width: 100%;
     }
 
     .view-content.active {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
     }
 
+    /* Pasek kontrolny */
     .controls-bar {
       display: flex;
-      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 1rem;
-      margin-bottom: 1rem;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
       background: var(--card-bg);
-      padding: 0.8rem 1.2rem;
+      padding: 0.6rem 0.85rem;
       border-radius: 10px;
       border: 1px solid var(--border);
     }
@@ -104,23 +125,42 @@
       background: #060d1e;
       color: var(--text);
       border: 1px solid var(--border);
-      padding: 0.55rem 0.85rem;
-      border-radius: 6px;
-      font-size: 0.9rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
       outline: none;
+      max-width: 100%;
     }
 
     select:focus, input[type="text"]:focus {
       border-color: var(--accent);
     }
 
+    .module-select-box {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .module-select-box select {
+      width: 100%;
+      text-overflow: ellipsis;
+    }
+
+    .counter-badge {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      margin-left: 0.5rem;
+    }
+
+    /* Pasek postępu */
     .progress-container {
       width: 100%;
       background: var(--border);
-      border-radius: 6px;
-      height: 8px;
+      border-radius: 4px;
+      height: 6px;
       overflow: hidden;
-      margin-bottom: 1.2rem;
+      margin-bottom: 0.85rem;
     }
 
     .progress-bar {
@@ -130,13 +170,14 @@
       transition: width 0.3s;
     }
 
-    /* Karta fiszki powiększona dla swobodnego czytania */
+    /* Karta Fiszki – zoptymalizowana pod pionowe ekrany */
     .flashcard-wrapper {
-      perspective: 1200px;
+      perspective: 1000px;
       width: 100%;
-      height: 480px;
+      min-height: 52vh;
+      max-height: 62vh;
+      margin-bottom: 0.85rem;
       cursor: pointer;
-      margin-bottom: 1.5rem;
     }
 
     .flashcard {
@@ -144,9 +185,9 @@
       height: 100%;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
       border-radius: 14px;
-      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+      box-shadow: 0 8px 20px -4px rgba(0,0,0,0.45);
     }
 
     .flashcard.flipped {
@@ -159,168 +200,176 @@
       height: 100%;
       backface-visibility: hidden;
       border-radius: 14px;
-      padding: 2.2rem 2.5rem;
+      padding: 1.25rem 1.15rem;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       border: 1px solid var(--border);
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .card-front {
       background: var(--card-front);
       text-align: center;
+      justify-content: center;
     }
 
     .card-back {
       background: var(--card-back);
       transform: rotateY(180deg);
       text-align: left;
+      justify-content: flex-start;
     }
 
     .card-badge {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.05em;
       color: var(--accent);
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.6rem;
       font-weight: 700;
     }
 
     .card-title {
-      font-size: 1.35rem;
+      font-size: 1.18rem;
       font-weight: 700;
-      line-height: 1.4;
+      line-height: 1.35;
       color: #f1f5f9;
     }
 
     .card-prompt {
-      margin-top: 1rem;
-      font-size: 0.95rem;
+      margin-top: 0.75rem;
+      font-size: 0.88rem;
       color: var(--text-muted);
-      line-height: 1.5;
+      line-height: 1.45;
     }
 
     .card-explanation {
-      font-size: 0.93rem;
-      line-height: 1.65;
+      font-size: 0.9rem;
+      line-height: 1.6;
       white-space: pre-line;
       color: #e2e8f0;
     }
 
     .card-hint {
-      margin-top: 1.2rem;
-      font-size: 0.8rem;
+      margin-top: auto;
+      padding-top: 0.8rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
       text-align: center;
     }
 
+    /* Przyciski oceny – duże, wygodne pod kciuk */
     .flashcard-actions {
       display: flex;
-      gap: 1rem;
-      justify-content: center;
+      gap: 0.6rem;
+      width: 100%;
     }
 
     .btn {
       flex: 1;
-      padding: 0.9rem 1.5rem;
-      font-size: 1rem;
+      padding: 0.85rem 0.5rem;
+      font-size: 0.92rem;
       font-weight: 600;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
-      transition: all 0.2s;
+      gap: 0.35rem;
+      transition: all 0.15s;
+      min-height: 48px;
     }
 
     .btn-repeat {
-      background: rgba(239, 68, 68, 0.15);
+      background: rgba(239, 68, 68, 0.18);
       color: #fca5a5;
-      border: 1px solid rgba(239, 68, 68, 0.35);
+      border: 1px solid rgba(239, 68, 68, 0.4);
     }
-    .btn-repeat:hover { background: rgba(239, 68, 68, 0.3); }
+    .btn-repeat:active { background: rgba(239, 68, 68, 0.35); transform: scale(0.98); }
 
     .btn-known {
-      background: rgba(34, 197, 94, 0.15);
+      background: rgba(34, 197, 94, 0.18);
       color: #86efac;
-      border: 1px solid rgba(34, 197, 94, 0.35);
+      border: 1px solid rgba(34, 197, 94, 0.4);
     }
-    .btn-known:hover { background: rgba(34, 197, 94, 0.3); }
+    .btn-known:active { background: rgba(34, 197, 94, 0.35); transform: scale(0.98); }
 
-    /* Widok Kompendium / Baza Pytań */
+    /* Widok Kompendium na telefonie */
     .list-toolbar {
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-bottom: 1.2rem;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 0.85rem;
     }
 
     .list-filter-row {
       display: flex;
-      gap: 0.75rem;
-      flex: 1;
-      min-width: 280px;
+      gap: 0.5rem;
+      width: 100%;
     }
 
-    .search-input { flex: 1; }
+    .search-input {
+      flex: 1;
+      min-width: 0;
+    }
 
     .accordion-controls {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.4rem;
+      width: 100%;
+    }
+
+    .accordion-controls .btn-sm {
+      flex: 1;
+      text-align: center;
+      padding: 0.5rem 0.3rem;
+      font-size: 0.75rem;
     }
 
     .question-accordion-item {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 10px;
-      margin-bottom: 0.85rem;
+      margin-bottom: 0.6rem;
       overflow: hidden;
-      transition: border-color 0.2s;
-    }
-
-    .question-accordion-item:hover {
-      border-color: var(--accent);
     }
 
     .accordion-header {
-      padding: 1.1rem 1.3rem;
+      padding: 0.85rem 0.95rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      user-select: none;
       background: var(--card-bg);
-      gap: 1rem;
+      gap: 0.75rem;
     }
 
     .accordion-title-box {
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
+      gap: 0.2rem;
+      min-width: 0;
     }
 
     .accordion-title {
       font-weight: 600;
       color: #f1f5f9;
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       line-height: 1.35;
     }
 
     .accordion-meta {
-      font-size: 0.75rem;
+      font-size: 0.68rem;
       color: var(--accent);
       font-weight: 600;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
     }
 
     .accordion-chevron {
       color: var(--text-muted);
-      font-size: 1.1rem;
+      font-size: 0.85rem;
       transition: transform 0.25s ease;
       flex-shrink: 0;
     }
@@ -332,7 +381,7 @@
 
     .accordion-body {
       display: none;
-      padding: 1.2rem 1.4rem 1.4rem 1.4rem;
+      padding: 0.95rem 1rem 1.1rem 1rem;
       border-top: 1px solid var(--border);
       background: #111c2e;
     }
@@ -342,41 +391,39 @@
     }
 
     .accordion-text {
-      font-size: 0.95rem;
-      line-height: 1.65;
+      font-size: 0.88rem;
+      line-height: 1.6;
       color: #cbd5e1;
       white-space: pre-line;
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
     }
 
     .accordion-footer {
       display: flex;
       justify-content: flex-end;
-      gap: 0.5rem;
     }
 
     .btn-sm {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.8rem;
+      padding: 0.45rem 0.75rem;
+      font-size: 0.75rem;
       border-radius: 6px;
       cursor: pointer;
       border: 1px solid var(--border);
       background: #091122;
       color: var(--text-muted);
       font-weight: 500;
-      transition: all 0.2s;
     }
-    .btn-sm:hover {
+    .btn-sm:active {
       color: var(--text);
       border-color: var(--accent);
     }
 
-    /* Modal edycji */
+    /* Modal edycji na pełny ekran telefonu */
     .modal {
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.75);
+      background: rgba(0,0,0,0.8);
       justify-content: center;
       align-items: center;
       padding: 1rem;
@@ -386,40 +433,47 @@
     .modal-box {
       background: var(--card-bg);
       border: 1px solid var(--border);
-      padding: 1.5rem;
-      border-radius: 12px;
+      padding: 1.25rem;
+      border-radius: 14px;
       width: 100%;
-      max-width: 680px;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
     }
-    .modal-box h3 { margin-bottom: 1rem; color: var(--accent); }
+    .modal-box h3 { margin-bottom: 0.75rem; color: var(--accent); font-size: 1.1rem; }
     .modal-box textarea {
       width: 100%;
       background: #091122;
       color: var(--text);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 0.8rem;
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
+      border-radius: 8px;
+      padding: 0.7rem;
+      font-size: 0.85rem;
+      margin-bottom: 0.75rem;
       outline: none;
       resize: vertical;
     }
     .modal-actions {
       display: flex;
       justify-content: flex-end;
-      gap: 0.8rem;
+      gap: 0.6rem;
     }
 
     .finished-box {
       text-align: center;
-      padding: 3.5rem 1.5rem;
+      padding: 2.5rem 1rem;
       background: var(--card-bg);
       border-radius: 14px;
       border: 1px solid var(--border);
+      margin-top: 1rem;
     }
     .finished-box h2 {
       color: var(--success);
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.6rem;
+      font-size: 1.25rem;
+    }
+    .finished-box p {
+      font-size: 0.88rem;
     }
   </style>
 </head>
@@ -427,30 +481,29 @@
 
   <header>
     <h1>🎓 Egzamin Magisterski AIR</h1>
-    <p style="color: var(--text-muted); font-size: 0.9rem;">Karty pojęciowe i kompendium wiedzy do odpowiedzi ustnej</p>
+    <p>Fiszki pojęciowe i kompendium wiedzy</p>
   </header>
 
   <nav class="tabs">
-    <button class="tab-btn active" onclick="switchTab('quiz')">🗂️ Tryb Fiszek Pojęciowych</button>
-    <button class="tab-btn" onclick="switchTab('list')">📖 Kompendium / Baza Zagadnień</button>
+    <button class="tab-btn active" onclick="switchTab('quiz')">🗂️ Fiszki</button>
+    <button class="tab-btn" onclick="switchTab('list')">📖 Kompendium</button>
   </nav>
 
   <main class="container">
-    <!-- WIDOK 1: FISZKI -->
+    <!-- WIDOK 1: FISZKI POJĘCIOWE -->
     <section id="view-quiz" class="view-content active">
       <div class="controls-bar">
-        <div>
-          <label style="font-size: 0.85rem; color: var(--text-muted);">Segment wiedzy: </label>
+        <div class="module-select-box">
           <select id="module-select" onchange="changeModule()">
-            <option value="all">Wszystkie moduły (pełen zakres)</option>
-            <option value="inf1">Informatyka cz. 1 (Mikrokontrolery, Sieci, IoT)</option>
-            <option value="inf2">Informatyka cz. 2 (VR/AR, HMI, Biznes i Zarządzanie)</option>
-            <option value="fiz1">Fizyka i Sensoryka cz. 1 (ADC/DAC, Sensory, FPGA/HDL)</option>
-            <option value="fiz2">Fizyka i Sensoryka cz. 2 (Wizja/Dźwięk, Sygnały, Łączność)</option>
+            <option value="all">Wszystkie moduły</option>
+            <option value="inf1">Informatyka cz. 1 (Sprzęt, Sieci, IoT)</option>
+            <option value="inf2">Informatyka cz. 2 (VR/AR, HMI, Biznes)</option>
+            <option value="fiz1">Fizyka i Sensoryka cz. 1 (A/C, Sensory, FPGA)</option>
+            <option value="fiz2">Fizyka i Sensoryka cz. 2 (Wizja, Sygnały, GSM)</option>
           </select>
         </div>
-        <div style="font-size: 0.85rem; color: var(--text-muted);">
-          Pozostało zagadnień: <strong id="count-left" style="color: var(--accent);">0</strong>
+        <div class="counter-badge">
+          Pozostało: <strong id="count-left" style="color: var(--accent);">0</strong>
         </div>
       </div>
 
@@ -465,46 +518,46 @@
               <span class="card-badge" id="card-badge">Zagadnienie</span>
               <h2 class="card-title" id="card-title">Ładowanie zagadnienia...</h2>
               <p class="card-prompt" id="card-prompt">...</p>
-              <div class="card-hint">💡 Kliknij, aby przejrzeć omówienie pojęć i mechanizmów</div>
+              <div class="card-hint">👆 Dotknij karty, aby sprawdzić omówienie</div>
             </div>
             <div class="card-face card-back">
-              <span class="card-badge">Struktura wypowiedzi / Kluczowe pojęcia</span>
+              <span class="card-badge">Kluczowe pojęcia / Wypowiedź</span>
               <div class="card-explanation" id="card-explanation">...</div>
-              <div class="card-hint">💡 Kliknij, aby obrócić z powrotem</div>
+              <div class="card-hint">👆 Dotknij, aby obrócić z powrotem</div>
             </div>
           </div>
         </div>
 
         <div class="flashcard-actions">
           <button class="btn btn-repeat" onclick="handleAnswer(false)">
-            🔄 Do powtórzenia (jeszcze niepewne)
+            🔄 Do powtórzenia
           </button>
           <button class="btn btn-known" onclick="handleAnswer(true)">
-            ✅ Opanowane (znam pojęcia)
+            ✅ Opanowane
           </button>
         </div>
       </div>
 
       <div id="finished-area" class="finished-box" style="display: none;">
-        <h2>🎉 Świetnie! Cały segment pojęciowy powtórzony!</h2>
-        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Przejrzałeś i przyswoiłeś wszystkie zagadnienia z tej partii materiału.</p>
-        <button class="btn btn-known" style="max-width: 270px; margin: 0 auto;" onclick="restartModule()">
-          Powtórz ten segment jeszcze raz
+        <h2>🎉 Świetnie! Segment opanowany!</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.25rem;">Wszystkie zagadnienia z tej partii zostały przejrzane.</p>
+        <button class="btn btn-known" style="max-width: 250px; margin: 0 auto;" onclick="restartModule()">
+          Powtórz segment od nowa
         </button>
       </div>
     </section>
 
-    <!-- WIDOK 2: BAZA WIEDZY -->
+    <!-- WIDOK 2: BAZA WIEDZY (KOMPENDIUM) -->
     <section id="view-list" class="view-content">
       <div class="list-toolbar">
         <div class="list-filter-row">
-          <input type="text" id="search-input" class="search-input" placeholder="🔍 Szukaj hasła, pojęcia, technologii..." oninput="renderQuestionsList()">
-          <select id="list-module-filter" onchange="renderQuestionsList()">
-            <option value="all">Wszystkie moduły</option>
-            <option value="inf1">Informatyka cz. 1</option>
-            <option value="inf2">Informatyka cz. 2</option>
-            <option value="fiz1">Fizyka i Sensoryka cz. 1</option>
-            <option value="fiz2">Fizyka i Sensoryka cz. 2</option>
+          <input type="text" id="search-input" class="search-input" placeholder="🔍 Szukaj hasła..." oninput="renderQuestionsList()">
+          <select id="list-module-filter" style="max-width: 140px;" onchange="renderQuestionsList()">
+            <option value="all">Wszystko</option>
+            <option value="inf1">Inf cz. 1</option>
+            <option value="inf2">Inf cz. 2</option>
+            <option value="fiz1">Fiz cz. 1</option>
+            <option value="fiz2">Fiz cz. 2</option>
           </select>
         </div>
         <div class="accordion-controls">
@@ -521,20 +574,19 @@
   <!-- MODAL EDYCJI -->
   <div class="modal" id="edit-modal">
     <div class="modal-box">
-      <h3>Edycja zagadnienia pojęciowego</h3>
-      <label style="font-size: 0.8rem; color: var(--text-muted);">Zagadnienie / Pytanie:</label>
-      <textarea id="edit-q-text" rows="3"></textarea>
-      <label style="font-size: 0.8rem; color: var(--text-muted);">Kluczowe pojęcia i omówienie:</label>
-      <textarea id="edit-a-text" rows="10"></textarea>
+      <h3>Edycja zagadnienia</h3>
+      <label style="font-size: 0.75rem; color: var(--text-muted);">Zagadnienie / Tytuł:</label>
+      <textarea id="edit-q-text" rows="2"></textarea>
+      <label style="font-size: 0.75rem; color: var(--text-muted);">Notatka / Punkty wypowiedzi:</label>
+      <textarea id="edit-a-text" rows="9"></textarea>
       <div class="modal-actions">
         <button class="btn-sm" onclick="closeEditModal()">Anuluj</button>
-        <button class="btn-sm" style="background: var(--accent); color: #0b1120; border-color: var(--accent); font-weight: bold;" onclick="saveEditedQuestion()">Zapisz zmiany</button>
+        <button class="btn-sm" style="background: var(--accent); color: #0b1120; border-color: var(--accent); font-weight: bold;" onclick="saveEditedQuestion()">Zapisz</button>
       </div>
     </div>
   </div>
 
   <script>
-    // BAZA WIEDZY: POJĘCIOWE PUNKTY ODNIESIENIA NA EGZAMIN MAGISTERSKI
     const DEFAULT_DATA = [
       // -------------------------------------------------------------------------
       // INFORMATYKA I GOSPODARKA ELEKTRONICZNA (CZĘŚĆ 1)
@@ -543,16 +595,16 @@
         id: "inf_c_1",
         module: "inf1",
         category: "Zagadnienie 1 | Sprzęt wbudowany",
-        title: "Spektrum mikrokontrolerów i platform sterujących (AVR, PIC, PLC, FPGA, RPi)",
-        prompt: "Jak scharakteryzować i porównać poszczególne rodziny układów pod kątem ich filozofii i zastosowania?",
+        title: "Mikrokontrolery i platformy sterujące (AVR, PIC, PLC, FPGA, RPi)",
+        prompt: "Jak scharakteryzować i porównać poszczególne platformy pod kątem ich filozofii działania i zastosowania?",
         body: "1. Mikrokontrolery ogólnego przeznaczenia (MCU):\n" +
-              "   • AVR / XMega: Tanie, 8/16-bitowe układy RISC. Prosta architektura harwardzka, duża biblioteka peryferiów (baza Arduino). Idealne do prostego odczytu czujników i szybkiego prototypowania.\n" +
-              "   • PIC (Microchip): Wysoka odporność na zakłócenia elektromagnetyczne (EMC) i zaawansowane tryby uśpienia (nanoWatt). Standard w przemyśle AGD i automotive.\n\n" +
+              "   • AVR / XMega: Tanie, 8/16-bitowe układy RISC (Microchip/Atmel). Prosta architektura, baza Arduino. Odczyt czujników i szybkie prototypowanie.\n" +
+              "   • PIC: Wysoka odporność na zakłócenia elektromagnetyczne (EMC) i niski pobór prądu w uśpieniu (nanoWatt). Przemysł AGD i automotive.\n\n" +
               "2. Systemy przemysłowe i rekonfigurowalne:\n" +
-              "   • PLC: Pancerny komputer przemysłowy na szynę DIN ze zintegrowaną ochroną I/O (24V). Programowany językiem drabinkowym (LD). Gwarantuje determinizm pętli sterowania w fabrykach.\n" +
-              "   • FPGA: Programowalna macierz bramek logicznych. Nie wykonuje programu instrukcja po instrukcji – kod w VHDL/Verilogu rekonfiguruje fizyczną strukturę krzemu. Zapewnia prawdziwą równoległość i zerowe opóźnienia programowe (radary, telekomunikacja 5G, kryptografia).\n\n" +
+              "   • PLC: Gotowy, pancerny komputer przemysłowy na szynę DIN z zabezpieczonymi wejściami 24V. Programowany językiem drabinkowym (LD). Odporny na pył, zakłócenia i wibracje na liniach produkcyjnych.\n" +
+              "   • FPGA: Programowalna macierz bramek logicznych. Kod HDL fizycznie rekonfiguruje połączenia w krzemie. Brak opóźnień programowych, pełna równoległość (radary, telekomunikacja 5G, akceleracja AI).\n\n" +
               "3. Komputery jednopłytkowe (SBC):\n" +
-              "   • Raspberry Pi: Pełny procesor ARM z systemem Linux. W systemach IoT pełni rolę Bramy Brzegowej (Edge Gateway) agregującej dane z sieci polowych, wykonującej lokalną analitykę lub wizję maszynową."
+              "   • Raspberry Pi: Procesor ARM z systemem Linux. W IoT pełni rolę Bramy Brzegowej (Edge Gateway) agregującej dane z czujników, lokalnej bazy danych lub węzła przetwarzania wizji."
       },
       {
         id: "inf_c_2a",
@@ -561,14 +613,14 @@
         title: "Architektury układów cyfrowych: Stała vs Programowalna vs Mikroprocesorowa",
         prompt: "Czym różnią się te trzy podejścia pod względem elastyczności, kosztów i wydajności?",
         body: "1. Układy o ustalonej strukturze (ASIC / stałe bramki):\n" +
-              "   • Połączenia tranzystorów są niezmiennie wyryte w krzemie podczas produkcji.\n" +
-              "   • Cechy: Ekstremalnie wysoki koszt wdrożenia (maski krzemowe), ale najniższy koszt jednostkowy przy masowej skali. Najwyższa wydajność i energooszczędność, zerowa elastyczność zmian.\n\n" +
+              "   • Połączenia tranzystorów są niezmiennie wytrawione w krzemie podczas produkcji.\n" +
+              "   • Bardzo wysoki koszt projektu maski krzemowej, ale najniższy koszt jednostkowy w masowej skali. Najwyższa wydajność i energooszczędność, zerowa elastyczność zmian.\n\n" +
               "2. Układy o programowalnej strukturze (PLD, CPLD, FPGA):\n" +
-              "   • Struktura logiczna jest definiowana programowo po wyprodukowaniu układu (kodem HDL).\n" +
-              "   • Cechy: Brak kosztownych masek, pełna elastyczność i możliwość aktualizacji logiki w gotowym urządzeniu. Wyższy koszt jednostkowy i większy pobór prądu niż ASIC.\n\n" +
+              "   • Wewnętrzna siatka połączeń logicznych definiowana programowo po wyprodukowaniu układu (kodem HDL).\n" +
+              "   • Brak kosztownych masek, pełna elastyczność i możliwość aktualizacji logiki w gotowym urządzeniu. Wyższy koszt chipa niż ASIC.\n\n" +
               "3. Układy mikroprocesorowe (CPU, MCU):\n" +
-              "   • Stała architektura sprzętowa (jednostka ALU, rejestry, dekoder), która realizuje zmienny program przechowywany w pamięci (architektura von Neumanna lub harwardzka).\n" +
-              "   • Cechy: Najwyższa elastyczność programistyczna, ale sekwencyjne wykonywanie instrukcji narzuca ograniczenia czasowe."
+              "   • Stała architektura sprzętowa (ALU, rejestry, dekoder), która realizuje zmienny program przechowywany w pamięci.\n" +
+              "   • Najwyższa elastyczność programistyczna, ale sekwencyjne wykonywanie instrukcji narzuca ograniczenia czasowe."
       },
       {
         id: "inf_c_2b",
@@ -577,23 +629,23 @@
         title: "Wirtualizacja w informatyce: Hiperwizory, konteneryzacja i chmury",
         prompt: "Jakie są poziomy wirtualizacji zasobów, dlaczego się ją stosuje i gdzie jest kluczowa?",
         body: "1. Filozofia i korzyści:\n" +
-              "   • Uruchamianie wielu niezależnych środowisk logicznych na jednym fizycznym zasobie sprzętowym.\n" +
-              "   • Zalety: Drastyczne zwiększenie utylizacji serwerów (oszczędność prądu i sprzętu), łatwe tworzenie migawek (snapshots), izolacja awarii i skalowalność.\n\n" +
+              "   • Uruchamianie wielu niezależnych środowisk logicznych na jednym fizycznym serwerze.\n" +
+              "   • Zwiększenie utylizacji sprzętu (oszczędność prądu i maszyn), łatwe migawki (snapshots), izolacja awarii i błyskawiczne skalowanie.\n\n" +
               "2. Główne metody realizacji:\n" +
-              "   • Hiperwizor Typu 1 (Bare-metal, np. VMware ESXi, Proxmox): Działa bezpośrednio na sprzęcie serwera; najwyższa wydajność w centrach danych.\n" +
-              "   • Hiperwizor Typu 2 (Hosted, np. VirtualBox): Działa jako program wewnątrz zwykłego systemu operacyjnego (do zastosowań deweloperskich).\n" +
-              "   • Konteneryzacja (Docker, Kubernetes): Wirtualizacja na poziomie jądra systemu – kontenery współdzielą kernel gospodarza, izolując jedynie procesy. Błyskawiczny start (milisekundy) i minimalny narzut pamięci.\n\n" +
-              "3. Zastosowanie: Chmury obliczeniowe (AWS, Azure), potoki CI/CD oraz architektury mikroserwisów."
+              "   • Hiperwizor Typu 1 (Bare-metal, np. Proxmox, VMware ESXi): Działa bezpośrednio na sprzęcie serwera; standard w centrach danych.\n" +
+              "   • Hiperwizor Typu 2 (Hosted, np. VirtualBox): Działa jako program w zwykłym systemie operacyjnym (testy deweloperskie).\n" +
+              "   • Konteneryzacja (Docker, Kubernetes): Wirtualizacja na poziomie jądra – kontenery współdzielą kernel gospodarza, izolując jedynie procesy. Start w milisekundy i minimalny narzut pamięci.\n\n" +
+              "3. Zastosowanie: Chmury publiczne (AWS, Azure), potoki CI/CD i mikroserwisy."
       },
       {
         id: "inf_c_3",
         module: "inf1",
         category: "Zagadnienie 3 | Inżynieria 3D",
         title: "Modelowanie 3D oraz obieg dokumentacji w ekosystemie CAD/CAM",
-        prompt: "Jak wygląda przejście od koncepcji inżynierskiej do wytworzenia elementu?",
-        body: "1. CAD (Computer-Aided Design) – Projektowanie i dokumentacja:\n" +
-              "   • Tworzenie parametrycznych modeli 3D części (bryłowych i powierzchniowych) oraz złożeń.\n" +
-              "   • Zasady redagowania rysunku wykonawczego: jednoznaczność wymiarowa (brak przewymiarowania), tolerancje geometryczne i pasowania, chropowatość powierzchni oraz rzutowanie europejskie (metoda kąta pierwszego).\n\n" +
+        prompt: "Jak wygląda przejście od koncepcji inżynierskiej do wytworzenia gotowego elementu?",
+        body: "1. CAD (Computer-Aided Design) – Projektowanie:\n" +
+              "   • Tworzenie parametrycznych modeli 3D części bryłowych i złożeń.\n" +
+              "   • Zasady dokumentacji wykonawczej: jednoznaczność wymiarowa (brak przewymiarowania), tolerancje geometryczne i pasowania, chropowatość powierzchni oraz rzutowanie europejskie (metoda kąta pierwszego).\n\n" +
               "2. CAM (Computer-Aided Manufacturing) – Wytwarzanie:\n" +
               "   • Pobranie geometrii z CAD i zdefiniowanie parametrów obróbki (dobór frezów, prędkości skrawania, posuwów).\n" +
               "   • Postprocessing: Wygenerowanie uniwersalnego kodu maszynowego (G-Code) sterującego osiami frezarek CNC, tokarek lub drukarek 3D."
@@ -605,10 +657,10 @@
         title: "Sieci personalne (PAN) i bardzo krótkiego zasięgu (NFC, BLE, Zigbee, UWB)",
         prompt: "Jakie technologie tworzą łączność osobistą i lokalną oraz jak dobrać standard do zadania?",
         body: "1. Zasięg dotykowy i zbliżeniowy:\n" +
-              "   • NFC (13,56 MHz, do paru cm): Płatności zbliżeniowe, parowanie urządzeń Bluetooth jednym dotknięciem, pasywne tagi zbliżeniowe.\n\n" +
+              "   • NFC (13,56 MHz, do paru cm): Płatności zbliżeniowe telefonem, szybkie parowanie Bluetooth jednym dotknięciem, pasywne tagi RFID.\n\n" +
               "2. Łączność osobista i domowa:\n" +
-              "   • BLE (Bluetooth Low Energy, 2,4 GHz): Tryby uśpienia i wysyłka krótkich pakietów pozwalają na pracę na baterii pastylkowej przez lata (smartwatche, monitory tętna, beacony nawigacyjne).\n" +
-              "   • Zigbee (IEEE 802.15.4) & Z-Wave: Topologia siatki (Mesh) – urządzenia przekazują pakiety dalej, zwiększając zasięg. Z-Wave (pasmo 868 MHz) unika zatłoczonego pasma 2,4 GHz Wi-Fi.\n\n" +
+              "   • BLE (Bluetooth Low Energy, 2,4 GHz): Tryby głębokiego uśpienia i krótkie pakiety pozwalają na pracę na baterii pastylkowej przez lata (smartwatche, monitory tętna, beacony nawigacyjne).\n" +
+              "   • Zigbee & Z-Wave: Topologia siatki (Mesh) – węzły retransmitują pakiety, zwiększając zasięg. Z-Wave (pasmo 868 MHz) unika zakłóceń z Wi-Fi 2,4 GHz.\n\n" +
               "3. Precyzyjne pozycjonowanie:\n" +
               "   • UWB (Ultra-Wideband): Pasmo >500 MHz, impulsowa transmisja umożliwia centymetrowy pomiar odległości metodą Time of Flight (cyfrowe klucze samochodowe, Apple AirTag)."
       },
@@ -616,16 +668,16 @@
         id: "inf_c_5",
         module: "inf1",
         category: "Zagadnienie 5 | Radiolokacja",
-        title: "Metody i techniki geolokalizacji radiowej w przestrzeni otwartej i zamkniętej",
-        prompt: "Jak fizycznie wyznacza się położenie węzła radiowego na zewnątrz oraz wewnątrz budynków?",
+        title: "Metody i techniki geolokalizacji radiowej w terenie otwartym i wewnątrz budynków",
+        prompt: "Jak fizycznie wyznacza się położenie węzła radiowego na zewnątrz oraz wewnątrz obiektów?",
         body: "1. Przestrzeń otwarta (Outdoor):\n" +
-              "   • GNSS (GPS, Galileo): Zegary atomowe na satelitach nadają sygnał czasu. Odbiornik mierzy czas dotarcia fali (Time of Arrival) i metodą trilateracji wyznacza pozycję. Wymaga min. 4 satelitów (X, Y, Z oraz korekta błędu taniego zegara kwarcowego w odbiorniku).\n" +
+              "   • GNSS (GPS, Galileo): Zegary atomowe na satelitach nadają sygnał czasu. Odbiornik mierzy czas dotarcia fali (Time of Arrival) i metodą trilateracji wyznacza pozycję. Wymaga min. 4 satelitów (X, Y, Z oraz korekta błędu zegara kwarcowego w odbiorniku).\n" +
               "   • Sieci komórkowe (GSM/LTE): Identyfikacja stacji bazowej (Cell-ID) oraz triangulacja/trilateracja na podstawie wielu stacji BTS.\n\n" +
               "2. Wewnątrz budynków (Indoor Positioning – brak sygnału GNSS):\n" +
-              "   • RSSI: Estymacja odległości na podstawie spadku mocy sygnału Wi-Fi/BLE (niedokładna przez odbicia od ścian i mebli).\n" +
-              "   • Fingerprinting: Porównywanie bieżącego wektora sygnałów z wcześniej zarejestrowaną 'mapą radiową' budynku.\n" +
+              "   • RSSI: Estymacja odległości na podstawie spadku mocy sygnału Wi-Fi/BLE (mało dokładna przez odbicia od ścian).\n" +
+              "   • Fingerprinting: Porównywanie bieżącego odczytu z wcześniej zmierzoną 'mapą radiową' budynku.\n" +
               "   • UWB (TDoA / ToF): Precyzyjny pomiar nanosekundowych różnic czasu dotarcia impulsów (dokładność poniżej 10 cm).\n" +
-              "   • Kątowe AoA / AoD: Wyznaczanie kąta nadejścia fali przez macierz anten w standardzie BLE 5.1."
+              "   • Kątowe AoA / AoD: Wyznaczanie kąta nadejścia fali przez macierz anten w BLE 5.1."
       },
       {
         id: "inf_c_7_10",
@@ -639,7 +691,7 @@
               "2. Architektury sieci przyszłości:\n" +
               "   • SDN (Software-Defined Networking): Programowe rozdzielenie płaszczyzny sterowania (Control Plane) od płaszczyzny danych (Data Plane). Centralny kontroler programuje trasy ruchu na przełącznikach.\n" +
               "   • NFV: Wirtualizacja funkcji sieciowych (zastąpienie fizycznych firewalli i routerów maszynami wirtualnymi).\n" +
-              "   • Edge Computing: Przeniesienie mocy obliczeniowej z odległej chmury na krawędź sieci (blisko użytkownika), co redukuje opóźnienia do paru milisekund (niezbędne dla autonomicznych aut i telechirurgii)."
+              "   • Edge Computing: Przeniesienie mocy obliczeniowej z chmury na krawędź sieci (blisko użytkownika), redukujące opóźnienia do kilku milisekund (niezbędne dla autonomicznych aut i telechirurgii)."
       },
       {
         id: "inf_c_9",
@@ -652,7 +704,7 @@
               "   • Łączności (Network): Sieci LPWAN (LoRaWAN, NB-IoT) do transmisji na kilometry przy mikroskopijnym poborze prądu, sieci lokalne (BLE, Zigbee, Wi-Fi).\n" +
               "   • Przetwarzania i Aplikacji: Bramy brzegowe (Edge), brokerzy danych, chmury analityczne, panele HMI/Dashboardy.\n\n" +
               "2. Protokoły komunikacji IoT:\n" +
-              "   • MQTT: Lekki wzorzec Publish/Subscribe z centralnym brokerem. Minimalny narzut nagłówka (2 bajty) i poziomy QoS (0, 1, 2).\n" +
+              "   • MQTT: Lekki wzorzec Publish/Subscribe z centralnym brokerem. Minimalny narzut nagłówka (2 bajty) i gwarancje QoS (0, 1, 2).\n" +
               "   • CoAP: Komunikacja Request/Response oparta na UDP dla urządzeń o skrajnie ograniczonej pamięci.\n\n" +
               "3. Wartość biznesowa: Predykcyjne utrzymanie ruchu (Predictive Maintenance), automatyzacja i dekarbonizacja procesów."
       },
@@ -669,7 +721,7 @@
         body: "1. Podstawowe problemy bezpieczeństwa IoT:\n" +
               "   • Niewielka moc obliczeniowa uniemożliwia stosowanie ciężkich algorytmów kryptograficznych.\n" +
               "   • Fabryczne zaniedbania: Domyślne hasła, brak bezpiecznego mechanizmu zdalnej aktualizacji firmware (OTA).\n" +
-              "   • Zagrożenie atakami DDoS: Tysiące przejętych urządzeń (kamer, routerów) tworzy botnety (np. Mirai) paraliżujące infrastrukturę sieciową.\n\n" +
+              "   • Zagrożenie botnetami: Tysiące przejętych urządzeń (kamer, routerów) tworzy botnety (np. Mirai) paraliżujące infrastrukturę sieciową atakami DDoS.\n\n" +
               "2. Zagrożenie prywatności:\n" +
               "   • Sensory wkraczają w przestrzeń intymną (mikrofony asystentów, kamery domowe, profile zużycia energii w mieszkaniu zdradzające obecność domowników).\n\n" +
               "3. Filozofia 'Security by Design':\n" +
@@ -962,16 +1014,14 @@
       }
     ];
 
-    // STAN APLIKACJI
     let questions = [];
     let currentModule = "all";
     let queue = [];
     let initialCount = 0;
     let editingId = null;
 
-    // INICJALIZACJA
     function init() {
-      const saved = localStorage.getItem("air_exam_concepts_v3");
+      const saved = localStorage.getItem("air_exam_mobile_v4");
       if (saved) {
         try {
           questions = JSON.parse(saved);
@@ -986,11 +1036,19 @@
     }
 
     function saveToStorage() {
-      localStorage.setItem("air_exam_concepts_v3", JSON.stringify(questions));
+      localStorage.setItem("air_exam_mobile_v4", JSON.stringify(questions));
     }
 
-    // NAWIGACJA ZAKŁADEK
+    function triggerHaptic(type = 'light') {
+      if (navigator.vibrate) {
+        if (type === 'light') navigator.vibrate(12);
+        if (type === 'success') navigator.vibrate([15, 40, 20]);
+        if (type === 'repeat') navigator.vibrate(30);
+      }
+    }
+
     function switchTab(tab) {
+      triggerHaptic('light');
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
 
@@ -1004,7 +1062,6 @@
       }
     }
 
-    // LOGIKA FISZEK POJĘCIOWYCH
     function setupModuleQueue() {
       currentModule = document.getElementById("module-select").value;
       if (currentModule === "all") {
@@ -1048,6 +1105,7 @@
     }
 
     function flipCard() {
+      triggerHaptic('light');
       document.getElementById("flashcard").classList.toggle("flipped");
     }
 
@@ -1056,12 +1114,14 @@
 
       const currentId = queue.shift();
       if (!known) {
-        queue.push(currentId); // Wraca na koniec kolejki
+        triggerHaptic('repeat');
+        queue.push(currentId);
+      } else {
+        triggerHaptic('success');
       }
       updateQuizView();
     }
 
-    // KOMPENDIUM - BAZA ZAGADNIEŃ
     function renderQuestionsList() {
       const listEl = document.getElementById("questions-list");
       const search = document.getElementById("search-input").value.toLowerCase();
@@ -1077,7 +1137,7 @@
       });
 
       if (filtered.length === 0) {
-        listEl.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 3rem;">Brak zagadnień spełniających podane kryteria.</p>`;
+        listEl.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 2rem;">Brak zagadnień spełniających kryteria.</p>`;
         return;
       }
 
@@ -1105,18 +1165,19 @@
     }
 
     function toggleAccordion(id) {
+      triggerHaptic('light');
       const el = document.getElementById(`acc-${id}`);
       if (el) { el.classList.toggle("open"); }
     }
 
     function expandAll(expand) {
+      triggerHaptic('light');
       document.querySelectorAll(".question-accordion-item").forEach(item => {
         if (expand) { item.classList.add("open"); } 
         else { item.classList.remove("open"); }
       });
     }
 
-    // EDYCJA ZAGADNIENIA
     function openEditModal(id) {
       editingId = id;
       const item = questions.find(q => q.id === id);
