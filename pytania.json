@@ -3,272 +3,344 @@
     "id": "inf_1",
     "module": "inf1",
     "category": "Informatyka | Pytanie 1",
-    "title": "Rodzaje i przeznaczenie mikrokontrolerów (AVR, PIC, PLC, FPGA, RPi)",
-    "prompt": "Jak scharakteryzować i porównać poszczególne platformy sterujące pod kątem ich filozofii i zastosowania?",
-    "body": "• AVR / XMega: 8- lub 16-bitowe układy firmy Microchip (wcześniej Atmel). Proste w budowie i programowaniu (baza popularnego Arduino). Stosowane tam, gdzie wystarczą podstawowe operacje: proste sterowniki, odczyt czujników domowych, zabawki.\n\n• PIC (Peripheral Interface Controller): Rodzina mikrokontrolerów Microchip. Wyróżniają się bardzo dużą odpornością na zakłócenia elektryczne i minimalnym poborem prądu w uśpieniu. Powszechne w sprzęcie AGD (pralki, lodówki) i motoryzacji.\n\n• PLC (Programowalny Sterownik Logiczny): Komputer przemysłowy w odpornej obudowie na szynę DIN. Pracuje na typowych napięciach fabrycznych (24 V), jest odporny na pył i drgania. Programowany m.in. językiem drabinkowym (LD). Steruje liniami produkcyjnymi i maszynami.\n\n• FPGA (Bezpośrednio Programowalna Macierz Bramek): Układ, który nie wykonuje programu krok po kroku. Zamiast tego kod w języku HDL sprzętowo łączy miliony wewnętrznych bramek logicznych w dedykowany obwód. Działa w pełni równolegle i bez opóźnień (stacje bazowe 5G, radary, szybkie szyfrowanie danych).\n\n• Raspberry Pi (SBC – Komputer Jednopłytkowy): Kompletny minikomputer z procesorem ARM i systemem Linux. Posiada USB, HDMI i interfejsy sieciowe. W IoT działa jako brama (Gateway): zbiera dane z wielu mniejszych czujników, przetwarza je lokalnie i wysyła do chmury."
+    "title": "1. Rodzaje i przeznaczenie mikrokontrolerów (PIC, PLC, FPGA, AVR, XMega, Raspberry, ...)",
+    "prompt": "Jakie są główne rodziny układów sterujących i czym różnią się w zastosowaniach?",
+    "body": "• AVR / XMega: 8- i 16-bitowe układy RISC (Microchip/Atmel). Prosta architektura, baza platformy Arduino. Tanie i łatwe w programowaniu, idealne do prostego odczytu czujników i automatyki domowej.\n\n• PIC (Peripheral Interface Controller): Rodzina mikrokontrolerów Microchip. Charakteryzują się wysoką odpornością na zakłócenia elektromagnetyczne (EMC) i niskim poborem prądu w uśpieniu. Powszechne w motoryzacji i AGD.\n\n• PLC (Programowalny Sterownik Logiczny): Przemysłowy komputer sterujący w obudowie na szynę DIN. Odporny na pył, wibracje i napięcia 24 V. Programowany m.in. językiem drabinkowym (LD). Steruje liniami produkcyjnymi i maszynami fabrycznymi.\n\n• FPGA (Bezpośrednio Programowalna Macierz Bramek): Układ rekonfigurowalny sprzętowo za pomocą kodu HDL. Zapewnia równoległe przetwarzanie w czasie rzeczywistym i brak opóźnień programowych (radary, telekomunikacja 5G, kryptografia).\n\n• Raspberry Pi (SBC): Komputer jednopłytkowy z procesorem ARM i systemem Linux. W IoT pełni rolę bramki brzegowej (Gateway) agregującej dane z czujników do chmury."
   },
   {
     "id": "inf_2a",
     "module": "inf1",
-    "category": "Informatyka | Pytanie 2a",
-    "title": "Typy układów cyfrowych pod względem struktury",
-    "prompt": "Czym różnią się układy o ustalonej strukturze, programowalnej strukturze oraz mikroprocesorowe?",
-    "body": "• O ustalonej strukturze (np. ASIC): Dedykowany układ scalony zaprojektowany do jednego zadania. Po wyprodukowaniu w fabryce nie da się w nim nic zmienić. Jest najszybszy i najtańszy przy masowych nakładach, ale błąd w projekcie wymusza produkcję nowego chipu.\n\n• O programowalnej strukturze (FPGA, CPLD): Wewnętrzne połączenia bramek ustala programista już po wyprodukowaniu układu (za pomocą kodu HDL). Można go wielokrotnie modyfikować w gotowym urządzeniu.\n\n• Mikroprocesorowe (CPU, MCU): Układ o stałej strukturze fizycznej (ALU, rejestry, dekoder), który wykonuje zmienny program wgrany do pamięci. Zapewnia największą elastyczność programistyczną."
+    "category": "Informatyka | Pytanie 2 (a)",
+    "title": "2 (a). Typy układów cyfrowych: o ustalonej strukturze, o programowalnej strukturze, układy mikroprocesorowe",
+    "prompt": "Czym różnią się te trzy podejścia pod względem architektury, kosztów i elastyczności?",
+    "body": "• Układy o ustalonej strukturze (np. ASIC / bramki logiczne): Architektura połączeń wykonana na stałe w krzemie. Najwyższa wydajność i najniższy koszt jednostkowy przy masowej produkcji, brak możliwości zmian po wyprodukowaniu.\n\n• Układy o programowalnej strukturze (PLD, CPLD, FPGA): Struktura połączeń logicznych definiowana programowo przez użytkownika za pomocą kodu HDL. Pozwalają na wielokrotne przeprogramowanie i aktualizację logiki sprzętowej.\n\n• Układy mikroprocesorowe (CPU, MCU): Stała budowa sprzętowa (ALU, rejestry, dekoder rozkazów), która realizuje zmienny program wgrany do pamięci (sekwencyjne wykonywanie instrukcji)."
   },
   {
     "id": "inf_2b",
     "module": "inf1",
-    "category": "Informatyka | Pytanie 2b",
-    "title": "Wirtualizacja w informatyce: Realizacja, korzyści i zastosowania",
-    "prompt": "Na czym polega wirtualizacja, jakie są poziomy jej realizacji i jakie przynosi korzyści?",
-    "body": "• Istota: Dzielenie jednego fizycznego, mocnego serwera na wiele mniejszych, niezależnych środowisk logicznych.\n\n• Sposoby realizacji:\n  - Hiperwizor Typu 1 (Bare-metal, np. Proxmox, ESXi): Instalowany bezpośrednio na sprzęcie serwera, bez nadrzędnego systemu; daje najwyższą wydajność w serwerowniach.\n  - Hiperwizor Typu 2 (np. VirtualBox): Program uruchamiany wewnątrz zwykłego Windowsa/Linuksa do testów.\n  - Konteneryzacja (Docker): Aplikacje współdzielą jedno jądro systemu gospodarza, izolując tylko swoje procesy. Startują w ułamku sekundy przy minimalnym narzucie zasobów.\n\n• Korzyści: Oszczędność prądu i sprzętu, łatwe tworzenie kopii zapasowych (migawki/snapshots), elastyczne skalowanie i izolacja awarii."
+    "category": "Informatyka | Pytanie 2 (b)",
+    "title": "2 (b). Wirtualizacja w informatyce: sposoby realizacji, korzyści i obszary zastosowań",
+    "prompt": "Na czym polega wirtualizacja, jak się ją wdraża i co daje w praktyce?",
+    "body": "• Istota: Uruchamianie wielu niezależnych środowisk logicznych (maszyn wirtualnych/kontenerów) na jednym fizycznym zasobie sprzętowym.\n\n• Sposoby realizacji:\n  - Hiperwizor Typu 1 (Bare-metal: Proxmox, VMware ESXi): Instalowany bezpośrednio na sprzęcie serwera; najwyższa wydajność.\n  - Hiperwizor Typu 2 (Hosted: VirtualBox): Program działający wewnątrz tradycyjnego systemu operacyjnego.\n  - Konteneryzacja (Docker): Aplikacje współdzielą jedno jądro systemu operacyjnego, izolując tylko swoje procesy (lekkość i natychmiastowy start).\n\n• Korzyści i zastosowanie: Lepsze wykorzystanie zasobów sprzętowych (oszczędność prądu i maszyn), łatwe kopie zapasowe (migawki/snapshots), izolacja awarii; fundament chmur obliczeniowych (AWS, Azure) i środowisk testowych."
   },
   {
     "id": "inf_3",
     "module": "inf1",
     "category": "Informatyka | Pytanie 3",
-    "title": "Modelowanie 3D oraz dokumentacja CAD/CAM",
-    "prompt": "Jakie są role systemów CAD i CAM oraz kluczowe zasady tworzenia dokumentacji technicznej?",
-    "body": "• CAD (Projektowanie Wspomagane Komputerowo): Tworzenie parametrycznych brył 3D, złożeń oraz rysunków technicznych na komputerze.\n\n• CAM (Wytwarzanie Wspomagane Komputerowo): Przekształcanie modelu z CAD na ruchy narzędzia i kod maszynowy (G-Code) dla obrabiarek CNC lub drukarek 3D.\n\n• Zasady dokumentacji:\n  - Jednoznaczność: każdy wymiar podaje się tylko raz (brak przewymiarowania).\n  - Określenie tolerancji wymiarowych, geometrycznych i chropowatości powierzchni.\n  - Stosowanie ujednoliconych norm rzutowania (np. metoda europejska kąta pierwszego).\n  - Parametryczność: wiązanie wymiarów relacjami ułatwiającymi modyfikacje."
+    "title": "3. Modelowanie 3D - zasady redagowania i edycji dokumentacji CAD/CAM",
+    "prompt": "Jakie są role systemów CAD i CAM oraz kluczowe zasady tworzenia rysunku wykonawczego?",
+    "body": "• CAD (Computer-Aided Design): Komputerowe wspomaganie projektowania – modelowanie geometrii części 3D oraz tworzenie rysunków technicznych.\n\n• CAM (Computer-Aided Manufacturing): Przekształcenie geometrii CAD w ścieżki narzędzi i kod maszynowy (G-Code) sterujący obrabiarkami CNC i drukarkami 3D.\n\n• Zasady redagowania dokumentacji:\n  - Jednoznaczność wymiarowa: każdy wymiar podaje się tylko raz (brak przewymiarowania).\n  - Określenie tolerancji wymiarowych, geometrycznych i chropowatości powierzchni.\n  - Stosowanie ujednoliconych norm rzutowania (rzutowanie europejskie kąta pierwszego).\n  - Parametryczność: wiązanie wymiarów relacjami ułatwiającymi modyfikacje modelu."
   },
   {
     "id": "inf_4",
     "module": "inf1",
     "category": "Informatyka | Pytanie 4",
-    "title": "Standardy sieci personalnych (PAN) i bardzo krótkiego zasięgu",
-    "prompt": "Jakie technologie tworzą łączność osobistą i krótkiego zasięgu oraz jak dobrać standard do zadania?",
-    "body": "• NFC: Zasięg do kilku centymetrów, częstotliwość 13,56 MHz. Płatności zbliżeniowe, szybkie parowanie urządzeń, tagi informacyjne.\n\n• BLE (Bluetooth Low Energy): Zasięg kilkunastu metrów, pasmo 2,4 GHz. Wysyła małe porcje danych przy znikomym poborze prądu. Smartwatche, sensory fitness.\n\n• Zigbee / Z-Wave: Sieci dla inteligentnego domu. Działają w siatce (Mesh) – urządzenia przekazują sygnał między sobą. Z-Wave (pasmo 868 MHz) nie wchodzi w drogę domowemu Wi-Fi (2,4 GHz).\n\n• UWB (Ultra-Wideband): Szerokie pasmo (>500 MHz), krótkie impulsy radiowe. Mierzy czas przelotu fali z dokładnością do paru centymetrów (cyfrowe kluczyki, lokalizatory Apple AirTag)."
+    "title": "4. Standardy sieci personalnych i bardzo krótkiego zasięgu",
+    "prompt": "Jakie technologie tworzą łączność osobistą (PAN) i bardzo krótkiego zasięgu?",
+    "body": "• NFC (Near Field Communication): Zasięg do kilku centymetrów, pasmo 13,56 MHz. Płatności zbliżeniowe, parowanie Bluetooth jednym dotknięciem, tagi zbliżeniowe RFID.\n\n• Bluetooth / BLE (Bluetooth Low Energy): Zasięg 10–50 m, pasmo 2,4 GHz. Wersja BLE przesyła małe pakiety danych przy znikomym poborze prądu (praca na baterii pastylkowej przez lata).\n\n• Zigbee (IEEE 802.15.4): Pasmo 2,4 GHz, energooszczędna topologia siatki (Mesh). Standard inteligentnego domu.\n\n• Z-Wave: Pasmo sub-GHz (~868 MHz w UE), topologia Mesh. Brak zakłóceń z Wi-Fi 2,4 GHz.\n\n• UWB (Ultra-Wideband): Pasmo >500 MHz, impulsowa transmisja fal. Precyzyjny pomiar odległości metodą Time of Flight z centymetrową dokładnością (np. Apple AirTag)."
   },
   {
-    "id": "inf_5",
+    "id": "inf_5a",
     "module": "inf1",
-    "category": "Informatyka | Pytanie 5",
-    "title": "Metody i techniki geolokalizacji radiowej w otwartej przestrzeni i wewnątrz budynków",
-    "prompt": "Jak działa geolokalizacja na zewnątrz (GNSS) oraz jak rozwiązuje się problem lokalizacji w budynkach?",
-    "body": "• W terenie otwartym:\n  - GNSS (GPS, Galileo): Satelity nadają sygnał czasu. Odbiornik mierzy opóźnienie fali i metodą trilateracji wyznacza pozycję. Wymaga minimum 4 satelitów (3 na pozycję X, Y, Z oraz 1 do zniwelowania błędu zegara w telefonie).\n  - Sieci komórkowe: Przybliżona lokalizacja na podstawie stacji bazowej (Cell-ID) lub pomiaru sygnału z kilku wież BTS.\n\n• Wewnątrz budynków (brak sygnału satelitarnego):\n  - RSSI: Szacowanie odległości po sile tłumienia sygnału Wi-Fi/BLE (mało precyzyjne przez ściany).\n  - Fingerprinting: Wcześniejsze zmapowanie sygnałów w budynku i dopasowywanie bieżącego odczytu do wzorca.\n  - UWB: Dokładny pomiar różnicy czasu dotarcia impulsów – precyzja rzędu kilku centymetrów."
+    "category": "Informatyka | Pytanie 5 (a)",
+    "title": "5 (a). Metody i techniki geolokalizacji radiowej: w otwartej przestrzeni",
+    "prompt": "Jak wyznacza się pozycję na zewnątrz za pomocą systemów satelitarnych i komórkowych?",
+    "body": "• GNSS (GPS, Galileo, GLONASS): Satelity nadają sygnał czasu z pokładowych zegarów atomowych. Odbiornik mierzy czas dotarcia sygnału (Time of Arrival) i metodą trilateracji wyznacza pozycję.\n\n• Wymóg 4 satelitów: Minimum 3 satelity są niezbędne do wyznaczenia współrzędnych przestrzennych (X, Y, Z), a 4. satelita służy do zniwelowania błędu niedokładnego zegara kwarcowego w odbiorniku.\n\n• Sieci komórkowe (GSM/LTE): Lokalizacja na podstawie identyfikatora stacji bazowej (Cell-ID) lub triangulacji/trilateracji z wykorzystaniem opóźnień i siły sygnału z kilku wież BTS."
+  },
+  {
+    "id": "inf_5b",
+    "module": "inf1",
+    "category": "Informatyka | Pytanie 5 (b)",
+    "title": "5 (b). Metody i techniki geolokalizacji radiowej: wewnątrz budynków",
+    "prompt": "Jak realizuje się Indoor Positioning w miejscach pozbawionych sygnału satelitarnego?",
+    "body": "• RSSI (Received Signal Strength Indication): Szacowanie odległości na podstawie tłumienia mocy sygnału Wi-Fi lub Bluetooth. Proste, lecz mało dokładne przez tłumienie i odbicia fal od ścian.\n\n• Fingerprinting: Wcześniejsze sporządzenie bazy pomiarowej („mapy radiowej”) sygnałów w budynku i późniejsze dopasowywanie bieżącego odczytu urządzenia do wzorców.\n\n• UWB (Time of Flight / TDoA): Precyzyjny pomiar różnicy czasu nadejścia nanosekundowych impulsów radiowych – centymetrowa dokładność w halach i magazynach.\n\n• AoA / AoD (Angle of Arrival / Departure): Wyznaczanie kąta nadejścia fali radiowej za pomocą macierzy anten (standard Bluetooth 5.1)."
   },
   {
     "id": "inf_6",
     "module": "inf1",
     "category": "Informatyka | Pytanie 6",
-    "title": "Obszar zastosowań sieci personalnych (w szczególności BT/BLE)",
-    "prompt": "Gdzie w praktyce inżynierskiej stosuje się technologie Bluetooth i Bluetooth Low Energy?",
-    "body": "• Elektronika noszona (Wearables): Smartwatche, opaski sportowe, czujniki tętna, glukometry – przesył danych telemetrycznych przy minimalnym zużyciu baterii.\n\n• Automatyka domowa: Inteligentne zamki, sterowanie głowicami grzejników i oświetleniem (Bluetooth Mesh).\n\n• Mikrolokalizacja: Beacony w muzeach i sklepach wysyłające powiadomienia kontekstowe przy zbliżeniu.\n\n• Śledzenie aktywów (Asset Tracking): Breloki lokalizacyjne do kluczy, bagażu i sprzętu firmowego."
+    "title": "6. Obszar zastosowań sieci personalnych, w szczególności wykorzystujących technologie BT/BLE",
+    "prompt": "Gdzie w praktyce inżynierskiej wykorzystuje się Bluetooth oraz Bluetooth Low Energy?",
+    "body": "• Elektronika noszona (Wearables): Smartwatche, monitory tętna, opaski sportowe, glukometry – przesył danych telemetrycznych przy minimalnym zużyciu baterii.\n\n• Inteligentny dom (Smart Home): Bezprzewodowe głowice termostatyczne, inteligentne zamki do drzwi, sterowanie oświetleniem w standardzie Bluetooth Mesh.\n\n• Mikrolokalizacja i Beacony: Nadajniki w muzeach i sklepach przesyłające informacje kontekstowe przy zbliżeniu się użytkownika ze smartfonem.\n\n• Śledzenie zasobów (Asset Tracking): Breloki lokalizacyjne do kluczy, narzędzi i bagażu."
   },
   {
     "id": "inf_7",
     "module": "inf1",
     "category": "Informatyka | Pytanie 7",
-    "title": "Technologie sieci nowej generacji NGN/NGA",
+    "title": "7. Technologie sieci nowej generacji NGN/NGA",
     "prompt": "Czym charakteryzują się sieci NGN oraz NGA i co oznacza koncepcja All-IP?",
-    "body": "• NGN (Sieci Nowej Generacji): Koncepcja All-IP – zastąpienie oddzielnych sieci telefonicznych i telewizyjnych wspólną siecią pakietową IP. Usługi (VoIP, streaming wideo) są całkowicie oddzielone od sposobu transmisji kablowej.\n\n• NGA (Dostęp Nowej Generacji): Infrastruktura szerokopasmowa zapewniająca wysokie transfery (>30–100 Mb/s), głównie światłowody FTTH (Fiber to the Home / standardy GPON) oraz łączność bezprzewodowa 5G."
+    "body": "• NGN (Next Generation Network): Sieć w pełni oparta na protokole IP (koncepcja All-IP). Wszystkie dotychczas odrębne usługi (telefonia VoIP, telewizja IPTV, dane) przesyłane są wspólną infrastrukturą pakietową. Następuje całkowite oddzielenie warstwy transportowej od warstwy usługowej.\n\n• NGA (Next Generation Access): Nowoczesne sieci dostępu szerokopasmowego gwarantujące przepustowości powyżej 30–100 Mb/s.\n\n• Główne technologie: Światłowody do budynków i mieszkań FTTH (Fiber to the Home, w standardach GPON/XGS-PON) oraz bezprzewodowe sieci komórkowe 5G."
   },
   {
     "id": "inf_8",
     "module": "inf1",
     "category": "Informatyka | Pytanie 8",
-    "title": "Personalne urządzenia mobilne: Sprzęt, systemy i programowanie",
-    "prompt": "Jakie rozwiązania sprzętowe i programowe definiują współczesne urządzenia mobilne?",
-    "body": "• Sprzęt: Zintegrowane układy SoC (procesor, grafika, modem w jednym chipie w architekturze ARM), energooszczędne pamięci LPDDR, ekrany OLED oraz zintegrowane sensory.\n\n• Systemy operacyjne: Android (oparty na jądrze Linux) oraz Apple iOS.\n\n• Języki i narzędzia:\n  - Natywne: Kotlin / Java (Android) oraz Swift (iOS).\n  - Wieloplatformowe: Flutter (z językiem Dart) oraz React Native (z TypeScriptem/JS), umożliwiające pisanie jednej bazy kodu na oba systemy."
+    "title": "8. Personalne urządzenia mobilne: cechy użytkowe, parametry techniczne, systemy operacyjne, języki programowania",
+    "prompt": "Jak scharakteryzować smartfony i tablety pod kątem sprzętu, systemów i tworzenia aplikacji?",
+    "body": "• Cechy i parametry: Zintegrowane układy SoC (System on a Chip w architekturze ARM), pamięci LPDDR, wyświetlacze OLED, modemy 5G/Wi-Fi 6, wbudowane pakiety sensorów (IMU, GPS, biometria).\n\n• Systemy operacyjne: Android (oparty na jądrze Linuksa) oraz Apple iOS.\n\n• Języki programowania:\n  - Podejście natywne: Kotlin oraz Java (dla Androida), Swift (dla iOS).\n  - Frameworki wieloplatformowe: Flutter (język Dart) oraz React Native (TypeScript/JavaScript), pozwalające pisać jedną aplikację na oba systemy."
   },
   {
     "id": "inf_9",
     "module": "inf1",
     "category": "Informatyka | Pytanie 9",
-    "title": "Internet Rzeczy (IoT): Korzyści, obszary i technologie",
-    "prompt": "Jakie korzyści przynosi IoT, jakie protokoły stosuje i jak łączy urządzenia na duże odległości?",
-    "body": "• Idea i korzyści: Komunikacja urządzeń fizycznych przez sieć bez konieczności udziału człowieka. Automatyzacja, optymalizacja zużycia zasobów, predykcyjne utrzymanie ruchu (Predictive Maintenance).\n\n• Protokoły komunikacyjne:\n  - MQTT: Oparty na schemacie Publish/Subscribe i centralnym brokerze danych. Ma bardzo mały narzut nagłówka (2 bajty) i poziomy jakości QoS (0, 1, 2), co oszczędza pakiety i baterię.\n  - CoAP: Lekki odpowiednik HTTP oparty na protokole UDP dla małych układów.\n\n• Łączność LPWAN (LoRaWAN, NB-IoT): Fale radiowe o dużym zasięgu (wiele kilometrów) przesyłające małe ramki danych przy znikomym zużyciu energii (np. zdalne liczniki wody)."
+    "title": "9. „Internet Rzeczy” - korzyści, obszary aplikacyjne oraz wykorzystywane technologie",
+    "prompt": "Jakie korzyści przynosi IoT, gdzie się go stosuje i jakie protokoły wykorzystuje?",
+    "body": "• Korzyści i obszary: Automatyzacja procesów, predykcyjne utrzymanie ruchu (Predictive Maintenance), oszczędność surowców i mediów. Obszary: Smart City, Przemysł 4.0 (IIoT), rolnictwo precyzyjne, medycyna (IoMT).\n\n• Protokoły komunikacyjne:\n  - MQTT: Lekki protokół Publish/Subscribe oparty na centralnym brokerze. Mały narzut nagłówka (2 bajty), 3 poziomy jakości usług QoS (0, 1, 2) – idealny na niestabilne łącza.\n  - CoAP: Odpowiednik HTTP oparty na protokole UDP dla układów o małej pamięci.\n\n• Łączność LPWAN (LoRaWAN, NB-IoT): Transmisja małych ramek na wiele kilometrów przy wieloletniej pracy na baterii (np. zdalne odczyty wodomierzy)."
   },
   {
     "id": "inf_10",
     "module": "inf1",
     "category": "Informatyka | Pytanie 10",
-    "title": "Architektura Internetu Przyszłości (SDN, NFV, Edge Computing)",
+    "title": "10. Architektura „Internetu Przyszłości”, aplikacje i usługi w sieciach przyszłości",
     "prompt": "W jakim kierunku ewoluuje architektura sieci teleinformatycznych pod kątem masowego IoT?",
-    "body": "• SDN (Software-Defined Networking): Programowe zarządzanie siecią – centralny kontroler ustala reguły przesyłania danych na przełącznikach bez potrzeby ręcznej konfiguracji każdego routera z osobna.\n\n• NFV (Network Functions Virtualization): Zastąpienie dedykowanych urządzeń sprzętowych (np. firewalli, balancerów) aplikacjami wirtualnymi uruchamianymi na zwykłych serwerach.\n\n• Edge Computing: Przetwarzanie danych blisko źródła (przy kamerze czy maszynie), co eliminuje opóźnienia przesyłu do odległej chmury (kluczowe dla aut autonomicznych i telechirurgii)."
+    "body": "• SDN (Software-Defined Networking): Programowe oddzielenie płaszczyzny sterowania (Control Plane – centralny kontroler programowy) od płaszczyzny danych (Data Plane – przełączniki realizujące reguły). Umożliwia dynamiczne zarządzanie ruchem w sieci z poziomu konsoli.\n\n• NFV (Network Functions Virtualization): Zastąpienie dedykowanych urządzeń sprzętowych (routerów, firewalli) instancjami wirtualnymi w chmurze.\n\n• Edge Computing: Przeniesienie mocy obliczeniowej z odległej chmury na krawędź sieci (blisko urządzeń końcowych), co redukuje opóźnienia do kilku milisekund (niezbędne dla pojazdów autonomicznych V2X i telechirurgii)."
   },
   {
     "id": "inf_11",
     "module": "inf2",
     "category": "Informatyka | Pytanie 11",
-    "title": "Ochrona prywatności, bezpieczeństwo i zaufanie w IoT",
+    "title": "11. Ochrona prywatności czy bezpieczeństwo i zaufanie - podstawowy problem „Internetu Rzeczy”",
     "prompt": "Dlaczego urządzenia IoT stanowią szczególne wyzwanie dla cyberbezpieczeństwa i prywatności?",
-    "body": "• Główne problemy: Niewielka moc procesorów utrudniająca silne szyfrowanie asymetryczne, domyślne hasła fabryczne i brak bezpiecznych mechanizmów aktualizacji firmware.\n\n• Skutek: Przejmowanie urządzeń przez hakerów do tworzenia botnetów paraliżujących serwisy atakami DDoS (np. botnet Mirai).\n\n• Prywatność: Nieustanne rejestrowanie zachowań domowników przez kamery, mikrofony asystentów i czujniki zużycia mediów.\n\n• Ochrona: Zasada Security by Design, unikalne hasła, szyfrowanie TLS/DTLS i bezpieczne chipy sprzętowe (TPM, Secure Element)."
+    "body": "• Zagrożenia bezpieczeństwa: Ograniczone zasoby sprzętowe tanich urządzeń utrudniają stosowanie silnego szyfrowania; zaniedbania fabryczne (domyślne hasła, brak bezpiecznej aktualizacji firmware OTA). Urządzenia są masowo przejmowane do botnetów wykonujących paraliżujące ataki DDoS (np. botnet Mirai).\n\n• Problem prywatności: Sensory wkraczają w przestrzeń prywatną (kamery, mikrofony asystentów, inteligentne liczniki energii rejestrujące obecność domowników).\n\n• Zapewnienie zaufania: Szyfrowanie połączeń TLS/DTLS, sprzętowe moduły bezpieczeństwa (TPM, Secure Element) oraz zasada Security by Design wspierana regulacjami prawnymi (RODO, Cyber Resilience Act)."
   },
   {
     "id": "inf_12",
     "module": "inf2",
     "category": "Informatyka | Pytanie 12",
-    "title": "Techniki, urządzenia i zastosowania wirtualnej (VR) i rozszerzonej (AR) rzeczywistości",
-    "prompt": "Czym różnią się technologie VR i AR oraz jakie są ich główne obszary wdrożeń?",
-    "body": "• VR (Rzeczywistość Wirtualna): Pełne odcięcie wzrokowe od otoczenia i zanurzenie w wygenerowanym cyfrowo świecie 3D przez gogle (np. Meta Quest, PCVR). Zastosowanie: symulacje medyczne, szkolenia BHP, cyfrowa prezentacja trudno dostępnych zabytków (jak Fortify3D).\n\n• AR (Rzeczywistość Rozszerzona): Nakładanie cyfrowych elementów i instrukcji na obraz świata rzeczywistego przez kamerę telefonu lub przezroczyste okulary (HoloLens). Zastosowanie: serwis maszyn w przemyśle, nawigacja piesza.\n\n• Wartość dla dziedzictwa: Bezinwazyjne udostępnianie obiektów bez ryzyka ich degradacji."
+    "title": "12. Techniki, urządzenia i obszary zastosowań wirtualnej i rozszerzonej rzeczywistości",
+    "prompt": "Czym różnią się technologie VR i AR oraz jakie są ich główne zastosowania inżynierskie?",
+    "body": "• VR (Virtual Reality): Całkowite odcięcie wzrokowe od otoczenia i pełna immersja w cyfrowo wygenerowanym świecie 3D za pomocą nieprzezroczystych gogli (Meta Quest, HTC Vive). Zastosowania: symulatory medyczne, szkolenia wojskowe/BHP, wirtualna prezentacja i digitalizacja zabytków (np. Fortify3D z wykorzystaniem 3D Gaussian Splatting).\n\n• AR (Augmented Reality): Nakładanie obiektów cyfrowych i wskaźników na obraz rzeczywistego otoczenia (smartfony, okulary HoloLens). Zastosowania: instrukcje serwisowe dla mechaników wyświetlane wprost na maszynie, nawigacja piesza.\n\n• Wartość dla dziedzictwa: Bezpieczne udostępnianie trudno dostępnych przestrzeni bez ryzyka degradacji zabytku."
   },
   {
     "id": "inf_13",
     "module": "inf2",
     "category": "Informatyka | Pytanie 13",
-    "title": "Wykluczenie cyfrowe: Ujęcie tradycyjne a wykluczenie w kontekście IoT",
-    "prompt": "W jaki sposób nowoczesne technologie Internetu Rzeczy paradoksalnie pogłębiają bariery społeczne?",
-    "body": "• Tradycyjne: Brak komputera, brak stałego łącza internetowego lub brak podstawowej umiejętności korzystania z Internetu (bariera kompetencyjna).\n\n• W dobie IoT: Przymus technologiczny – zastępowanie tradycyjnych usług automatami miejskimi i aplikacjami (np. parkometry tylko na aplikację, bilety, obsługa inteligentnych liczników), co odcina osoby starsze lub mniej zamożne od usług publicznych.\n\n• Wykluczenie ekonomiczne: Korzyści z dynamicznych taryf energii są dostępne tylko dla osób posiadających kapitał na drogie instalacje smart-grid."
+    "title": "13. Wykluczenie cyfrowe w ujęciu tradycyjnym oraz w kontekście nowoczesnych technologii „Internetu Rzeczy”",
+    "prompt": "W jaki sposób technologie IoT pogłębiają tradycyjne bariery społeczne?",
+    "body": "• Ujęcie tradycyjne: Brak fizycznego komputera, brak łącza internetowego lub brak podstawowych kompetencji obsługi przeglądarki (szczególnie u osób starszych).\n\n• W dobie IoT: Przymus technologiczny – tradycyjne usługi są zastępowane aplikacjami mobilnymi i automatyką (np. parkometry tylko przez aplikację, bilety miejskie, systemy opieki zdrowotnej). Brak smartfona oznacza wykluczenie z podstawowych usług miejskich.\n\n• Wykluczenie ekonomiczne: Korzyści z dynamicznych taryf energii i inteligentnego zarządzania domem są dostępne tylko dla osób posiadających kapitał na drogie instalacje smart-grid."
   },
   {
     "id": "inf_14",
     "module": "inf2",
     "category": "Informatyka | Pytanie 14",
-    "title": "Idea inteligentnego miasta (Smart City), budynku (BMS) i pojazdu",
+    "title": "14. Idea „inteligentnego miasta”, „inteligentnego budynku”, miejsca pracy, pojazdu itp. technologie i aktualne trendy rozwojowe",
     "prompt": "Jakie koncepcje i technologie łączą inteligentne przestrzenie miejskie, budynkowe i pojazdy?",
-    "body": "• Smart City: Automatyczne sterowanie ruchem, oświetlenie uliczne reagujące na obecność, czujniki napełnienia śmietników optymalizujące trasy śmieciarek.\n\n• BMS (Building Management System): Centralny system sterujący klimatyzacją, ogrzewaniem i światłem w budynku w celu maksymalizacji komfortu i ograniczenia zużycia energii.\n\n• Pojazdy: Łączność V2X (Vehicle-to-Everything) – auto wymienia dane z infrastrukturą drogową (V2I) i innymi pojazdami (V2V), poprawiając płynność i bezpieczeństwo jazdy."
+    "body": "• Smart City: Optymalizacja zasobów miejskich na żywo – adaptacyjne sterowanie ruchem, oświetlenie uliczne LED gasnące przy braku ruchu, czujniki napełnienia kontenerów na odpady optymalizujące trasy śmieciarek.\n\n• Smart Building / BMS (Building Management System): Zintegrowane zarządzanie instalacjami budynku (HVAC – klimatyzacja/ogrzewanie, oświetlenie, kontrola dostępu) w celu maksymalizacji komfortu i obniżenia zużycia energii.\n\n• Smart Mobility: Komunikacja pojazdu z otoczeniem V2X (Vehicle-to-Everything) – wymiana danych z innymi autami (V2V) i infrastrukturą drogową (V2I), zaawansowane systemy ADAS i dążenie do jazdy autonomicznej."
   },
   {
-    "id": "inf_15_16",
+    "id": "inf_15",
     "module": "inf2",
-    "category": "Informatyka | Pytania 15 i 16",
-    "title": "Interfejsy człowiek-maszyna (HMI) oraz interfejsy naturalne (NUI)",
-    "prompt": "Jak ewoluuje kontakt człowieka z maszyną i z jakimi wyzwaniami mierzy się inżynier?",
-    "body": "• HMI (Interfejs Człowiek-Maszyna): Pulpity sterownicze i ekrany operatorskie. Kluczowa jest ergonomia, unikanie przeciążenia informacyjnego (operator musi natychmiast rozpoznać alarm) oraz natychmiastowe sprzężenie zwrotne.\n\n• NUI (Interfejsy Naturalne): Sterowanie głosem (NLP), gestami dłoni (kamery ToF), mimiką lub samą obecnością (radary fal milimetrowych mmWave).\n\n• Główne trudności NUI: Szum akustyczny i optyczny w tle, zmienne oświetlenie oraz przypadkowe gesty i słowa interpretowane błędnie jako komendy."
+    "category": "Informatyka | Pytanie 15",
+    "title": "15. Interfejs człowiek-maszyna - główne problemy i wyzwania",
+    "prompt": "Z jakimi wyzwaniami ergonomicznymi i technicznymi mierzy się projektant interfejsu HMI?",
+    "body": "• Przeciążenie poznawcze (Cognitive Overload): Zbyt duża ilość prezentowanych danych utrudnia szybką decyzję operatora; stan alarmowy musi być widoczny natychmiast.\n\n• Sprzężenie zwrotne: Każda akcja operatora musi wywołać natychmiastową, czytelną reakcję systemu (wizualną lub dźwiękową).\n\n• Odporność na błędy (Poka-Yoke): Projektowanie paneli uniemożliwiające przypadkowe wywołanie niebezpiecznej operacji (np. fizyczne osłony wyłączników, dwuetapowe potwierdzenia).\n\n• Dostępność: Projektowanie zgodnie ze standardami dostępności (np. WCAG, właściwy kontrast kolorów dla osób ze słabszym wzrokiem)."
+  },
+  {
+    "id": "inf_16",
+    "module": "inf2",
+    "category": "Informatyka | Pytanie 16",
+    "title": "16. Interfejsy naturalne (dźwięk, postawa, gesty, obecność), ich znaczenie dla współczesnej informatyki i główne problemy ich implementacji",
+    "prompt": "Czym są interfejsy NUI i jakie wyzwania wiążą się z ich wdrażaniem?",
+    "body": "• Definicja: Interfejsy wykorzystujące naturalne zachowania człowieka zamiast urządzeń pośredniczących (klawiatury/myszy): komendy głosowe (NLP), gesty dłoni w powietrzu (kamery ToF), mimika twarzy czy wykrywanie samej obecności (radary fal milimetrowych mmWave).\n\n• Główne problemy implementacji:\n  - Zakłócenia z otoczenia: Szum akustyczny, zmienne oświetlenie i cienie utrudniające detekcję obrazu.\n  - Fałszywe aktywacje: Przypadkowe gesty w trakcie swobodnej rozmowy błędnie interpretowane jako komendy sterujące.\n  - Zapotrzebowanie obliczeniowe: Konieczność działania algorytmów rozpoznawania wzorców i AI w czasie rzeczywistym."
   },
   {
     "id": "inf_17",
     "module": "inf2",
     "category": "Informatyka | Pytanie 17",
-    "title": "Modele biznesowe sprzedaży urządzeń i usług Internetu Rzeczy",
-    "prompt": "Jak przedsiębiorstwa monetyzują rozwiązania IoT?",
-    "body": "• Sprzedaż samego sprzętu (Hardware-only): Tradycyjny jednorazowy zysk na marży ze sprzedaży urządzenia fizycznego.\n\n• Sprzęt + Abonament (SaaS): Tani zakup urządzenia, ale stała miesięczna opłata za dostęp do aplikacji, chmury i archiwizacji danych.\n\n• Product-as-a-Service (PaaS): Klient nie kupuje maszyny, lecz płaci za efekt jej działania (np. za godziny pracy kompresora czy oświetlenie hali). Producent zachowuje sprzęt i zdalnie pilnuje jego sprawności przez IoT.\n\n• Monetyzacja danych: Sprzedaż zanonimizowanych, zagregowanych analiz statystycznych partnerom rynkowym."
+    "title": "17. Możliwe modele biznesowe sprzedaży urządzeń i usług „Internetu Rzeczy”",
+    "prompt": "W jaki sposób przedsiębiorstwa zarabiają na rozwiązaniach IoT?",
+    "body": "• Hardware-only: Tradycyjna, jednorazowa sprzedaż fizycznego urządzenia z marżą na sprzęcie.\n\n• Hardware + SaaS (Subskrypcja): Tani zakup urządzenia, ale stała miesięczna opłata abonamentowa za dostęp do aplikacji, chmury i archiwizacji danych (np. kamery bezpieczeństwa).\n\n• Product-as-a-Service (PaaS): Klient nie kupuje maszyny, lecz płaci za efekt jej działania (np. linie lotnicze płacą za godziny pracy silnika odrzutowego; magazyn płaci za metry sześcienne chłodu). Producent zachowuje sprzęt i zdalnie monitoruje jego sprawność przez IoT.\n\n• Monetyzacja danych: Sprzedaż zagregowanych, zanonimizowanych analiz statystycznych partnerom zewnętrznym."
   },
   {
     "id": "inf_18",
     "module": "inf2",
     "category": "Informatyka | Pytanie 18",
-    "title": "Wskaźniki oceny efektywności finansowo-ekonomicznej projektów (NPV, IRR, ROI)",
-    "prompt": "Jak inżynier ocenia opłacalność finansową przedsięwzięcia inwestycyjnego?",
-    "body": "• NPV (Wartość Bieżąca Netto): Przyszłe przepływy pieniężne zdyskontowane (przeliczone na dzisiejszą wartość pieniądza) minus koszty początkowe. Inwestycja opłacalna, gdy NPV > 0.\n\n• IRR (Wewnętrzna Stopa Zwrotu): Taka stopa dyskonta, przy której NPV = 0. Określa procentową rentowność projektu – musi być wyższa niż koszt pozyskania kapitału (oprocentowanie kredytu).\n\n• ROI (Zwrot z Inwestycji): Prosty procentowy stosunek zysku netto do poniesionych nakładów."
+    "title": "18. Wskaźniki oceny efektywności finansowo-ekonomicznej przedsięwzięć inwestycyjnych",
+    "prompt": "Jak ocenia się opłacalność finansową projektu inwestycyjnego (NPV, IRR, ROI)?",
+    "body": "• NPV (Net Present Value – Wartość Bieżąca Netto): Suma zdyskontowanych przyszłych przepływów pieniężnych pomniejszona o nakłady początkowe. Inwestycja jest opłacalna finansowo, gdy NPV > 0.\n\n• IRR (Internal Rate of Return – Wewnętrzna Stopa Zwrotu): Stopa dyskontowa, przy której NPV wynosi dokładnie zero. Określa graniczną rentowność projektu – musi być wyższa niż koszt pozyskania kapitału (np. oprocentowanie kredytu bankowego).\n\n• PP / DPP (Payback Period): Okres zwrotu z inwestycji (prosty lub zdyskontowany).\n\n• ROI (Return on Investment): Prosty procentowy stosunek zysku netto do poniesionych nakładów inwestycyjnych."
   },
   {
     "id": "inf_19",
     "module": "inf2",
     "category": "Informatyka | Pytanie 19",
-    "title": "Projektowanie, optymalizacja i wskaźniki kampanii internetowych",
-    "prompt": "Jakie metryki decydują o skuteczności kampanii internetowych?",
-    "body": "• CTR (Click-Through Rate): Współczynnik klikalności – procent osób, które kliknęły w reklamę po jej wyświetleniu.\n\n• CPC (Cost Per Click): Koszt, jaki reklamodawca płaci za pojedyncze kliknięcie użytkownika.\n\n• CPA / CAC: Koszt pozyskania pożądanej akcji lub nowego płacącego klienta.\n\n• ROAS (Return on Ad Spend): Procentowy zwrot z wydatków na reklamę (przychód z kampanii podzielony przez jej koszt)."
+    "title": "19. Projektowanie, optymalizacja i implementacja kampanii internetowych",
+    "prompt": "Jak projektuje się kampanie internetowe i jak mierzy się ich efektywność?",
+    "body": "• Etapy: Określenie celów i grupy docelowej (tworzenie persony), dobór kanałów (reklama w wyszukiwarkach Google Ads, social media Meta Ads, e-mail marketing) oraz wdrożenie tagów analitycznych (Google Tag Manager, piksele konwersji).\n\n• Kluczowe wskaźniki efektywności:\n  - CTR (Click-Through Rate): Współczynnik klikalności – procent osób klikających w reklamę po wyświetleniu.\n  - CPC (Cost Per Click): Koszt pojedynczego kliknięcia w reklamę.\n  - CPA / CAC: Koszt pozyskania konkretnego leada lub nowego klienta.\n  - ROAS (Return on Ad Spend): Procentowy zwrot z wydatków na reklamę (przychód podzielony przez koszt kampanii). Optymalizacja oparta na testach A/B kreacji."
   },
   {
     "id": "inf_20",
     "module": "inf2",
     "category": "Informatyka | Pytanie 20",
-    "title": "Studium wykonalności oraz szacowanie kosztów (CAPEX vs OPEX)",
-    "prompt": "Czym różni się studium wykonalności oraz struktura kosztów CAPEX i OPEX?",
-    "body": "• Studium wykonalności (Feasibility Study): Wstępna analiza sprawdzająca, czy projekt sieci lub systemu jest możliwy do wykonania technicznie, zgodny z prawem i opłacalny finansowo.\n\n• CAPEX (Koszty inwestycyjne): Jednorazowe nakłady ponoszone na start (zakup serwerów, switchy, montaż okablowania i robocizna).\n\n• OPEX (Koszty operacyjne): Bieżące koszty ponoszone co miesiąc na utrzymanie systemu (prąd, łącza internetowe, licencje roczne, serwis i pensja administratora)."
+    "title": "20. Studium wykonalności i szacowanie kosztów wybranej klasy przedsięwzięć informatycznych (np. sieci komputerowej)",
+    "prompt": "Co zawiera studium wykonalności i czym różnią się koszty CAPEX od OPEX?",
+    "body": "• Studium wykonalności (Feasibility Study): Wstępny audyt sprawdzający wykonalność techniczną (Site Survey obiektu, uwarunkowania architektoniczne), formalno-prawną (zgody budowlane, normy ppoż.) oraz ekonomiczną.\n\n• Szacowanie kosztów:\n  - CAPEX (Koszty inwestycyjne): Jednorazowe nakłady na start – zakup szaf RACK, switchy, routerów, wykonanie okablowania strukturalnego i montaż.\n  - OPEX (Koszty operacyjne): Bieżące koszty ponoszone w trakcie eksploatacji – abonament za łącze internetowe, prąd, licencje roczne, serwis i pensja administratora sieci."
   },
   {
     "id": "fiz_1",
     "module": "fiz1",
     "category": "Fizyka | Pytanie 1",
-    "title": "Przetwarzanie analogowo-cyfrowe (ADC): Próbkowanie, kwantyzacja i technologie",
-    "prompt": "Jak zamienić ciągły sygnał fizyczny na postać cyfrową i jak działa twierdzenie Nyquista?",
-    "body": "• 3 etapy konwersji ADC:\n  1. Próbkowanie w czasie: Pobieranie wartości napięcia w regularnych odstępach czasu Ts.\n  2. Kwantyzacja w wartości: Zaokrąglanie wartości ciągłej do najbliższego poziomu bitowego (generuje szum kwantyzacji).\n  3. Kodowanie: Przypisanie wartości w kodzie binarnym.\n\n• Twierdzenie Nyquista-Shannona i Aliasing:\n  - Aby wiernie zapisać sygnał, częstotliwość próbkowania musi być co najmniej 2 razy wyższa niż najwyższa częstotliwość w sygnale (fs >= 2*fmax).\n  - Zbyt rzadkie próbkowanie wywołuje aliasing (wysokie tony tworzą fałszywe zniekształcenia niskoczęstotliwościowe). Zapobiega mu analogowy filtr dolnoprzepustowy (antyaliasingowy) przed wejściem ADC.\n\n• Typy przetworników ADC:\n  - SAR: Sukcesywna aproksymacja – dobry kompromis szybkości i dokładności (standard w mikrokontrolerach).\n  - Flash: Równoległa macierz komparatorów, najszybszy, duży pobór prądu (oscyloskopy).\n  - Sigma-Delta: Bardzo wysoka rozdzielczość (do 24 bitów), wolniejszy (audio, precyzyjne wagi)."
+    "title": "1. Przetwarzanie analogowo-cyfrowe - główne problemy i technologie",
+    "prompt": "Jak zamienić ciągły sygnał na postać cyfrową i jak działa twierdzenie Nyquista?",
+    "body": "• 3 etapy konwersji ADC:\n  1. Próbkowanie w czasie: Pobieranie wartości napięcia w stałych odstępach czasu Ts.\n  2. Kwantyzacja w wartości: Zaokrąglenie wartości ciągłej do najbliższego poziomu bitowego (generuje szum kwantyzacji).\n  3. Kodowanie: Przypisanie poziomowi słowa binarnego.\n\n• Twierdzenie Nyquista-Shannona i Aliasing:\n  - Aby wiernie odtworzyć sygnał, częstotliwość próbkowania musi wynosić co najmniej fs >= 2*fmax.\n  - Zbyt rzadkie próbkowanie wywołuje aliasing (nakładanie się widm i fałszywe tony niskie). Zapobiega mu analogowy filtr dolnoprzepustowy (antyaliasingowy) przed przetwornikiem.\n\n• Technologie ADC:\n  - SAR: Sukcesywna aproksymacja – uniwersalny, wbudowany w mikrokontrolery.\n  - Flash: Równoległa macierz komparatorów, najszybszy, duży pobór prądu (oscyloskopy).\n  - Sigma-Delta: Bardzo wysoka rozdzielczość (do 24 bitów) dzięki nadpróbkowaniu (audio, wagi precyzyjne)."
   },
   {
     "id": "fiz_2",
     "module": "fiz1",
     "category": "Fizyka | Pytanie 2",
-    "title": "Przetwarzanie cyfrowo-analogowe (DAC): Drabinka R-2R i filtr rekonstrukcyjny",
+    "title": "2. Przetwarzanie cyfrowo-analogowe - główne problemy i technologie",
     "prompt": "Jak zamienić kod binarny na gładki sygnał napięciowy?",
-    "body": "• Zasada: Zamiana liczb binarnych na proporcjonalne napięcie lub prąd na wyjściu.\n\n• Drabinka R-2R: Układ oporników o zaledwie dwóch powtarzalnych wartościach (R i 2R). Prądy w kolejnych gałęziach dzielą się binarnie przez 2, a klucze sterowane bitami sumują odpowiednie składowe proporcjonalnie do liczby.\n\n• Filtr rekonstrukcyjny: Napięcie z DAC ma postać ostrych schodków (ekstrapolator zerowego rzędu ZOH). Niezbędny analogowy filtr dolnoprzepustowy na wyjściu wygładza te schodki i odcina wysokie składowe pasożytnicze, przywracając czystą falę analogową."
+    "body": "• Zasada: Przekształcenie liczby binarnej na proporcjonalne napięcie lub prąd wyjściowy.\n\n• Drabinka rezystorowa R-2R: Układ wykorzystujący rezystory o wartościach R i 2R. Prądy w kolejnych gałęziach dzielą się binarnie przez 2, a klucze sterowane bitami sumują składowe proporcjonalnie do wartości liczby.\n\n• Główne problemy i filtr rekonstrukcyjny:\n  - Sygnał wyjściowy ma postać ostrych schodków (ekstrapolator zerowego rzędu ZOH), co oznacza obecność wysokich częstotliwości pasożytniczych.\n  - Zastosowanie analogowego filtru dolnoprzepustowego (rekonstrukcyjnego) na wyjściu wygładza schodki do czystej fali analogowej.\n  - Zjawisko glitch: krótkie szpilki napięciowe przy przełączaniu kluczy."
   },
   {
-    "id": "fiz_3_4_5",
+    "id": "fiz_3",
     "module": "fiz1",
-    "category": "Fizyka | Pytania 3, 4 i 5",
-    "title": "Pojęcie sensora oraz podział na czujniki aktywne i pasywne",
-    "prompt": "Czym jest sensor i jaka jest fundamentalna różnica między czujnikiem aktywnym a pasywnym?",
-    "body": "• Definicja: Element pomiarowy przetwarzający badaną wielkość nieelektryczną (ciepło, nacisk, światło) na użyteczny sygnał elektryczny.\n\n• Czujniki aktywne (generacyjne): Generują sygnał elektryczny samoczynnie ze zjawiska fizycznego – NIE wymagają zewnętrznego zasilania.\n  - Przykłady: Termopara (zjawisko Seebecka – różnica temperatur daje napięcie), piezoelektryk (nacisk generuje ładunek), ogniwo fotowoltaiczne.\n\n• Czujniki pasywne (parametryczne): Wymagają doprowadzenia zewnętrznego zasilania – pod wpływem zjawiska zmieniają jedynie swój opór, pojemność lub indukcyjność.\n  - Przykłady: Termistor (zmiana oporu z temperaturą), fotorezystor, tensometr foliowy (zmiana oporu przy ugięciu mechanicznym)."
+    "category": "Fizyka | Pytanie 3",
+    "title": "3. Metody i techniki pomiaru zjawisk fizycznych, przykładowe urządzenia pomiarowe",
+    "prompt": "Jak klasyfikuje się metody pomiarowe i jakie urządzenia stosuje się w praktyce?",
+    "body": "• Metody pomiaru:\n  - Bezpośrednie: Porównanie mierzonej wielkości bezpośrednio ze znanym wzorcem (np. suwmiarka, waga odważnikowa).\n  - Pośrednie: Pomiar innej wielkości fizycznej powiązanej znaną zależnością matematyczną (np. wyznaczenie temperatury ze zmiany rezystancji termistora, prędkości z przesunięcia Dopplera).\n\n• Urządzenia pomiarowe:\n  - Multimetr cyfrowy (pomiar napięcia, prądu, rezystancji).\n  - Oscyloskop cyfrowy (wizualizacja przebiegów napięcia w czasie).\n  - LiDAR / Dalmierz laserowy (pomiar czasu przelotu wiązki światła ToF do wyznaczenia odległości).\n  - Kamera termowizyjna (pomiar promieniowania podczerwonego powierzchni)."
+  },
+  {
+    "id": "fiz_4",
+    "module": "fiz1",
+    "category": "Fizyka | Pytanie 4",
+    "title": "4. Pojęcie czujnika/sensora, przykłady i zastosowania",
+    "prompt": "Czym jest sensor i jak przetwarza zjawiska fizyczne na sygnał elektryczny?",
+    "body": "• Definicja: Element wejściowy toru pomiarowego, który przekształca badaną wielkość nieelektryczną (temperaturę, ciśnienie, przyspieszenie, światło) na użyteczny sygnał elektryczny (napięcie, prąd, zmianę rezystancji lub pojemności).\n\n• Przykłady i zastosowania:\n  - Akcelerometr / IMU: Pomiar przyspieszenia i orientacji (smartfony, stabilizacja dronów).\n  - Czujnik Halla: Detekcja pola magnetycznego (pomiar prędkości obrotowej kół w ABS).\n  - Fotodioda: Wykrywanie natężenia światła w optoelektronice i światłowodach.\n  - Tensometr: Pomiar ugięcia i masy w wagach elektronicznych i mostach."
+  },
+  {
+    "id": "fiz_5",
+    "module": "fiz1",
+    "category": "Fizyka | Pytanie 5",
+    "title": "5. Podstawowe różnice między czujnikami aktywnymi a pasywnymi",
+    "prompt": "Jaka jest fundamentalna różnica w zasilaniu czujników aktywnych i pasywnych?",
+    "body": "• Czujniki aktywne (generacyjne): Do wytworzenia sygnału wyjściowego NIE wymagają zewnętrznego źródła zasilania; bezpośrednio zamieniają energię zjawiska w energię elektryczną.\n  - Przykłady: Termopara (zjawisko Seebecka – różnica temperatur generuje napięcie), kryształ piezoelektryczny (nacisk generuje ładunek), ogniwo fotowoltaiczne.\n\n• Czujniki pasywne (parametryczne): WYMAGAJĄ doprowadzenia zewnętrznego zasilania pomiarowego; mierzona wielkość zmienia ich wewnętrzny parametr elektryczny (R, C lub L).\n  - Przykłady: Termistor NTC/PTC (zmiana rezystancji z temperaturą), fotorezystor, tensometr foliowy (zmiana rezystancji pod wpływem naprężenia)."
   },
   {
     "id": "fiz_6",
     "module": "fiz1",
     "category": "Fizyka | Pytanie 6",
-    "title": "Sensoryka w urządzeniach mobilnych (pakiet IMU i czujniki otoczenia)",
-    "prompt": "Jakie sensory zintegrowane są we współczesnych smartfonach i smartwatchach?",
-    "body": "• Pakiet IMU (Inercyjna Jednostka Pomiarowa w technologii MEMS):\n  - Akcelerometr: Mierzy przyspieszenie liniowe i wektor grawitacji (liczy kroki, wykrywa orientację pion/poziom).\n  - Żyroskop: Mierzy prędkość obrotu telefonu (stabilizacja wideo, rozglądanie się w VR).\n  - Magnetometr: Mierzy ziemskie pole magnetyczne (funkcja cyfrowego kompasu).\n\n• Sensory otoczenia i biometrii:\n  - Czujnik zbliżeniowy (gasi ekran przy uchu), barometr (pomiar wysokości npm i wspomaganie GPS), sensor optyczny PPG (puls i natlenienie krwi SpO2 w zegarkach)."
+    "title": "6. Możliwe obszary aplikacyjne technologii sensorów związanych z personalnymi urządzeniami mobilnymi",
+    "prompt": "Jakie sensory zintegrowane są we współczesnych telefonach i zegarkach?",
+    "body": "• Pakiet IMU (technologia MEMS):\n  - Akcelerometr: Mierzy przyspieszenie liniowe i wektor grawitacji (liczy kroki, wykrywa orientację pion/poziom).\n  - Żyroskop: Mierzy prędkość kątową obrotu telefonu (stabilizacja wideo, orientacja w VR).\n  - Magnetometr: Mierzy ziemskie pole magnetyczne (funkcja cyfrowego kompasu).\n\n• Czujniki otoczenia:\n  - Czujnik oświetlenia (automatyczna regulacja jasności ekranu), czujnik zbliżeniowy (wygaszanie ekranu przy uchu), barometr (pomiar wysokości npm i wspomaganie GPS).\n\n• Sensory biometryczne: Optyczny czujnik PPG (puls i natlenienie krwi SpO2 w smartwatchach), czytniki linii papilarnych, sensory ToF/FaceID (mapowanie twarzy 3D w podczerwieni)."
   },
   {
     "id": "fiz_7",
     "module": "fiz1",
     "category": "Fizyka | Pytanie 7",
-    "title": "Elementy wykonawcze (aktuatory) w automatyce i ich fizyczne zasady działania",
+    "title": "7. Elementy wykonawcze w układach automatyki oraz fizyczna zasada ich działania",
     "prompt": "Jak sygnał elektryczny z układu sterowania zamienia się w ruch lub siłę mechaniczną?",
-    "body": "• Silniki elektryczne: Wykorzystują siłę Lorentza – prąd płynący w uzwojeniu wirnika w polu magnetycznym stojana wytwarza moment obrotowy.\n\n• Przekaźniki i elektrozawory: Cewka staje się elektromagnesem i przyciąga ferromagnetyczny styk, załączając obwód lub otwierając przepływ medium.\n\n• Aktuatory piezoelektryczne: Odwrotne zjawisko piezoelektryczne – przyłożenie napięcia wywołuje mikroskopijną deformację kryształu (ruch o nanometrowej precyzji we wtryskiwaczach paliwa Common Rail i mikroskopach AFM).\n\n• Siłowniki pneumatyczne i hydrauliczne: Ruch posuwisty wywołany ciśnieniem sprężonego powietrza lub oleju."
+    "body": "• Silniki elektryczne (DC, BLDC, krokowe): Wykorzystują siłę Lorentza – prąd płynący w uzwojeniu wirnika w polu magnetycznym stojana wytwarza moment obrotowy.\n\n• Przekaźniki i elektrozawory: Cewka staje się elektromagnesem i przyciąga ferromagnetyczną zworę, załączając obwód lub otwierając przepływ medium.\n\n• Aktuatory piezoelektryczne: Odwrotne zjawisko piezoelektryczne – przyłożenie napięcia wywołuje mikroskopijną deformację kryształu (ruch o nanometrowej precyzji we wtryskiwaczach paliwa Common Rail i mikroskopach AFM).\n\n• Siłowniki fluidalne: Ruch posuwisty tłoka wywołany ciśnieniem sprężonego powietrza (pneumatyka) lub oleju (hydraulika)."
   },
   {
     "id": "fiz_8",
     "module": "fiz1",
     "category": "Fizyka | Pytanie 8",
-    "title": "Układy cyfrowe: Kombinacyjne vs Sekwencyjne",
-    "prompt": "Jaka jest kluczowa różnica między układem kombinacyjnym a sekwencyjnym?",
-    "body": "• Układy kombinacyjne (bez pamięci): Stan wyjścia zależy wyłącznie od aktualnego stanu wejść w danym ułamku sekundy (bramki logiczne, sumatory liczb, multipleksery, komparatory).\n\n• Układy sekwencyjne (z pamięcią): Stan wyjścia zależy od aktualnego stanu wejść ORAZ od poprzedniego stanu układu. Posiadają pętlę sprzężenia zwrotnego (przerzutniki D, JK, liczniki, rejestry przesuwne, automaty stanów)."
+    "title": "8. Typy układów cyfrowych i metody ich opisu oraz implementacji",
+    "prompt": "Czym różnią się układy kombinacyjne od sekwencyjnych i jak się je projektuje?",
+    "body": "• Typy układów:\n  - Kombinacyjne (bez pamięci): Stan wyjścia zależy wyłącznie od aktualnego stanu wejść (bramki logiczne, sumatory, multipleksery, komparatory).\n  - Sekwencyjne (z pamięcią): Stan wyjścia zależy od aktualnych wejść oraz poprzedniego stanu układu; posiadają pętlę sprzężenia zwrotnego (przerzutniki D/JK, liczniki, rejestry).\n\n• Metody opisu: Tablice prawdy, siatki Karnaugh, równania algebry Boole'a, grafy przejść automatów stanów (Moore'a/Mealy'ego), języki HDL.\n\n• Implementacja: Bramki dyskretne (SSI/MSI), układy programowalne CPLD/FPGA, dedykowane układy ASIC."
   },
   {
     "id": "fiz_9",
     "module": "fiz1",
     "category": "Fizyka | Pytanie 9",
-    "title": "Języki opisu układów cyfrowych (VHDL vs Verilog)",
-    "prompt": "Jak projektuje się i opisuje układy cyfrowe na poziomie bramek i rejestrów?",
-    "body": "• VHDL: Język wywodzący się ze środowiska wojskowego (Ada). Charakteryzuje się bardzo silną kontrolą typów i sztywną składnią. Chroni przed ukrytymi błędami w wielkich projektach krytycznych (lotnictwo, wojsko, Europa).\n\n• Verilog: Składnia zbliżona do języka C, znacznie mniej restrykcyjny w typowaniu, pozwala na szybsze tworzenie kodu. Popularny w USA przy komercyjnym projektowaniu chipów ASIC.\n\n• Poziomy opisu: Behawioralny (algorytm), RTL (Register-Transfer Level – przepływ danych między rejestrami) oraz strukturalny (siatka połączeń modułów)."
+    "title": "9. Języki opisu układów cyfrowych (VHDL, Verilog)",
+    "prompt": "Jak opisuje się układy cyfrowe na poziomie bramek i rejestrów za pomocą języków HDL?",
+    "body": "• VHDL: Język wywodzący się z projektów wojskowych (Ada). Charakteryzuje się bardzo silną kontrolą typów i sztywną składnią. Chroni przed ukrytymi błędami w wielkich projektach krytycznych (lotnictwo, wojsko, Europa).\n\n• Verilog: Składnia zbliżona do języka C, znacznie mniej restrykcyjny w typowaniu, pozwala na szybsze tworzenie kodu. Powszechny w USA przy komercyjnym projektowaniu chipów ASIC.\n\n• Poziomy abstrakcji opisu w HDL:\n  - Behawioralny (opis działania za pomocą algorytmu).\n  - RTL (Register-Transfer Level – przepływ danych między rejestrami i operacje logiczne).\n  - Strukturalny (jawne połączenia między gotowymi modułami i bramkami)."
   },
   {
     "id": "fiz_10",
     "module": "fiz1",
     "category": "Fizyka | Pytanie 10",
-    "title": "Zjawisko fotoelektryczne (Zewnętrzne vs Wewnętrzne) i jego zastosowanie",
-    "prompt": "Jak światło oddziałuje z materią w elementach optoelektronicznych?",
-    "body": "• Zjawisko fotoelektryczne zewnętrzne: Padające światło uderza w metal i całkowicie wybija elektrony poza materiał do próżni (gdy energia fotonu h*nu >= praca wyjścia W). Zastosowanie: fotopowielacze o czułości pojedynczych fotonów, noktowizory.\n\n• Zjawisko fotoelektryczne wewnętrzne: Światło wzbudza elektrony wewnątrz półprzewodnika z pasma walencyjnego do przewodnictwa, tworząc wolne nośniki prądu (pary elektron-dziura). Zastosowanie: panele fotowoltaiczne (produkcja prądu), fotodiody oraz matryce aparatów CMOS."
+    "title": "10. Zjawisko fotoelektryczne i jego wykorzystanie praktyczne",
+    "prompt": "Jak światło oddziałuje z materią w zjawisku fotoelektrycznym zewnętrznym i wewnętrznym?",
+    "body": "• Zjawisko fotoelektryczne zewnętrzne: Padające światło uderza w powierzchnię metalu i całkowicie wybija elektrony poza materiał do próżni (gdy energia fotonu h*nu >= praca wyjścia W). Zastosowanie: fotopowielacze o czułości pojedynczych fotonów, noktowizory tradycyjne.\n\n• Zjawisko fotoelektryczne wewnętrzne: Światło wzbudza elektrony wewnątrz półprzewodnika z pasma walencyjnego do pasma przewodnictwa, tworząc wolne nośniki prądu (pary elektron-dziura).\n  - Efekt fotowoltaiczny: Złącze p-n generuje siłę elektromotoryczną (ogniwa słoneczne PV).\n  - Efekt fotoprzewodnictwa: Zmiana rezystancji pod wpływem światła (fotodiody, fototranzystory, matryce aparatów CMOS)."
   },
   {
-    "id": "fiz_11",
+    "id": "fiz_11a",
     "module": "fiz2",
-    "category": "Fizyka | Pytanie 11",
-    "title": "Cyfrowe przetwarzanie dźwięku (MP3) i obrazu (filtr Bayera)",
-    "prompt": "Jak działa stratna kompresja audio oraz jak matryca aparatu rejestruje kolor?",
-    "body": "• Kompresja audio (MP3): Model psychoakustyczny – usuwa dźwięki niesłyszalne dla ucha na skutek zjawiska maskowania (cichy dźwięk jest niesłyszalny tuż po głośnym uderzeniu lub obok głośnego tonu), redukując plik nawet 10-krotnie.\n\n• Rejestracja obrazu (Filtr Bayera): Piksele matrycy mierzą tylko jasność. Przed matrycą umieszcza się mozaikę filtrów: 50% zielonych (G), 25% czerwonych (R) i 25% niebieskich (B). Przewaga zieleni wynika z najwyższej czułości ludzkiego oka na tę barwę.\n\n• Kompresja JPEG: Wykorzystuje Dyskretną Transformatę Kosinusową (DCT) i upraszcza wysokie częstotliwości przestrzenne (drobne detale mało widoczne dla oka)."
+    "category": "Fizyka | Pytanie 11 (a)",
+    "title": "11 (a). Cyfrowe kodowanie i kompresja sygnałów akustycznych",
+    "prompt": "Jak zapisuje się dźwięk cyfrowy i na jakiej zasadzie działa kompresja stratna MP3?",
+    "body": "• Zapis bez kompresji (PCM): Bezstratne próbkowanie i kwantyzacja fali akustycznej (standard CD-Audio: 44,1 kHz, 16 bitów, stereo).\n\n• Kompresja bezstratna (FLAC): Redukcja objętości o 40–50% za pomocą kodowania predykcyjnego i entropijnego bez utraty ani jednego bitu danych.\n\n• Kompresja stratna (MP3, AAC, Opus): Oparta na modelu psychoakustycznym słuchu ludzkiego. Algorytm usuwa składowe niesłyszalne na skutek zjawiska maskowania:\n  - Maskowanie częstotliwościowe: Cichy dźwięk o częstotliwości bliskiej głośnemu tonowi jest niesłyszalny i zostaje wycięty.\n  - Maskowanie czasowe: Przez ułamek sekundy po głośnym dźwięku ucho nie rejestruje cichych tonów. Pozwala to na nawet 10-krotne zmniejszenie pliku."
+  },
+  {
+    "id": "fiz_11b",
+    "module": "fiz2",
+    "category": "Fizyka | Pytanie 11 (b)",
+    "title": "11 (b). Cyfrowe formowanie, zapis i przetwarzanie obrazu",
+    "prompt": "Jak matryca aparatu formuje obraz cyfrowy i na czym polega kompresja JPEG?",
+    "body": "• Formowanie obrazu (Filtr Bayera): Piksele krzemowe matrycy mierzą jedynie natężenie światła (jasność). Przed matrycą umieszcza się mozaikę barwnych filtrów: 50% zielonych (G), 25% czerwonych (R) i 25% niebieskich (B). Przewaga zieleni wynika z najwyższej czułości ludzkiego oka na tę barwę. Demosaicing interpoluje pełne barwy RGB dla każdego piksela.\n\n• Formaty zapisu: Bezstratne (RAW, PNG), stratne (JPEG).\n\n• Kompresja JPEG: Podział obrazu na bloki 8x8 pikseli, Dyskretna Transformata Kosinusowa (DCT), kwantyzacja wysokich częstotliwości przestrzennych (drobnych szumów mało widocznych dla oka) i kodowanie Huffmana.\n\n• Podstawowe przetwarzanie: Filtracja splotowa (wygładzanie Gaussa, wyostrzanie), binaryzacja progowa, wykrywanie krawędzi (Sobel, Canny)."
   },
   {
     "id": "fiz_12",
     "module": "fiz2",
     "category": "Fizyka | Pytanie 12",
-    "title": "Cyfrowe modele barw (RGB, CMYK, HSV) i ich zastosowanie",
-    "prompt": "W jakich przestrzeniach barwnych reprezentuje się kolory i dlaczego używamy różnych modeli?",
-    "body": "• RGB (Addytywny): Mieszanie świateł R, G, B (suma daje biel). Wyświetlacze, sensory kamer.\n\n• CMYK (Subtraktywny): Mieszanie pigmentów farb pochłaniających światło na papierze (suma daje czerń). Druk i poligrafia.\n\n• HSV: Rozdziela odcień barwy (Hue – kąt na kole barw) od nasycenia (Saturation) i jasności (Value). Bardzo przydatny w widzeniu maszynowym, ponieważ zmiana naświetlenia obiektu nie zmienia jego odcienia bazowego (Hue)."
+    "title": "12. Cyfrowe modele barw i algorytmy ich konwersji",
+    "prompt": "Czym różnią się modele RGB, CMYK i HSV oraz dlaczego stosuje się różne przestrzenie barwne?",
+    "body": "• RGB (Addytywny): Mieszanie świateł R, G, B (suma daje biel). Punktem wyjścia jest ciemność. Standard dla monitorów, wyświetlaczy i sensorów kamer.\n\n• CMYK (Subtraktywny): Mieszanie pigmentów farb pochłaniających światło na papierze (C+M+Y daje czerń, K to pigment czarny). Standard druku i poligrafii.\n\n• HSV / HSL: Reprezentacja rozdzielająca czysty odcień barwy (Hue – kąt na kole barw) od jej nasycenia (Saturation) i jasności (Value/Lightness). Bardzo przydatna w widzeniu maszynowym, ponieważ zmiana naświetlenia obiektu nie zmienia jego odcienia bazowego (Hue).\n\n• Konwersja RGB do skali szarości: Y = 0.299*R + 0.587*G + 0.114*B (wagi wynikają z czułości ludzkiego oka)."
   },
   {
-    "id": "fiz_13_14",
+    "id": "fiz_13",
     "module": "fiz2",
-    "category": "Fizyka | Pytania 13 i 14",
-    "title": "Rozpoznawanie wzorców w obrazie statycznym i detekcja ruchu w wideo",
-    "prompt": "Jakie algorytmy pozwalają maszynie rozpoznawać obiekty i śledzić ich ruch?",
-    "body": "• Rozpoznawanie wzorców (obraz statyczny): Kiedyś deskryptory punktów kluczowych odporne na skalę i obrót (SIFT, ORB), dziś głębokie sieci neuronowe (CNN, np. YOLO), które same lokalizują i klasyfikują obiekty w czasie rzeczywistym.\n\n• Detekcja ruchu (wideo):\n  - Różnicowanie kadrów: Proste odejmowanie kolejnych klatek; szybkie, ale nieruchomy obiekt znika z pola widzenia.\n  - Odejmowanie tła (GMM): Statystyczne modelowanie stałego tła; pozwala wykrywać obiekt nawet wtedy, gdy na chwilę się zatrzyma.\n  - Przepływ optyczny (Optical Flow): Wyznaczanie wektorów prędkości przemieszczenia punktów w czasie."
+    "category": "Fizyka | Pytanie 13",
+    "title": "13. Metody rozpoznawania wzorca w obrazie nieruchomym",
+    "prompt": "Jakie algorytmy pozwalają komputerowi rozpoznać obiekty na zdjęciu statycznym?",
+    "body": "• Dopasowanie szablonu (Template Matching): Przesuwanie wycinka wzorca piksel po pikselu i liczenie korelacji; działa tylko przy niezmiennej skali i kącie obrotu.\n\n• Deskryptory punktów kluczowych (SIFT, SURF, ORB): Wyszukiwanie charakterystycznych cech lokalnych (narożników, krawędzi) odpornych na zmiany skali, obrót i oświetlenie.\n\n• Klasyfikatory kaskadowe (Haar Cascades): Szybkie wykrywanie twarzy na podstawie prostokątnych cech jasnościowych.\n\n• Głębokie konwolucyjne sieci neuronowe (CNN, np. YOLO, ResNet): Współczesny standard – sieć sama uczy się wielopoziomowej reprezentacji cech, lokalizując i klasyfikując obiekty w czasie rzeczywistym."
   },
   {
-    "id": "fiz_15_16",
+    "id": "fiz_14",
     "module": "fiz2",
-    "category": "Fizyka | Pytania 15 i 16",
-    "title": "Rekonstrukcja sygnałów oraz filtry cyfrowe (FIR vs IIR)",
-    "prompt": "Czym różnią się filtry FIR i IIR oraz jak rekonstruuje się sygnał ciągły?",
-    "body": "• Rekonstrukcja sygnału: Odtworzenie sygnału ciągłego z próbek (interpolacja funkcją sinc); w praktyce realizowana przez przetwornik DAC (ekstrapolator ZOH) i analogowy filtr dolnoprzepustowy wygładzający schodki.\n\n• Filtry FIR (o skończonej odpowiedzi impulsowej): Bez sprzężenia zwrotnego. Zawsze bezwarunkowo stabilne, posiadają idealnie liniową fazę (brak zniekształceń kształtu sygnału), ale wymagają dużej liczby obliczeń.\n\n• Filtry IIR (o nieskończonej odpowiedzi impulsowej): Posiadają pętlę zwrotną (rekurencję). Dają strome tłumienie przy małej liczbie obliczeń, ale mogą stać się niestabilne i wprowadzają nieliniowe zniekształcenia fazowe."
+    "category": "Fizyka | Pytanie 14",
+    "title": "14. Metody rozpoznawania ruchu i zmian w obrazie ruchomym",
+    "prompt": "Jakie metody stosuje się do detekcji i śledzenia ruchu w sekwencji wideo?",
+    "body": "• Różnicowanie kadrów (Frame Differencing): Proste odejmowanie wartości pikseli kolejnych klatek (|Klatka[t] - Klatka[t-1]| > Próg). Bardzo szybkie obliczeniowo, ale jeśli poruszający się obiekt nagle się zatrzyma, znika z pola detekcji.\n\n• Odejmowanie tła (Background Subtraction / GMM): Statystyczne modelowanie stałego tła za pomocą mieszanin gaussowskich; pozwala wykrywać obiekt pierwszoplanowy nawet wtedy, gdy na chwilę się zatrzyma.\n\n• Przepływ optyczny (Optical Flow): Wyznaczanie wektorów prędkości i kierunku przemieszczenia punktów obrazu w czasie (np. metoda Lucasa-Kanade)."
   },
   {
-    "id": "fiz_17_18",
+    "id": "fiz_15",
     "module": "fiz2",
-    "category": "Fizyka | Pytania 17 i 18",
-    "title": "Parametry łącza radiowego: Zasięg (Wzór Friisa) oraz wskaźniki jakości (SNR, BER)",
-    "prompt": "Jakie wielkości fizyczne określają zasięg fali radiowej oraz jakość przesyłu danych?",
-    "body": "• Zasięg (Budżet łącza / Wzór Friisa):\n  Prx = Ptx + Gtx + Grx - PathLoss\n  - Ptx: moc nadajnika (dBm), Gtx/Grx: zysk anten (dBi).\n  - Path Loss (tłumienie trasy): rośnie z kwadratem odległości i częstotliwości (fale sub-GHz mają znacznie większy zasięg niż 2,4 GHz czy 5 GHz).\n  - Odbiór jest poprawny, dopóki moc odebrana Prx przewyższa czułość odbiornika Srx.\n\n• Jakość transmisji:\n  - SNR: Stosunek mocy sygnału użytecznego do szumu tła (w decybelach).\n  - BER (Bit Error Rate): Stopa błędów – procent błędnie odebranych bitów w transmisji."
+    "category": "Fizyka | Pytanie 15",
+    "title": "15. Cyfrowa rekonstrukcja sygnału",
+    "prompt": "W jaki sposób odtwarza się ciągły sygnał analogowy z ciągu próbek cyfrowych?",
+    "body": "• Podstawa teoretyczna: Wzór interpolacyjny Whittakera-Kotielnikowa-Shannona z wykorzystaniem funkcji sinc jako idealnego filtru dolnoprzepustowego w dziedzinie częstotliwości.\n\n• Realizacja inżynierska:\n  - Przetwornik DAC z ekstrapolatorem zerowego rzędu (ZOH) tworzy sygnał schodkowy.\n  - Na wyjściu stosuje się analogowy filtr dolnoprzepustowy (rekonstrukcyjny), który wygładza schodki i odcina kopie widma pasożytniczego powyżej częstotliwości Nyquista, przywracając ciągłą falę analogową."
   },
   {
-    "id": "fiz_19_20",
+    "id": "fiz_16",
     "module": "fiz2",
-    "category": "Fizyka | Pytania 19 i 20",
-    "title": "Telefonia komórkowa: Struktura komórkowa, Handover i ewolucja (2G–5G)",
-    "prompt": "Jak zorganizowana jest sieć komórkowa i jak ewoluowała transmisja głosu oraz danych?",
-    "body": "• Struktura komórkowa: Podział terenu na obszary obsługiwane przez stacje BTS, co umożliwia ponowne wykorzystanie tych samych częstotliwości w oddalonych komórkach.\n\n• Handover: Bezprzerwowa procedura automatycznego przełączania aktywnego połączenia między stacjami bazowymi w trakcie przemieszczania się abonenta.\n\n• Ewolucja standardów:\n  - 2G (GSM): Cyfrowy przesył głosu, komutacja łączy.\n  - 3G (HSPA+): Wprowadzenie mobilnego Internetu pakietowego (do kilkunastu Mb/s).\n  - 4G (LTE): Architektura w 100% pakietowa IP, rozmowy przesyłane jako pakiety VoLTE, prędkości do paruset Mb/s.\n  - 5G (New Radio): Fale milimetrowe (mmWave), anteny Massive MIMO z formowaniem wiązki (Beamforming), opóźnienia rzędu 1 ms, prędkości >1 Gb/s."
+    "category": "Fizyka | Pytanie 16",
+    "title": "16. Cyfrowa filtracja sygnałów (filtry FIR vs IIR)",
+    "prompt": "Czym różnią się filtry cyfrowe FIR i IIR pod względem stabilności i mocy obliczeniowej?",
+    "body": "• Filtry FIR (o skończonej odpowiedzi impulsowej, niesprzężone zwrotnie):\n  - Zawsze bezwarunkowo stabilne.\n  - Posiadają idealnie liniową fazę (brak zniekształceń kształtu sygnału).\n  - Wymagają wysokiego rzędu (dużo operacji mnożenia, obciążają procesor).\n\n• Filtry IIR (o nieskończonej odpowiedzi impulsowej, rekurencyjne ze sprzężeniem zwrotnym):\n  - Bardzo stroma charakterystyka tłumienia przy niskim rzędzie filtru (szybkie, oszczędzają moc obliczeniową i pamięć).\n  - Mogą stać się niestabilne i wprowadzają nieliniowe zniekształcenia fazowe."
+  },
+  {
+    "id": "fiz_17",
+    "module": "fiz2",
+    "category": "Fizyka | Pytanie 17",
+    "title": "17. Parametry urządzeń nadawczo-odbiorczych określające zasięg łącza radiowego",
+    "prompt": "Jakie parametry fizyczne i techniczne decydują o zasięgu fali radiowej (Wzór Friisa)?",
+    "body": "• Równanie budżetu łącza (Wzór Friisa):\n  Prx = Ptx + Gtx + Grx - PathLoss\n\n• Parametry:\n  - Ptx: Moc nadajnika (w dBm lub watach).\n  - Gtx, Grx: Zysk energetyczny anteny nadawczej i odbiorczej (w dBi).\n  - Path Loss (tłumienie trasy): Rośnie z kwadratem odległości oraz kwadratem częstotliwości fali (stąd pasma sub-GHz mają znacznie większy zasięg niż 2,4 GHz czy 5 GHz).\n\n• Warunek odbioru: Otrzymana moc Prx musi być większa niż czułość odbiornika Srx (np. > -105 dBm)."
+  },
+  {
+    "id": "fiz_18",
+    "module": "fiz2",
+    "category": "Fizyka | Pytanie 18",
+    "title": "18. Parametry urządzeń nadawczo-odbiorczych określające jakość transmisji w łączu radiowym",
+    "prompt": "Jakie wskaźniki określają jakość i czystość transmisji bezprzewodowej?",
+    "body": "• SNR (Signal-to-Noise Ratio): Stosunek mocy sygnału użytecznego do mocy szumu tła (w decybelach dB). Wyższy SNR pozwala na stosowanie gęstszych modulacji cyfrowych (np. 256-QAM) i osiąganie wyższych transferów.\n\n• SINR: Uwzględnia stosunek mocy sygnału do szumu oraz zakłóceń od innych nadajników pracujących w tym samym kanale.\n\n• BER (Bit Error Rate): Stopa błędów bitowych – stosunek liczby błędnie odebranych bitów do całkowitej liczby przesłanych bitów.\n\n• EVM (Error Vector Magnitude): Miara dokładności modulacji cyfrowej (odchylenie punktów konstelacji od ideału)."
+  },
+  {
+    "id": "fiz_19",
+    "module": "fiz2",
+    "category": "Fizyka | Pytanie 19",
+    "title": "19. Zasada działania telefonii komórkowej w zakresie transmisji głosu, główne standardy",
+    "prompt": "Jak zorganizowana jest komórkowa transmisja głosu i jak działa procedura Handover?",
+    "body": "• Struktura komórkowa: Podział obszaru na niewielkie komórki ze stacjami bazowymi BTS. Umożliwia ponowne wykorzystanie tych samych częstotliwości w oddalonych komórkach bez wzajemnych zakłóceń.\n\n• Handover (przełączenie): Bezprzerwowa procedura automatycznego przełączania aktywnej rozmowy między stacjami bazowymi w trakcie poruszania się abonenta.\n\n• Ewolucja transmisji głosu:\n  - 2G (GSM) & 3G (UMTS): Klasyczna komutacja łączy (dedykowany kanał fizyczny na czas rozmowy).\n  - 4G (LTE) -> VoLTE: Głos przesyłany jako spakietowane dane IP (VoIP) z priorytetem jakości QoS.\n  - 5G -> VoNR: Natywny przesył głosu przez sieć pakietową 5G o minimalnych opóźnieniach."
+  },
+  {
+    "id": "fiz_20",
+    "module": "fiz2",
+    "category": "Fizyka | Pytanie 20",
+    "title": "20. Zasada działania telefonii komórkowej w zakresie transmisji danych, główne standardy",
+    "prompt": "Jak ewoluowała transmisja danych w sieciach komórkowych od 2.5G do 5G?",
+    "body": "• Zasada: Komutacja pakietów; dane dzielone są na pakiety IP przesyłane wspólnym kanałem radiowym z dynamicznym przydziałem pasma.\n\n• Ewolucja standardów danych:\n  - 2.5G (GPRS / EDGE): Pakiety w sieci GSM, prędkości rzędu kilkudziesięciu/setek kb/s.\n  - 3G (HSPA+): Pakietowy dostęp WCDMA, transfery rzędu kilkunastu Mb/s (początek powszechnego mobilnego Internetu).\n  - 4G (LTE / LTE-A): Architektura w 100% pakietowa IP, modulacja OFDMA, wieloantenowe nadawanie MIMO, transfery do paruset Mb/s.\n  - 5G (New Radio): Wykorzystanie fal milimetrowych (mmWave), Massive MIMO, kierunkowe formowanie wiązki (Beamforming), podział sieci (Network Slicing), transfery >1 Gb/s i opóźnienia rzędu 1 ms."
   }
 ]
