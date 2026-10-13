@@ -469,6 +469,31 @@
       font-size: 1.25rem;
     }
     .finished-box p { font-size: 0.88rem; }
+
+    /* Etykieta modułu w nagłówku akordeonu */
+    .module-pill {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-right: 0.4rem;
+    }
+    
+    .mod-inf1 { background: rgba(56, 189, 248, 0.18); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+    .mod-inf2 { background: rgba(168, 85, 247, 0.18); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
+    .mod-fiz1 { background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .mod-fiz2 { background: rgba(34, 197, 94, 0.18); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
+    
+    .accordion-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+    
   </style>
 </head>
 <body>
@@ -714,47 +739,59 @@
       updateQuizView();
     }
 
-    function renderQuestionsList() {
-      const listEl = document.getElementById("questions-list");
-      const search = document.getElementById("search-input").value.toLowerCase();
-      const modFilter = document.getElementById("list-module-filter").value;
-      listEl.innerHTML = "";
+// Pomocniczy słownik nazw i klas modułów
+const MODULE_NAMES = {
+  inf1: { label: "Informatyka cz. 1", css: "mod-inf1" },
+  inf2: { label: "Informatyka cz. 2", css: "mod-inf2" },
+  fiz1: { label: "Fizyka cz. 1", css: "mod-fiz1" },
+  fiz2: { label: "Fizyka cz. 2", css: "mod-fiz2" }
+};
 
-      const filtered = questions.filter(item => {
-        const matchesModule = (modFilter === "all" || item.module === modFilter);
-        const matchesSearch = item.title.toLowerCase().includes(search) || 
-                              item.category.toLowerCase().includes(search) || 
-                              item.body.toLowerCase().includes(search);
-        return matchesModule && matchesSearch;
-      });
+function renderQuestionsList() {
+  const listEl = document.getElementById("questions-list");
+  const search = document.getElementById("search-input").value.toLowerCase();
+  const modFilter = document.getElementById("list-module-filter").value;
+  listEl.innerHTML = "";
 
-      if (filtered.length === 0) {
-        listEl.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 2rem;">Brak zagadnień spełniających kryteria.</p>`;
-        return;
-      }
+  const filtered = questions.filter(item => {
+    const matchesModule = (modFilter === "all" || item.module === modFilter);
+    const matchesSearch = item.title.toLowerCase().includes(search) || 
+                          item.category.toLowerCase().includes(search) || 
+                          item.body.toLowerCase().includes(search);
+    return matchesModule && matchesSearch;
+  });
 
-      filtered.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "question-accordion-item";
-        div.id = `acc-${item.id}`;
-        div.innerHTML = `
-          <div class="accordion-header" onclick="toggleAccordion('${item.id}')">
-            <div class="accordion-title-box">
-              <span class="accordion-meta">${item.category}</span>
-              <span class="accordion-title">${item.title}</span>
-            </div>
-            <span class="accordion-chevron">▼</span>
+  if (filtered.length === 0) {
+    listEl.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 2rem;">Brak zagadnień spełniających kryteria.</p>`;
+    return;
+  }
+
+  filtered.forEach(item => {
+    const modInfo = MODULE_NAMES[item.module] || { label: item.module, css: "mod-inf1" };
+    const div = document.createElement("div");
+    div.className = "question-accordion-item";
+    div.id = `acc-${item.id}`;
+    div.innerHTML = `
+      <div class="accordion-header" onclick="toggleAccordion('${item.id}')">
+        <div class="accordion-title-box">
+          <div class="accordion-meta-row">
+            <span class="module-pill ${modInfo.css}">${modInfo.label}</span>
+            <span class="accordion-meta">${item.category}</span>
           </div>
-          <div class="accordion-body">
-            <div class="accordion-text">${item.body}</div>
-            <div class="accordion-footer">
-              <button class="btn-sm" onclick="openEditModal('${item.id}')">✏️ Edytuj notatkę</button>
-            </div>
-          </div>
-        `;
-        listEl.appendChild(div);
-      });
-    }
+          <span class="accordion-title">${item.title}</span>
+        </div>
+        <span class="accordion-chevron">▼</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-text">${item.body}</div>
+        <div class="accordion-footer">
+          <button class="btn-sm" onclick="openEditModal('${item.id}')">✏️ Edytuj notatkę</button>
+        </div>
+      </div>
+    `;
+    listEl.appendChild(div);
+  });
+}
 
     function toggleAccordion(id) {
       triggerHaptic('light');
