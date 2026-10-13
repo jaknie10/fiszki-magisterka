@@ -180,32 +180,32 @@
     "module": "fiz1",
     "category": "Fizyka | Pytanie 1",
     "title": "1. Przetwarzanie analogowo-cyfrowe - główne problemy i technologie",
-    "prompt": "Jak zamienić ciągły sygnał na postać cyfrową i jak działa twierdzenie Nyquista?",
-    "body": "• 3 etapy konwersji ADC:\n  1. Próbkowanie w czasie: Pobieranie wartości napięcia w stałych odstępach czasu Ts.\n  2. Kwantyzacja w wartości: Zaokrąglenie wartości ciągłej do najbliższego poziomu bitowego (generuje szum kwantyzacji).\n  3. Kodowanie: Przypisanie poziomowi słowa binarnego.\n\n• Twierdzenie Nyquista-Shannona i Aliasing:\n  - Aby wiernie odtworzyć sygnał, częstotliwość próbkowania musi wynosić co najmniej fs >= 2*fmax.\n  - Zbyt rzadkie próbkowanie wywołuje aliasing (nakładanie się widm i fałszywe tony niskie). Zapobiega mu analogowy filtr dolnoprzepustowy (antyaliasingowy) przed przetwornikiem.\n\n• Technologie ADC:\n  - SAR: Sukcesywna aproksymacja – uniwersalny, wbudowany w mikrokontrolery.\n  - Flash: Równoległa macierz komparatorów, najszybszy, duży pobór prądu (oscyloskopy).\n  - Sigma-Delta: Bardzo wysoka rozdzielczość (do 24 bitów) dzięki nadpróbkowaniu (audio, wagi precyzyjne)."
+    "prompt": "Jak prąd z czujnika zamienić na liczby w procesorze i o co chodzi z Nyquistem?",
+    "body": "• Problem: Mikrofon lub czujnik daje płynny prąd. Procesor rozumie tylko liczby binarne. ADC to tłumacz ze świata analogowego na cyfrowy.\n\n• 3 kroki zamiany:\n  1. Próbkowanie: Sprawdzanie napięcia co stały ułamek sekundy (robienie „zdjęć” fali).\n  2. Kwantyzacja: Zaokrąglenie zmierzonego napięcia do najbliższego poziomu (8 bitów to 256 poziomów, 16 bitów to 65 tysięcy). Zaokrąglenie rodzi drobny błąd, czyli szum kwantyzacji.\n  3. Kodowanie: Zapisanie tego poziomu w postaci zer i jedynek.\n\n• Twierdzenie Nyquista i Aliasing:\n  - Zasada: Musisz próbkować co najmniej 2 razy częściej niż najwyższa częstotliwość fali (fs >= 2*fmax). Dźwięk do 20 kHz próbkujesz min. 40 kHz (na CD jest 44,1 kHz).\n  - Aliasing: Gdy próbkujesz za rzadko, punkty pomiarowe ułożą się w fałszywą, wolniejszą falę (sztuczny szum i pisk). Zabezpieczenie: filtr antyaliasingowy (dolnoprzepustowy) przed wejściem ADC.\n\n• Technologie przetworników ADC:\n  - SAR: Sukcesywna aproksymacja – bada napięcie krok po kroku (jak gra w zgadywanie liczby). Tani, standard w mikrokontrolerach.\n  - Flash: Bateria komparatorów mierząca wszystko naraz. Błyskawiczny, drogi i prądożerny (używany w oscyloskopach).\n  - Sigma-Delta: Bardzo dokładny (do 24 bitów), ale wolniejszy (audio, wagi precyzyjne)."
   },
   {
     "id": "fiz_2",
     "module": "fiz1",
     "category": "Fizyka | Pytanie 2",
     "title": "2. Przetwarzanie cyfrowo-analogowe - główne problemy i technologie",
-    "prompt": "Jak zamienić kod binarny na gładki sygnał napięciowy?",
-    "body": "• Zasada: Przekształcenie liczby binarnej na proporcjonalne napięcie lub prąd wyjściowy.\n\n• Drabinka rezystorowa R-2R: Układ wykorzystujący rezystory o wartościach R i 2R. Prądy w kolejnych gałęziach dzielą się binarnie przez 2, a klucze sterowane bitami sumują składowe proporcjonalnie do wartości liczby.\n\n• Główne problemy i filtr rekonstrukcyjny:\n  - Sygnał wyjściowy ma postać ostrych schodków (ekstrapolator zerowego rzędu ZOH), co oznacza obecność wysokich częstotliwości pasożytniczych.\n  - Zastosowanie analogowego filtru dolnoprzepustowego (rekonstrukcyjnego) na wyjściu wygładza schodki do czystej fali analogowej.\n  - Zjawisko glitch: krótkie szpilki napięciowe przy przełączaniu kluczy."
+    "prompt": "Jak z liczb w pamięci zrobić gładki prąd dla głośnika lub silnika?",
+    "body": "• Problem: Odwrotność ADC – masz w procesorze ciąg liczb binarnych i chcesz z nich wytworzyć płynne napięcie.\n\n• Drabinka rezystorowa R-2R:\n  - Układ zbudowany ze zwykłych oporników o dwóch wartościach: R i 2R (np. 10 kΩ i 20 kΩ).\n  - Prądy w kolejnych gałęziach dzielą się binarnie przez dwa. Bity z procesora otwierają klucze, a prądy sumują się na wyjściu w napięcie proporcjonalne do liczby.\n\n• Po co filtr rekonstrukcyjny:\n  - Przetwornik trzyma poziom napięcia aż do kolejnej próbki. Sygnał na wyjściu przypomina ostre schodki.\n  - Ostre kanty tych schodków to piskliwe zniekształcenia o wysokiej częstotliwości.\n  - Dlatego na wyjściu daje się analogowy filtr dolnoprzepustowy (rekonstrukcyjny), który zaokrągla schodki do gładkiej fali."
   },
   {
     "id": "fiz_3",
     "module": "fiz1",
     "category": "Fizyka | Pytanie 3",
     "title": "3. Metody i techniki pomiaru zjawisk fizycznych, przykładowe urządzenia pomiarowe",
-    "prompt": "Jak klasyfikuje się metody pomiarowe i jakie urządzenia stosuje się w praktyce?",
-    "body": "• Metody pomiaru:\n  - Bezpośrednie: Porównanie mierzonej wielkości bezpośrednio ze znanym wzorcem (np. suwmiarka, waga odważnikowa).\n  - Pośrednie: Pomiar innej wielkości fizycznej powiązanej znaną zależnością matematyczną (np. wyznaczenie temperatury ze zmiany rezystancji termistora, prędkości z przesunięcia Dopplera).\n\n• Urządzenia pomiarowe:\n  - Multimetr cyfrowy (pomiar napięcia, prądu, rezystancji).\n  - Oscyloskop cyfrowy (wizualizacja przebiegów napięcia w czasie).\n  - LiDAR / Dalmierz laserowy (pomiar czasu przelotu wiązki światła ToF do wyznaczenia odległości).\n  - Kamera termowizyjna (pomiar promieniowania podczerwonego powierzchni)."
+    "prompt": "W jaki sposób inżynier mierzy zjawiska fizyczne i jakich narzędzi używa?",
+    "body": "• Dwie metody pomiaru:\n  1. Metoda bezpośrednia: Porównanie mierzonej wielkości bezpośrednio ze znanym wzorcem (np. mierzenie długości deski linijką, masy na wadze szalkowej z odważnikami).\n  2. Metoda pośrednia: Mierzenie innej wielkości fizycznej, która zmienia się razem z tą badaną, i przeliczenie wyniku ze wzoru (np. wyznaczanie temperatury ze spadku napięcia na termistorze).\n\n• Typowe urządzenia pomiarowe:\n  - Multimetr cyfrowy: Podstawowe narzędzie do pomiaru napięcia, prądu i rezystancji.\n  - Oscyloskop cyfrowy: Ekran pokazujący wykres napięcia w czasie – pozwala podejrzeć kształt fali, zakłócenia i częstotliwość.\n  - LiDAR / Dalmierz laserowy: Wypuszcza wiązkę światła i liczy czas jej powrotu (Time of Flight), przeliczając go na odległość.\n  - Kamera termowizyjna: Odczytuje niewidzialne promieniowanie podczerwone i przelicza je na mapę temperatur powierzchni."
   },
   {
     "id": "fiz_4",
     "module": "fiz1",
     "category": "Fizyka | Pytanie 4",
     "title": "4. Pojęcie czujnika/sensora, przykłady i zastosowania",
-    "prompt": "Czym jest sensor i jak przetwarza zjawiska fizyczne na sygnał elektryczny?",
-    "body": "• Definicja: Element wejściowy toru pomiarowego, który przekształca badaną wielkość nieelektryczną (temperaturę, ciśnienie, przyspieszenie, światło) na użyteczny sygnał elektryczny (napięcie, prąd, zmianę rezystancji lub pojemności).\n\n• Przykłady i zastosowania:\n  - Akcelerometr / IMU: Pomiar przyspieszenia i orientacji (smartfony, stabilizacja dronów).\n  - Czujnik Halla: Detekcja pola magnetycznego (pomiar prędkości obrotowej kół w ABS).\n  - Fotodioda: Wykrywanie natężenia światła w optoelektronice i światłowodach.\n  - Tensometr: Pomiar ugięcia i masy w wagach elektronicznych i mostach."
+    "prompt": "Czym dokładnie jest sensor i jak łączy świat fizyczny z elektroniką?",
+    "body": "• Czym jest sensor: To element wejściowy, który przetwarza badaną wielkość nieelektryczną (ciepło, nacisk, pole magnetyczne, ruch) na zrozumiały dla układu sygnał elektryczny (napięcie, prąd, zmianę oporu czy pojemności).\n\n• Przykłady i zastosowania:\n  - Czujnik Halla: Wykrywa pole magnetyczne. Zastosowanie: liczenie obrotów koła w układzie ABS w samochodzie.\n  - Fotodioda: Generuje prąd pod wpływem światła. Zastosowanie: odbiornik w pilocie TV, czujnik zmierzchu w latarni.\n  - Tensometr: Drucik na folii – gdy element ugina się pod ciężarem, drucik rozciąga się i rośnie jego opór elektryczny. Zastosowanie: wagi sklepowe, pomiary naprężeń mostów.\n  - Czujnik piezoelektryczny: Kryształ generujący ładunek pod wpływem nacisku. Zastosowanie: czujniki drgań i uderzeń."
   },
   {
     "id": "fiz_5",
@@ -213,119 +213,119 @@
     "category": "Fizyka | Pytanie 5",
     "title": "5. Podstawowe różnice między czujnikami aktywnymi a pasywnymi",
     "prompt": "Jaka jest fundamentalna różnica w zasilaniu czujników aktywnych i pasywnych?",
-    "body": "• Czujniki aktywne (generacyjne): Do wytworzenia sygnału wyjściowego NIE wymagają zewnętrznego źródła zasilania; bezpośrednio zamieniają energię zjawiska w energię elektryczną.\n  - Przykłady: Termopara (zjawisko Seebecka – różnica temperatur generuje napięcie), kryształ piezoelektryczny (nacisk generuje ładunek), ogniwo fotowoltaiczne.\n\n• Czujniki pasywne (parametryczne): WYMAGAJĄ doprowadzenia zewnętrznego zasilania pomiarowego; mierzona wielkość zmienia ich wewnętrzny parametr elektryczny (R, C lub L).\n  - Przykłady: Termistor NTC/PTC (zmiana rezystancji z temperaturą), fotorezystor, tensometr foliowy (zmiana rezystancji pod wpływem naprężenia)."
+    "body": "• Czujniki aktywne (generacyjne):\n  - NIE wymagają zewnętrznego źródła zasilania – same wytwarzają prąd lub napięcie kosztem energii badanego zjawiska.\n  - Przykłady: Termopara (zjawisko Seebecka – różnica temperatur na złączu drutów daje napięcie), kryształ piezoelektryczny (uderzenie daje impuls), ogniwo fotowoltaiczne.\n\n• Czujniki pasywne (parametryczne):\n  - WYMAGAJĄ doprowadzenia zewnętrznego zasilania – pod wpływem zjawiska zmieniają jedynie swój parametr (opór, pojemność lub indukcyjność).\n  - Przykłady: Termistor (zmiana oporu z temperaturą), fotorezystor (zmiana oporu ze światłem), tensometr foliowy (zmiana oporu przy rozciąganiu)."
   },
   {
     "id": "fiz_6",
     "module": "fiz1",
     "category": "Fizyka | Pytanie 6",
     "title": "6. Możliwe obszary aplikacyjne technologii sensorów związanych z personalnymi urządzeniami mobilnymi",
-    "prompt": "Jakie sensory zintegrowane są we współczesnych telefonach i zegarkach?",
-    "body": "• Pakiet IMU (technologia MEMS):\n  - Akcelerometr: Mierzy przyspieszenie liniowe i wektor grawitacji (liczy kroki, wykrywa orientację pion/poziom).\n  - Żyroskop: Mierzy prędkość kątową obrotu telefonu (stabilizacja wideo, orientacja w VR).\n  - Magnetometr: Mierzy ziemskie pole magnetyczne (funkcja cyfrowego kompasu).\n\n• Czujniki otoczenia:\n  - Czujnik oświetlenia (automatyczna regulacja jasności ekranu), czujnik zbliżeniowy (wygaszanie ekranu przy uchu), barometr (pomiar wysokości npm i wspomaganie GPS).\n\n• Sensory biometryczne: Optyczny czujnik PPG (puls i natlenienie krwi SpO2 w smartwatchach), czytniki linii papilarnych, sensory ToF/FaceID (mapowanie twarzy 3D w podczerwieni)."
+    "prompt": "Jakie sensory ukryte są w smartfonie i za co odpowiadają?",
+    "body": "• Pakiet ruchu i orientacji (IMU w technologii mikromechanicznej MEMS):\n  - Akcelerometr: Mierzy przyspieszenie liniowe i siłę grawitacji (wykrywa czy trzymasz telefon pionowo czy poziomo, liczy kroki).\n  - Żyroskop: Mierzy prędkość obrotu telefonu (niezbędny do płynnego celowania w grach, stabilizacji wideo i rozglądania się w goglach VR).\n  - Magnetometr: Mierzy ziemskie pole magnetyczne – działa jak cyfrowy kompas w mapach.\n\n• Sensory otoczenia i zdrowia:\n  - Czujnik zbliżeniowy (gasi ekran przy uchu), barometr (mierzy ciśnienie powietrza, wie na którym jesteś piętrze), sensor optyczny PPG w zegarku (diody świecące w skórę mierzące puls i natlenienie krwi SpO2)."
   },
   {
     "id": "fiz_7",
     "module": "fiz1",
     "category": "Fizyka | Pytanie 7",
     "title": "7. Elementy wykonawcze w układach automatyki oraz fizyczna zasada ich działania",
-    "prompt": "Jak sygnał elektryczny z układu sterowania zamienia się w ruch lub siłę mechaniczną?",
-    "body": "• Silniki elektryczne (DC, BLDC, krokowe): Wykorzystują siłę Lorentza – prąd płynący w uzwojeniu wirnika w polu magnetycznym stojana wytwarza moment obrotowy.\n\n• Przekaźniki i elektrozawory: Cewka staje się elektromagnesem i przyciąga ferromagnetyczną zworę, załączając obwód lub otwierając przepływ medium.\n\n• Aktuatory piezoelektryczne: Odwrotne zjawisko piezoelektryczne – przyłożenie napięcia wywołuje mikroskopijną deformację kryształu (ruch o nanometrowej precyzji we wtryskiwaczach paliwa Common Rail i mikroskopach AFM).\n\n• Siłowniki fluidalne: Ruch posuwisty tłoka wywołany ciśnieniem sprężonego powietrza (pneumatyka) lub oleju (hydraulika)."
+    "prompt": "Jak prąd ze sterownika zamienia się w ruch lub siłę mechaniczną?",
+    "body": "• O co chodzi: Aktuatory to „mięśnie” automatyki – zamieniają sygnał sterujący w fizyczne działanie.\n\n• Główne zasady działania:\n  - Silniki elektryczne: Siła Lorentza – prąd płynący przez przewodnik w polu magnetycznym wytwarza moment obrotowy obracający wał silnika.\n  - Przekaźniki i elektrozawory: Cewka staje się elektromagnesem i przyciąga metalowy styk, załączając prąd lub otwierając przepływ cieczy/gazu.\n  - Aktuatory piezoelektryczne: Odwrotne zjawisko piezoelektryczne – podanie napięcia deformuje kryształ o ułamki mikrometrów (nanometrowa precyzja we wtryskiwaczach paliwa Common Rail czy mikroskopach AFM).\n  - Siłowniki pneumatyczne i hydrauliczne: Ciśnienie sprężonego powietrza lub oleju popycha tłok generując dużą siłę posuwistą."
   },
   {
     "id": "fiz_8",
     "module": "fiz1",
     "category": "Fizyka | Pytanie 8",
     "title": "8. Typy układów cyfrowych i metody ich opisu oraz implementacji",
-    "prompt": "Czym różnią się układy kombinacyjne od sekwencyjnych i jak się je projektuje?",
-    "body": "• Typy układów:\n  - Kombinacyjne (bez pamięci): Stan wyjścia zależy wyłącznie od aktualnego stanu wejść (bramki logiczne, sumatory, multipleksery, komparatory).\n  - Sekwencyjne (z pamięcią): Stan wyjścia zależy od aktualnych wejść oraz poprzedniego stanu układu; posiadają pętlę sprzężenia zwrotnego (przerzutniki D/JK, liczniki, rejestry).\n\n• Metody opisu: Tablice prawdy, siatki Karnaugh, równania algebry Boole'a, grafy przejść automatów stanów (Moore'a/Mealy'ego), języki HDL.\n\n• Implementacja: Bramki dyskretne (SSI/MSI), układy programowalne CPLD/FPGA, dedykowane układy ASIC."
+    "prompt": "Czym różnią się układy kombinacyjne od sekwencyjnych i jak się je buduje?",
+    "body": "• Układy kombinacyjne (bez pamięci):\n  - Stan wyjścia zależy TYLKO od tego, co podasz na wejścia w danej chwili (np. bramka logiczna, sumator liczb – 2+2 od razu daje 4, układ nie pamięta co dodawał przed sekundą).\n\n• Układy sekwencyjne (z pamięcią):\n  - Stan wyjścia zależy od wejść ORAZ od poprzedniego stanu układu. Mają pętlę sprzężenia zwrotnego (np. licznik impulsów – musi pamiętać poprzednią wartość, rejestry, pamięć RAM).\n\n• Jak się je opisuje i buduje:\n  - Opis: Tablice prawdy, równania algebry Boole'a, grafy stanów automatów, języki HDL.\n  - Budowa: Zwykłe scalaki z bramkami (seria 74xx), układy programowalne FPGA lub dedykowane chipy krzemowe ASIC."
   },
   {
     "id": "fiz_9",
     "module": "fiz1",
     "category": "Fizyka | Pytanie 9",
-    "title": "9. Języki opisu układów cyfrowych (VHDL, Verilog)",
-    "prompt": "Jak opisuje się układy cyfrowe na poziomie bramek i rejestrów za pomocą języków HDL?",
-    "body": "• VHDL: Język wywodzący się z projektów wojskowych (Ada). Charakteryzuje się bardzo silną kontrolą typów i sztywną składnią. Chroni przed ukrytymi błędami w wielkich projektach krytycznych (lotnictwo, wojsko, Europa).\n\n• Verilog: Składnia zbliżona do języka C, znacznie mniej restrykcyjny w typowaniu, pozwala na szybsze tworzenie kodu. Powszechny w USA przy komercyjnym projektowaniu chipów ASIC.\n\n• Poziomy abstrakcji opisu w HDL:\n  - Behawioralny (opis działania za pomocą algorytmu).\n  - RTL (Register-Transfer Level – przepływ danych między rejestrami i operacje logiczne).\n  - Strukturalny (jawne połączenia między gotowymi modułami i bramkami)."
+    "title": "9. Języki opisu układów cyfrowych",
+    "prompt": "W jaki sposób programuje się układy cyfrowe za pomocą języków HDL?",
+    "body": "• O co chodzi: W językach HDL nie piszesz programu wykonywanego linijka po linijce. W nich opisujesz fizyczną strukturę i połączenia układu scalonego.\n\n• Dwa główne języki:\n  - VHDL: Wywodzi się z projektów wojskowych (składnia języka Ada). Ma bardzo rygorystyczne reguły typów danych, jest drobiazgowy i chroni przed błędami w wielkich projektach (lotnictwo, wojsko, Europa).\n  - Verilog: Składnia zbliżona do języka C. Mniej restrykcyjny, pisze się w nim szybciej i prościej. Popularny w USA przy komercyjnym projektowaniu chipów ASIC.\n\n• Poziomy opisu: Behawioralny (ogólny algorytm działania), RTL (Register-Transfer Level – przepływ danych między rejestrami), strukturalny (jawna siatka połączeń modułów)."
   },
   {
     "id": "fiz_10",
     "module": "fiz1",
     "category": "Fizyka | Pytanie 10",
     "title": "10. Zjawisko fotoelektryczne i jego wykorzystanie praktyczne",
-    "prompt": "Jak światło oddziałuje z materią w zjawisku fotoelektrycznym zewnętrznym i wewnętrznym?",
-    "body": "• Zjawisko fotoelektryczne zewnętrzne: Padające światło uderza w powierzchnię metalu i całkowicie wybija elektrony poza materiał do próżni (gdy energia fotonu h*nu >= praca wyjścia W). Zastosowanie: fotopowielacze o czułości pojedynczych fotonów, noktowizory tradycyjne.\n\n• Zjawisko fotoelektryczne wewnętrzne: Światło wzbudza elektrony wewnątrz półprzewodnika z pasma walencyjnego do pasma przewodnictwa, tworząc wolne nośniki prądu (pary elektron-dziura).\n  - Efekt fotowoltaiczny: Złącze p-n generuje siłę elektromotoryczną (ogniwa słoneczne PV).\n  - Efekt fotoprzewodnictwa: Zmiana rezystancji pod wpływem światła (fotodiody, fototranzystory, matryce aparatów CMOS)."
+    "prompt": "Jak światło oddziałuje z materią i jak powstaje prąd w fotowoltaice?",
+    "body": "• Zjawisko fotoelektryczne zewnętrzne:\n  - Foton (kwant światła) uderza w powierzchnię metalu i całkowicie wybija elektron na zewnątrz w przestrzeń (gdy energia fotonu h*nu przewyższa pracę wyjścia W).\n  - Zastosowanie: Fotopowielacze (bardzo czułe lampy potrafiące wykryć nawet pojedynczy foton światła), noktowizory tradycyjne.\n\n• Zjawisko fotoelektryczne wewnętrzne:\n  - Foton uderza w półprzewodnik (krzem). Elektron nie wylatuje na zewnątrz, ale przeskakuje do pasma przewodnictwa, stając się swobodnym nośnikiem prądu (powstaje para elektron-dziura).\n  - Zastosowanie: Panele fotowoltaiczne (produkcja prądu ze słońca na złączu p-n), fotodiody w światłowodach, matryce CMOS w aparatach cyfrowych."
   },
   {
     "id": "fiz_11a",
     "module": "fiz2",
     "category": "Fizyka | Pytanie 11 (a)",
     "title": "11 (a). Cyfrowe kodowanie i kompresja sygnałów akustycznych",
-    "prompt": "Jak zapisuje się dźwięk cyfrowy i na jakiej zasadzie działa kompresja stratna MP3?",
-    "body": "• Zapis bez kompresji (PCM): Bezstratne próbkowanie i kwantyzacja fali akustycznej (standard CD-Audio: 44,1 kHz, 16 bitów, stereo).\n\n• Kompresja bezstratna (FLAC): Redukcja objętości o 40–50% za pomocą kodowania predykcyjnego i entropijnego bez utraty ani jednego bitu danych.\n\n• Kompresja stratna (MP3, AAC, Opus): Oparta na modelu psychoakustycznym słuchu ludzkiego. Algorytm usuwa składowe niesłyszalne na skutek zjawiska maskowania:\n  - Maskowanie częstotliwościowe: Cichy dźwięk o częstotliwości bliskiej głośnemu tonowi jest niesłyszalny i zostaje wycięty.\n  - Maskowanie czasowe: Przez ułamek sekundy po głośnym dźwięku ucho nie rejestruje cichych tonów. Pozwala to na nawet 10-krotne zmniejszenie pliku."
+    "prompt": "Jak zapisuje się dźwięk cyfrowo i na jakiej zasadzie działa kompresja MP3?",
+    "body": "• Zapis bezstratny:\n  - PCM: Zwykłe próbkowanie fali dźwiękowej (standard płyty Audio-CD: 44,1 kHz, 16 bitów, stereo).\n  - FLAC: Kompresja bezstratna (zmniejsza plik o ok. 50% bez utraty ani jednego bitu danych, podobnie jak ZIP).\n\n• Kompresja stratna (MP3, AAC, Opus):\n  - Oparta na modelu psychoakustycznym słuchu ludzkiego. Algorytm wycina te dźwięki, których mózg i tak nie zarejestruje na skutek zjawiska maskowania.\n  - Maskowanie częstotliwościowe: Cichy ton o częstotliwości bliskiej głośnemu dźwiękowi jest niesłyszalny i zostaje usunięty.\n  - Maskowanie czasowe: Przez ułamek sekundy po głośnym uderzeniu (np. werbla) ucho nie rejestruje cichych szmerów.\n  - Wynik: 10-krotne zmniejszenie wagi pliku przy pozornej wierności odsłuchu."
   },
   {
     "id": "fiz_11b",
     "module": "fiz2",
     "category": "Fizyka | Pytanie 11 (b)",
     "title": "11 (b). Cyfrowe formowanie, zapis i przetwarzanie obrazu",
-    "prompt": "Jak matryca aparatu formuje obraz cyfrowy i na czym polega kompresja JPEG?",
-    "body": "• Formowanie obrazu (Filtr Bayera): Piksele krzemowe matrycy mierzą jedynie natężenie światła (jasność). Przed matrycą umieszcza się mozaikę barwnych filtrów: 50% zielonych (G), 25% czerwonych (R) i 25% niebieskich (B). Przewaga zieleni wynika z najwyższej czułości ludzkiego oka na tę barwę. Demosaicing interpoluje pełne barwy RGB dla każdego piksela.\n\n• Formaty zapisu: Bezstratne (RAW, PNG), stratne (JPEG).\n\n• Kompresja JPEG: Podział obrazu na bloki 8x8 pikseli, Dyskretna Transformata Kosinusowa (DCT), kwantyzacja wysokich częstotliwości przestrzennych (drobnych szumów mało widocznych dla oka) i kodowanie Huffmana.\n\n• Podstawowe przetwarzanie: Filtracja splotowa (wygładzanie Gaussa, wyostrzanie), binaryzacja progowa, wykrywanie krawędzi (Sobel, Canny)."
+    "prompt": "Jak matryca aparatu rejestruje kolory i jak kompresuje się zdjęcia do formatu JPEG?",
+    "body": "• Formowanie obrazu (Filtr Bayera):\n  - Krzemowe piksele w aparacie mierzą tylko ilość światła (są ślepe na kolory).\n  - Nad matrycą nakłada się szachownicę filtrów: 50% zielonych (G), 25% czerwonych (R) i 25% niebieskich (B).\n  - Dlaczego najwięcej zieleni: Ludzkie oko ma najwięcej fotoreceptorów zieleni i z tego koloru czerpie wrażenie ostrości obrazu. Algorytm demosaicingu wylicza z sąsiednich pikseli pełny kolor RGB.\n\n• Kompresja JPEG:\n  - Dzieli obraz na kafelki 8x8 pikseli, stosuje Dyskretną Transformatę Kosinusową (DCT) i upraszcza wysokie częstotliwości przestrzenne (drobne detale, których oko w cieniach nie zauważa), drastycznie zmniejszając wagę pliku.\n\n• Przetwarzanie: Filtry splotowe (wygładzanie szumów Gaussa, wyostrzanie), binaryzacja (zamiana na czarno-biały) i wykrywanie krawędzi (Sobel, Canny)."
   },
   {
     "id": "fiz_12",
     "module": "fiz2",
     "category": "Fizyka | Pytanie 12",
     "title": "12. Cyfrowe modele barw i algorytmy ich konwersji",
-    "prompt": "Czym różnią się modele RGB, CMYK i HSV oraz dlaczego stosuje się różne przestrzenie barwne?",
-    "body": "• RGB (Addytywny): Mieszanie świateł R, G, B (suma daje biel). Punktem wyjścia jest ciemność. Standard dla monitorów, wyświetlaczy i sensorów kamer.\n\n• CMYK (Subtraktywny): Mieszanie pigmentów farb pochłaniających światło na papierze (C+M+Y daje czerń, K to pigment czarny). Standard druku i poligrafii.\n\n• HSV / HSL: Reprezentacja rozdzielająca czysty odcień barwy (Hue – kąt na kole barw) od jej nasycenia (Saturation) i jasności (Value/Lightness). Bardzo przydatna w widzeniu maszynowym, ponieważ zmiana naświetlenia obiektu nie zmienia jego odcienia bazowego (Hue).\n\n• Konwersja RGB do skali szarości: Y = 0.299*R + 0.587*G + 0.114*B (wagi wynikają z czułości ludzkiego oka)."
+    "prompt": "Czym różnią się przestrzenie RGB, CMYK i HSV oraz dlaczego stosuje się różne modele barw?",
+    "body": "• RGB (Addytywny – świecący):\n  - Mieszanie świateł R, G, B (suma daje biel). Punktem wyjścia jest czarny ekran. Standard dla monitorów, telefonów i matryc kamer.\n\n• CMYK (Subtraktywny – pochłaniający):\n  - Mieszanie barwników na papierze pochłaniających światło (C+M+Y daje teoretycznie czerń, K to dedykowana czarna farba). Standard w drukarkach i poligrafii.\n\n• HSV (Hue, Saturation, Value):\n  - Odcień na kole barw (Hue), nasycenie (Saturation), jasność (Value).\n  - Niezbędny w kamerach i robotyce: Gdy śledzisz kolorowy obiekt, a w pokoju zmieni się światło lub pojawi cień, w RGB wartości szaleją. W HSV odcień (Hue) pozostaje stały, a zmienia się jedynie parametr jasności (Value).\n\n• Konwersja RGB na odcienie szarości: Y = 0.299*R + 0.587*G + 0.114*B (wagi wynikają z czułości ludzkiego oka na zieleń)."
   },
   {
     "id": "fiz_13",
     "module": "fiz2",
     "category": "Fizyka | Pytanie 13",
     "title": "13. Metody rozpoznawania wzorca w obrazie nieruchomym",
-    "prompt": "Jakie algorytmy pozwalają komputerowi rozpoznać obiekty na zdjęciu statycznym?",
-    "body": "• Dopasowanie szablonu (Template Matching): Przesuwanie wycinka wzorca piksel po pikselu i liczenie korelacji; działa tylko przy niezmiennej skali i kącie obrotu.\n\n• Deskryptory punktów kluczowych (SIFT, SURF, ORB): Wyszukiwanie charakterystycznych cech lokalnych (narożników, krawędzi) odpornych na zmiany skali, obrót i oświetlenie.\n\n• Klasyfikatory kaskadowe (Haar Cascades): Szybkie wykrywanie twarzy na podstawie prostokątnych cech jasnościowych.\n\n• Głębokie konwolucyjne sieci neuronowe (CNN, np. YOLO, ResNet): Współczesny standard – sieć sama uczy się wielopoziomowej reprezentacji cech, lokalizując i klasyfikując obiekty w czasie rzeczywistym."
+    "prompt": "W jaki sposób komputer odnajduje i rozpoznaje obiekty na zdjęciu?",
+    "body": "• Dopasowanie szablonu (Template Matching): Przesuwanie wycinka wzorca piksel po pikselu i liczenie korelacji. Działa tylko wtedy, gdy obiekt ma identyczny rozmiar i kąt obrotu.\n\n• Punkty kluczowe (SIFT, SURF, ORB): Wyszukiwanie charakterystycznych krawędzi i narożników odpornych na obrót, zmianę skali i oświetlenia (tradycyjne podejście inżynierskie).\n\n• Klasyfikatory kaskadowe (Haar Cascades): Bardzo szybkie wykrywanie twarzy na podstawie prostokątnych cech jasnościowych (np. okolice oczu są ciemniejsze niż czoło).\n\n• Głębokie sieci neuronowe (CNN, np. YOLO): Nowoczesny standard – sieć sama nauczyła się cech na tysiącach zdjęć i jednocześnie lokalizuje oraz rozpoznaje wiele obiektów w czasie rzeczywistym."
   },
   {
     "id": "fiz_14",
     "module": "fiz2",
     "category": "Fizyka | Pytanie 14",
     "title": "14. Metody rozpoznawania ruchu i zmian w obrazie ruchomym",
-    "prompt": "Jakie metody stosuje się do detekcji i śledzenia ruchu w sekwencji wideo?",
-    "body": "• Różnicowanie kadrów (Frame Differencing): Proste odejmowanie wartości pikseli kolejnych klatek (|Klatka[t] - Klatka[t-1]| > Próg). Bardzo szybkie obliczeniowo, ale jeśli poruszający się obiekt nagle się zatrzyma, znika z pola detekcji.\n\n• Odejmowanie tła (Background Subtraction / GMM): Statystyczne modelowanie stałego tła za pomocą mieszanin gaussowskich; pozwala wykrywać obiekt pierwszoplanowy nawet wtedy, gdy na chwilę się zatrzyma.\n\n• Przepływ optyczny (Optical Flow): Wyznaczanie wektorów prędkości i kierunku przemieszczenia punktów obrazu w czasie (np. metoda Lucasa-Kanade)."
+    "prompt": "Jak kamera wykrywa poruszające się obiekty w sekwencji wideo?",
+    "body": "• Różnicowanie kadrów (Frame Differencing):\n  - Proste odejmowanie wartości pikseli kolejnych klatek (|Klatka[t] - Klatka[t-1]| > Próg).\n  - Błyskawiczne obliczeniowo, ale jeśli poruszający się człowiek nagle się zatrzyma, natychmiast znika z pola detekcji.\n\n• Odejmowanie tła (Background Subtraction / GMM):\n  - Kamera statystycznie modeluje stałe tło (np. pusty korytarz za pomocą mieszanin gaussowskich).\n  - Każdy obiekt różniący się od tła jest wykrywany – nawet jeśli zatrzyma się i stoi w bezruchu.\n\n• Przepływ optyczny (Optical Flow):\n  - Wyznaczanie wektorów prędkości i kierunku przesunięcia punktów obrazu w czasie (np. metoda Lucasa-Kanade)."
   },
   {
     "id": "fiz_15",
     "module": "fiz2",
     "category": "Fizyka | Pytanie 15",
     "title": "15. Cyfrowa rekonstrukcja sygnału",
-    "prompt": "W jaki sposób odtwarza się ciągły sygnał analogowy z ciągu próbek cyfrowych?",
-    "body": "• Podstawa teoretyczna: Wzór interpolacyjny Whittakera-Kotielnikowa-Shannona z wykorzystaniem funkcji sinc jako idealnego filtru dolnoprzepustowego w dziedzinie częstotliwości.\n\n• Realizacja inżynierska:\n  - Przetwornik DAC z ekstrapolatorem zerowego rzędu (ZOH) tworzy sygnał schodkowy.\n  - Na wyjściu stosuje się analogowy filtr dolnoprzepustowy (rekonstrukcyjny), który wygładza schodki i odcina kopie widma pasożytniczego powyżej częstotliwości Nyquista, przywracając ciągłą falę analogową."
+    "prompt": "W jaki sposób z ciągu liczb w pamięci odtworzyć płynną falę ciągłą?",
+    "body": "• Podstawa teoretyczna: Wzór interpolacyjny Whittakera-Kotielnikowa-Shannona z wykorzystaniem funkcji sinc jako idealnego filtru dolnoprzepustowego.\n\n• Jak to wygląda w praktyce inżynierskiej:\n  - Przetwornik DAC wystawia próbkę i trzyma jej napięcie aż do następnej (ekstrapolator zerowego rzędu ZOH).\n  - Daje to sygnał o ostrych schodkach, który zawiera w sobie niepożądane harmoniczne o wysokiej częstotliwości.\n  - Na wyjściu stosuje się analogowy filtr dolnoprzepustowy (rekonstrukcyjny), który zaokrągla schodki i odcina składowe pasożytnicze powyżej częstotliwości Nyquista, przywracając czystą falę analogową."
   },
   {
     "id": "fiz_16",
     "module": "fiz2",
     "category": "Fizyka | Pytanie 16",
     "title": "16. Cyfrowa filtracja sygnałów (filtry FIR vs IIR)",
-    "prompt": "Czym różnią się filtry cyfrowe FIR i IIR pod względem stabilności i mocy obliczeniowej?",
-    "body": "• Filtry FIR (o skończonej odpowiedzi impulsowej, niesprzężone zwrotnie):\n  - Zawsze bezwarunkowo stabilne.\n  - Posiadają idealnie liniową fazę (brak zniekształceń kształtu sygnału).\n  - Wymagają wysokiego rzędu (dużo operacji mnożenia, obciążają procesor).\n\n• Filtry IIR (o nieskończonej odpowiedzi impulsowej, rekurencyjne ze sprzężeniem zwrotnym):\n  - Bardzo stroma charakterystyka tłumienia przy niskim rzędzie filtru (szybkie, oszczędzają moc obliczeniową i pamięć).\n  - Mogą stać się niestabilne i wprowadzają nieliniowe zniekształcenia fazowe."
+    "prompt": "Czym różnią się filtry FIR i IIR i kiedy stosować który z nich?",
+    "body": "• O co chodzi: Oczyszczanie sygnału (np. wycinanie szumu) czystą matematyką w procesorze sygnałowym DSP.\n\n• Filtry FIR (o skończonej odpowiedzi impulsowej):\n  - Zasada: Liczą wynik wyłącznie z bieżących i poprzednich próbek wejściowych (brak sprzężenia zwrotnego).\n  - Zalety: Zawsze w 100% stabilne, idealnie liniowa faza (brak zniekształceń kształtu fali).\n  - Wada: Wymagają wielu mnożeń, mocno obciążają procesor.\n\n• Filtry IIR (o nieskończonej odpowiedzi impulsowej):\n  - Zasada: Posiadają pętlę zwrotną – wynik z wyjścia wraca z powrotem na wejście jako składnik kolejnego równania.\n  - Zalety: Bardzo strome tłumienie przy zaledwie kilku działaniach matematycznych (lekkie dla procesora).\n  - Wady: Mogą stać się niestabilne (wpaść w rezonans) i wprowadzają nieliniowe zniekształcenia fazowe."
   },
   {
     "id": "fiz_17",
     "module": "fiz2",
     "category": "Fizyka | Pytanie 17",
     "title": "17. Parametry urządzeń nadawczo-odbiorczych określające zasięg łącza radiowego",
-    "prompt": "Jakie parametry fizyczne i techniczne decydują o zasięgu fali radiowej (Wzór Friisa)?",
-    "body": "• Równanie budżetu łącza (Wzór Friisa):\n  Prx = Ptx + Gtx + Grx - PathLoss\n\n• Parametry:\n  - Ptx: Moc nadajnika (w dBm lub watach).\n  - Gtx, Grx: Zysk energetyczny anteny nadawczej i odbiorczej (w dBi).\n  - Path Loss (tłumienie trasy): Rośnie z kwadratem odległości oraz kwadratem częstotliwości fali (stąd pasma sub-GHz mają znacznie większy zasięg niż 2,4 GHz czy 5 GHz).\n\n• Warunek odbioru: Otrzymana moc Prx musi być większa niż czułość odbiornika Srx (np. > -105 dBm)."
+    "prompt": "Jak oblicza się zasięg radia i o co chodzi ze Wzorem Friisa?",
+    "body": "• Równanie budżetu łącza (Wzór Friisa):\n  Prx = Ptx + Gtx + Grx - Straty trasy (Path Loss)\n\n• Co decyduje o zasięgu:\n  - Ptx: Moc nadajnika (w dBm lub watach) – siła z jaką nadajesz.\n  - Gtx i Grx: Zysk energetyczny anten (dBi) – jak mocno antena skupia wiązkę w jednym kierunku zamiast siać dokoła.\n  - Path Loss: Tłumienie fali w przestrzeni – rośnie z kwadratem odległości i częstotliwości fali (stąd fale sub-GHz 868 MHz lecą znacznie dalej i lepiej przenikają ściany niż 2,4 GHz czy 5 GHz).\n  - Czułość odbiornika (Srx): Minimalna moc sygnału (np. -105 dBm), przy której odbiornik jest jeszcze w stanie odróżnić bity od szumu. Łącze działa, dopóki Prx > Srx."
   },
   {
     "id": "fiz_18",
     "module": "fiz2",
     "category": "Fizyka | Pytanie 18",
     "title": "18. Parametry urządzeń nadawczo-odbiorczych określające jakość transmisji w łączu radiowym",
-    "prompt": "Jakie wskaźniki określają jakość i czystość transmisji bezprzewodowej?",
-    "body": "• SNR (Signal-to-Noise Ratio): Stosunek mocy sygnału użytecznego do mocy szumu tła (w decybelach dB). Wyższy SNR pozwala na stosowanie gęstszych modulacji cyfrowych (np. 256-QAM) i osiąganie wyższych transferów.\n\n• SINR: Uwzględnia stosunek mocy sygnału do szumu oraz zakłóceń od innych nadajników pracujących w tym samym kanale.\n\n• BER (Bit Error Rate): Stopa błędów bitowych – stosunek liczby błędnie odebranych bitów do całkowitej liczby przesłanych bitów.\n\n• EVM (Error Vector Magnitude): Miara dokładności modulacji cyfrowej (odchylenie punktów konstelacji od ideału)."
+    "prompt": "Jakie wskaźniki określają czystość i niezawodność transmisji bezprzewodowej?",
+    "body": "• SNR (Signal-to-Noise Ratio): Stosunek mocy sygnału użytecznego do mocy szumu tła (w decybelach dB). Im wyższy SNR, tym czystszy sygnał i możliwość użycia szybszych modulacji cyfrowych (np. 256-QAM).\n\n• SINR: Uwzględnia szum termiczny oraz zakłócenia od innych nadajników pracujących w tym samym kanale.\n\n• BER (Bit Error Rate): Stopa błędów bitowych – liczba błędnie odebranych bitów podzielona przez wszystkie przesłane bity (podstawowy miernik niezawodności łącza).\n\n• EVM (Error Vector Magnitude): Odchylenie punktów konstelacji modulacji od ich pozycji idealnych – miara dokładności nadajnika i toru radiowego."
   },
   {
     "id": "fiz_19",
@@ -333,14 +333,14 @@
     "category": "Fizyka | Pytanie 19",
     "title": "19. Zasada działania telefonii komórkowej w zakresie transmisji głosu, główne standardy",
     "prompt": "Jak zorganizowana jest komórkowa transmisja głosu i jak działa procedura Handover?",
-    "body": "• Struktura komórkowa: Podział obszaru na niewielkie komórki ze stacjami bazowymi BTS. Umożliwia ponowne wykorzystanie tych samych częstotliwości w oddalonych komórkach bez wzajemnych zakłóceń.\n\n• Handover (przełączenie): Bezprzerwowa procedura automatycznego przełączania aktywnej rozmowy między stacjami bazowymi w trakcie poruszania się abonenta.\n\n• Ewolucja transmisji głosu:\n  - 2G (GSM) & 3G (UMTS): Klasyczna komutacja łączy (dedykowany kanał fizyczny na czas rozmowy).\n  - 4G (LTE) -> VoLTE: Głos przesyłany jako spakietowane dane IP (VoIP) z priorytetem jakości QoS.\n  - 5G -> VoNR: Natywny przesył głosu przez sieć pakietową 5G o minimalnych opóźnieniach."
+    "body": "• Struktura komórkowa: Obszar podzielony jest na niewielkie komórki ze stacjami bazowymi BTS. Dzięki temu ten sam kanał częstotliwościowy może być używany jednocześnie w oddalonych od siebie komórkach bez wzajemnych zakłóceń.\n\n• Procedura Handover: Niezauważalne dla użytkownika, automatyczne przełączenie aktywnej rozmowy z jednej stacji bazowej na drugą podczas przemieszczania się (np. autem).\n\n• Ewolucja standardów głosu:\n  - 2G (GSM) & 3G (UMTS): Klasyczna komutacja łączy (rezerwacja dedykowanego kanału fizycznego na czas trwania połączenia).\n  - 4G (LTE) -> VoLTE: Rezygnacja z komutacji łączy; głos przesyłany jako spakietowane dane IP (VoIP) z priorytetem jakości QoS.\n  - 5G -> VoNR: Natywny przesył głosu przez sieć pakietową 5G o minimalnych opóźnieniach."
   },
   {
     "id": "fiz_20",
     "module": "fiz2",
     "category": "Fizyka | Pytanie 20",
     "title": "20. Zasada działania telefonii komórkowej w zakresie transmisji danych, główne standardy",
-    "prompt": "Jak ewoluowała transmisja danych w sieciach komórkowych od 2.5G do 5G?",
-    "body": "• Zasada: Komutacja pakietów; dane dzielone są na pakiety IP przesyłane wspólnym kanałem radiowym z dynamicznym przydziałem pasma.\n\n• Ewolucja standardów danych:\n  - 2.5G (GPRS / EDGE): Pakiety w sieci GSM, prędkości rzędu kilkudziesięciu/setek kb/s.\n  - 3G (HSPA+): Pakietowy dostęp WCDMA, transfery rzędu kilkunastu Mb/s (początek powszechnego mobilnego Internetu).\n  - 4G (LTE / LTE-A): Architektura w 100% pakietowa IP, modulacja OFDMA, wieloantenowe nadawanie MIMO, transfery do paruset Mb/s.\n  - 5G (New Radio): Wykorzystanie fal milimetrowych (mmWave), Massive MIMO, kierunkowe formowanie wiązki (Beamforming), podział sieci (Network Slicing), transfery >1 Gb/s i opóźnienia rzędu 1 ms."
+    "prompt": "Jak ewoluował mobilny Internet w telefonach od 2.5G do 5G?",
+    "body": "• Zasada ogólna: Komutacja pakietów – dane dzielone są na pakiety IP i przesyłane wspólnym kanałem radiowym z dynamicznym przydziałem pasma.\n\n• Ewolucja standardów danych:\n  - 2.5G (GPRS / EDGE): Pakiety w sieci GSM, prędkości rzędu kilkudziesięciu/setek kb/s.\n  - 3G (HSPA+): Pakietowy dostęp WCDMA, transfery rzędu kilkunastu Mb/s (początek powszechnego smartfonowego Internetu).\n  - 4G (LTE / LTE-A): Architektura w 100% pakietowa IP, modulacja OFDMA, wieloantenowe nadawanie MIMO, transfery do paruset Mb/s.\n  - 5G (New Radio): Wykorzystanie fal milimetrowych (mmWave), anteny Massive MIMO z kierunkowym formowaniem wiązki (Beamforming), podział sieci (Network Slicing), transfery >1 Gb/s i opóźnienia rzędu 1 ms."
   }
 ]
