@@ -307,7 +307,7 @@
     "id": "fiz_16",
     "module": "fiz2",
     "category": "Fizyka | Pytanie 16",
-    "title": "16. Cyfrowa filtracja sygnałów (filtry FIR vs IIR)",
+    "title": "16. Cyfrowa filtracja sygnałów",
     "prompt": "Jakie są różnice matematyczne i właściwości transmisyjne filtrów FIR oraz IIR?",
     "body": "1. Filtry FIR (o skończonej odpowiedzi impulsowej, niesprzężone zwrotnie):\n• Równanie różnicowe: Wyjście zależy wyłącznie od skończonej liczby bieżących i poprzednich próbek wejściowych: y(n) = Suma[ b_k * x(n-k) ].\n• Stabilność: Zawsze bezwarunkowo stabilne (wszystkie bieguny transmitancji leżą w punkcie z = 0).\n• Charakterystyka fazowa: Możliwość uzyskania idealnie liniowej fazy (stałe opóźnienie grupowe dla wszystkich składowych częstotliwościowych – brak deformacji kształtu fali).\n• Wady: Wymagają wysokiego rzędu filtru (duża liczba mnożeń i buforów) do uzyskania stromego zbocza opadania.\n\n2. Filtry IIR (o nieskończonej odpowiedzi impulsowej, rekurencyjne):\n• Równanie różnicowe: Posiadają pętlę sprzężenia zwrotnego od wyjścia: y(n) = Suma[ b_k * x(n-k) ] - Suma[ a_m * y(n-m) ].\n• Wydajność: Osiągają bardzo strome charakterystyki tłumienia przy znacznie niższym rzędzie niż FIR (niski narzut obliczeniowy na procesorze sygnałowym DSP).\n• Wady: Ryzyko utraty stabilności przy niedokładnej kwantyzacji współczynników (bieguny mogą wyjść poza okrąg jednostkowy |z| = 1); nieliniowa charakterystyka fazowa wprowadzająca zniekształcenia dyspersyjne."
   },
