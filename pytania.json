@@ -118,7 +118,7 @@
     "title": "13. Metody rozpoznawania wzorca w obrazie nieruchomym",
     "prompt": "Jak komputer znajduje i rozpoznaje obiekty na pojedynczym zdjęciu?",
     "body": "1. Dopasowanie wycinka (Template Matching):\n• Przesuwanie małego wzorca po zdjęciu piksel po pikselu i liczenie zgodności.\n• Wada: Działa tylko wtedy, gdy obiekt ma dokładnie taki sam rozmiar i kąt jak wzorzec.\n\n2. Punkty charakterystyczne (SIFT, ORB):\n• Szukanie unikalnych narożników i ostrych krawędzi obiektu.\n• Zaleta: Działa nawet wtedy, gdy obiekt na zdjęciu jest obrócony, powiększony lub zrobiony pod kątem.\n\n3. Kaskady cech (Haar Cascades):\n• Bardzo szybkie sprawdzanie prostych różnic jasności (np. oczy są ciemniejsze od czoła – klasyczne wykrywanie twarzy w aparatach).\n\n4. Głębokie sieci neuronowe (CNN, np. YOLO):\n• Nowoczesny standard – sieć wytrenowana na tysiącach zdjęć sama uczy się cech i potrafi natychmiast znaleźć oraz podpisać obiekty w ułamku sekundy."
-  }
+  },
   {
     "id": "inf_14",
     "module": "inf2",
