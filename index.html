@@ -115,6 +115,7 @@
       padding: 0.6rem 0.85rem;
       border-radius: 10px;
       border: 1px solid var(--border);
+      flex-wrap: wrap;
     }
 
     select, input[type="text"] {
@@ -134,7 +135,7 @@
 
     .module-select-box {
       flex: 1;
-      min-width: 0;
+      min-width: 160px;
     }
 
     .module-select-box select {
@@ -142,11 +143,36 @@
       text-overflow: ellipsis;
     }
 
+    .quiz-options {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .toggle-random-btn {
+      background: #060d1e;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 0.45rem 0.65rem;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .toggle-random-btn.active {
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
     .counter-badge {
       font-size: 0.8rem;
       color: var(--text-muted);
       white-space: nowrap;
-      margin-left: 0.5rem;
     }
 
     .progress-container {
@@ -165,26 +191,26 @@
       transition: width 0.3s;
     }
 
-   /* Karta Fiszki – stabilna wysokość */
-  .flashcard-wrapper {
-    perspective: 1000px;
-    width: 100%;
-    height: 380px; /* Stała, bezpieczna wysokość zamiast vh */
-    min-height: 380px;
-    margin-bottom: 1rem;
-    cursor: pointer;
-    display: block;
-  }
-  
-  .flashcard {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 14px;
-    box-shadow: 0 8px 20px -4px rgba(0,0,0,0.45);
-  }
+    /* Karta Fiszki – stabilna wysokość */
+    .flashcard-wrapper {
+      perspective: 1000px;
+      width: 100%;
+      height: 400px;
+      min-height: 400px;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      display: block;
+    }
+
+    .flashcard {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 14px;
+      box-shadow: 0 8px 20px -4px rgba(0,0,0,0.45);
+    }
 
     .flashcard.flipped {
       transform: rotateY(180deg);
@@ -192,11 +218,12 @@
 
     .card-face {
       position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
       border-radius: 14px;
-      padding: 1.25rem 1.15rem;
+      padding: 1.5rem 1.25rem;
       display: flex;
       flex-direction: column;
       border: 1px solid var(--border);
@@ -218,26 +245,20 @@
     }
 
     .card-badge {
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--accent);
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.8rem;
       font-weight: 700;
     }
 
     .card-title {
-      font-size: 1.18rem;
+      font-size: 1.25rem;
       font-weight: 700;
-      line-height: 1.35;
-      color: #f1f5f9;
-    }
-
-    .card-prompt {
-      margin-top: 0.75rem;
-      font-size: 0.88rem;
-      color: var(--text-muted);
       line-height: 1.45;
+      color: #f1f5f9;
+      padding: 0 0.5rem;
     }
 
     .card-explanation {
@@ -346,7 +367,7 @@
     .accordion-title-box {
       display: flex;
       flex-direction: column;
-      gap: 0.2rem;
+      gap: 0.25rem;
       min-width: 0;
     }
 
@@ -357,11 +378,32 @@
       line-height: 1.35;
     }
 
+    .accordion-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .module-pill {
+      display: inline-block;
+      padding: 0.15rem 0.45rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .mod-inf1 { background: rgba(56, 189, 248, 0.18); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+    .mod-inf2 { background: rgba(168, 85, 247, 0.18); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
+    .mod-fiz1 { background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .mod-fiz2 { background: rgba(34, 197, 94, 0.18); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
+
     .accordion-meta {
       font-size: 0.68rem;
-      color: var(--accent);
-      font-weight: 600;
-      letter-spacing: 0.03em;
+      color: var(--text-muted);
+      font-weight: 500;
     }
 
     .accordion-chevron {
@@ -469,31 +511,6 @@
       font-size: 1.25rem;
     }
     .finished-box p { font-size: 0.88rem; }
-
-    /* Etykieta modułu w nagłówku akordeonu */
-    .module-pill {
-      display: inline-block;
-      padding: 0.15rem 0.5rem;
-      font-size: 0.68rem;
-      font-weight: 700;
-      border-radius: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-right: 0.4rem;
-    }
-    
-    .mod-inf1 { background: rgba(56, 189, 248, 0.18); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
-    .mod-inf2 { background: rgba(168, 85, 247, 0.18); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
-    .mod-fiz1 { background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
-    .mod-fiz2 { background: rgba(34, 197, 94, 0.18); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
-    
-    .accordion-meta-row {
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-      flex-wrap: wrap;
-    }
-    
   </style>
 </head>
 <body>
@@ -514,12 +531,20 @@
       <div class="controls-bar">
         <div class="module-select-box">
           <select id="module-select" onchange="changeModule()">
-            <option value="all">Wszystkie moduły</option>
-            <option value="inf1">Informatyka cz. 1 (Sprzęt, Sieci, IoT)</option>
-            <option value="inf2">Informatyka cz. 2 (VR/AR, HMI, Biznes)</option>
-            <option value="fiz1">Fizyka i Sensoryka cz. 1 (A/C, Sensory, FPGA)</option>
-            <option value="fiz2">Fizyka i Sensoryka cz. 2 (Wizja, Sygnały, GSM)</option>
+            <option value="all">Wszystkie moduły (44)</option>
+            <option value="inf1">Informatyka cz. 1 (Pyt. 1–10)</option>
+            <option value="inf2">Informatyka cz. 2 (Pyt. 11–20)</option>
+            <option value="fiz1">Fizyka cz. 1 (Pyt. 1–10)</option>
+            <option value="fiz2">Fizyka cz. 2 (Pyt. 11–20)</option>
           </select>
+        </div>
+        <div class="quiz-options">
+          <button id="random-toggle-btn" class="toggle-random-btn" onclick="toggleRandomMode()">
+            🔀 Losowo
+          </button>
+          <button class="btn-sm" title="Przetasuj pozostałe pytania" onclick="shuffleCurrentQueue()">
+            🎲
+          </button>
         </div>
         <div class="counter-badge">
           Pozostało: <strong id="count-left" style="color: var(--accent);">0</strong>
@@ -533,12 +558,13 @@
       <div id="quiz-area">
         <div class="flashcard-wrapper" onclick="flipCard()">
           <div class="flashcard" id="flashcard">
+            <!-- Awers: Tylko kategoria i sam tytuł/zagadnienie -->
             <div class="card-face card-front">
               <span class="card-badge" id="card-badge">Zagadnienie</span>
-              <h2 class="card-title" id="card-title">Ładowanie pytań z pliku pytania.json...</h2>
-              <p class="card-prompt" id="card-prompt">...</p>
+              <h2 class="card-title" id="card-title">Ładowanie pytań...</h2>
               <div class="card-hint">👆 Dotknij karty, aby sprawdzić omówienie</div>
             </div>
+            <!-- Rewers: Zwięzłe wyjaśnienie -->
             <div class="card-face card-back">
               <span class="card-badge">Kluczowe pojęcia / Wypowiedź</span>
               <div class="card-explanation" id="card-explanation">...</div>
@@ -614,9 +640,20 @@
     let queue = [];
     let initialCount = 0;
     let editingId = null;
+    let isRandomMode = false;
+
+    const MODULE_NAMES = {
+      inf1: { label: "Informatyka cz. 1", css: "mod-inf1" },
+      inf2: { label: "Informatyka cz. 2", css: "mod-inf2" },
+      fiz1: { label: "Fizyka cz. 1", css: "mod-fiz1" },
+      fiz2: { label: "Fizyka cz. 2", css: "mod-fiz2" }
+    };
 
     async function init() {
-      // 1. Sprawdź, czy są lokalne modyfikacje w przeglądarce
+      // Przywróć stan trybu losowego z pamięci
+      isRandomMode = localStorage.getItem("air_exam_random_mode") === "true";
+      updateRandomBtnUI();
+
       const localSaved = localStorage.getItem("air_exam_questions_json_v1");
       if (localSaved) {
         try {
@@ -628,7 +665,6 @@
         }
       }
 
-      // 2. Jeśli nie ma w pamięci lokalnej, pobierz bezpośrednio z pytania.json
       await fetchQuestionsFromJSON();
     }
 
@@ -662,18 +698,39 @@
       }
     }
 
-    function switchTab(tab) {
-      triggerHaptic('light');
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
+    // Algorytm losowego tasowania (Fisher-Yates)
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
 
-      if (tab === 'quiz') {
-        document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
-        document.getElementById('view-quiz').classList.add('active');
+    function toggleRandomMode() {
+      isRandomMode = !isRandomMode;
+      localStorage.setItem("air_exam_random_mode", isRandomMode);
+      updateRandomBtnUI();
+      triggerHaptic('light');
+      setupModuleQueue();
+    }
+
+    function updateRandomBtnUI() {
+      const btn = document.getElementById("random-toggle-btn");
+      if (isRandomMode) {
+        btn.classList.add("active");
+        btn.innerHTML = "🔀 Losowo: WŁ";
       } else {
-        document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
-        document.getElementById('view-list').classList.add('active');
-        renderQuestionsList();
+        btn.classList.remove("active");
+        btn.innerHTML = "🔀 Losowo: WYŁ";
+      }
+    }
+
+    function shuffleCurrentQueue() {
+      triggerHaptic('light');
+      if (queue.length > 1) {
+        queue = shuffleArray([...queue]);
+        updateQuizView();
       }
     }
 
@@ -684,6 +741,11 @@
       } else {
         queue = questions.filter(q => q.module === currentModule).map(q => q.id);
       }
+
+      if (isRandomMode) {
+        queue = shuffleArray([...queue]);
+      }
+
       initialCount = queue.length;
       updateQuizView();
     }
@@ -712,7 +774,6 @@
       if (qData) {
         document.getElementById("card-badge").innerText = qData.category;
         document.getElementById("card-title").innerText = qData.title;
-        document.getElementById("card-prompt").innerText = qData.prompt || "";
         document.getElementById("card-explanation").innerText = qData.body;
         document.getElementById("count-left").innerText = queue.length;
 
@@ -739,59 +800,66 @@
       updateQuizView();
     }
 
-// Pomocniczy słownik nazw i klas modułów
-const MODULE_NAMES = {
-  inf1: { label: "Informatyka cz. 1", css: "mod-inf1" },
-  inf2: { label: "Informatyka cz. 2", css: "mod-inf2" },
-  fiz1: { label: "Fizyka cz. 1", css: "mod-fiz1" },
-  fiz2: { label: "Fizyka cz. 2", css: "mod-fiz2" }
-};
+    function switchTab(tab) {
+      triggerHaptic('light');
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
 
-function renderQuestionsList() {
-  const listEl = document.getElementById("questions-list");
-  const search = document.getElementById("search-input").value.toLowerCase();
-  const modFilter = document.getElementById("list-module-filter").value;
-  listEl.innerHTML = "";
+      if (tab === 'quiz') {
+        document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+        document.getElementById('view-quiz').classList.add('active');
+      } else {
+        document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+        document.getElementById('view-list').classList.add('active');
+        renderQuestionsList();
+      }
+    }
 
-  const filtered = questions.filter(item => {
-    const matchesModule = (modFilter === "all" || item.module === modFilter);
-    const matchesSearch = item.title.toLowerCase().includes(search) || 
-                          item.category.toLowerCase().includes(search) || 
-                          item.body.toLowerCase().includes(search);
-    return matchesModule && matchesSearch;
-  });
+    function renderQuestionsList() {
+      const listEl = document.getElementById("questions-list");
+      const search = document.getElementById("search-input").value.toLowerCase();
+      const modFilter = document.getElementById("list-module-filter").value;
+      listEl.innerHTML = "";
 
-  if (filtered.length === 0) {
-    listEl.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 2rem;">Brak zagadnień spełniających kryteria.</p>`;
-    return;
-  }
+      const filtered = questions.filter(item => {
+        const matchesModule = (modFilter === "all" || item.module === modFilter);
+        const matchesSearch = item.title.toLowerCase().includes(search) || 
+                              item.category.toLowerCase().includes(search) || 
+                              item.body.toLowerCase().includes(search);
+        return matchesModule && matchesSearch;
+      });
 
-  filtered.forEach(item => {
-    const modInfo = MODULE_NAMES[item.module] || { label: item.module, css: "mod-inf1" };
-    const div = document.createElement("div");
-    div.className = "question-accordion-item";
-    div.id = `acc-${item.id}`;
-    div.innerHTML = `
-      <div class="accordion-header" onclick="toggleAccordion('${item.id}')">
-        <div class="accordion-title-box">
-          <div class="accordion-meta-row">
-            <span class="module-pill ${modInfo.css}">${modInfo.label}</span>
-            <span class="accordion-meta">${item.category}</span>
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 2rem;">Brak zagadnień spełniających kryteria.</p>`;
+        return;
+      }
+
+      filtered.forEach(item => {
+        const modInfo = MODULE_NAMES[item.module] || { label: item.module, css: "mod-inf1" };
+        const div = document.createElement("div");
+        div.className = "question-accordion-item";
+        div.id = `acc-${item.id}`;
+        div.innerHTML = `
+          <div class="accordion-header" onclick="toggleAccordion('${item.id}')">
+            <div class="accordion-title-box">
+              <div class="accordion-meta-row">
+                <span class="module-pill ${modInfo.css}">${modInfo.label}</span>
+                <span class="accordion-meta">${item.category}</span>
+              </div>
+              <span class="accordion-title">${item.title}</span>
+            </div>
+            <span class="accordion-chevron">▼</span>
           </div>
-          <span class="accordion-title">${item.title}</span>
-        </div>
-        <span class="accordion-chevron">▼</span>
-      </div>
-      <div class="accordion-body">
-        <div class="accordion-text">${item.body}</div>
-        <div class="accordion-footer">
-          <button class="btn-sm" onclick="openEditModal('${item.id}')">✏️ Edytuj notatkę</button>
-        </div>
-      </div>
-    `;
-    listEl.appendChild(div);
-  });
-}
+          <div class="accordion-body">
+            <div class="accordion-text">${item.body}</div>
+            <div class="accordion-footer">
+              <button class="btn-sm" onclick="openEditModal('${item.id}')">✏️ Edytuj notatkę</button>
+            </div>
+          </div>
+        `;
+        listEl.appendChild(div);
+      });
+    }
 
     function toggleAccordion(id) {
       triggerHaptic('light');
@@ -832,7 +900,6 @@ function renderQuestionsList() {
       updateQuizView();
     }
 
-    // EKSPORT I IMPORT JSON
     function exportJSON() {
       triggerHaptic('success');
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(questions, null, 2));
