@@ -4,7 +4,6 @@
     "module": "inf1",
     "category": "Informatyka | Pytanie 1",
     "title": "1. Rodzaje i przeznaczenie mikrokontrolerów (PIC, PLC, FPGA, AVR, XMega, Raspberry, ...)",
-    "prompt": "Jakie są główne rodziny układów sterujących i czym różnią się w zastosowaniach?",
     "body": "• AVR / XMega: 8- i 16-bitowe układy RISC (Microchip/Atmel). Prosta architektura, baza platformy Arduino. Tanie i łatwe w programowaniu, idealne do prostego odczytu czujników i automatyki domowej.\n\n• PIC (Peripheral Interface Controller): Rodzina mikrokontrolerów Microchip. Charakteryzują się wysoką odpornością na zakłócenia elektromagnetyczne (EMC) i niskim poborem prądu w uśpieniu. Powszechne w motoryzacji i AGD.\n\n• PLC (Programowalny Sterownik Logiczny): Przemysłowy komputer sterujący w obudowie na szynę DIN. Odporny na pył, wibracje i napięcia 24 V. Programowany m.in. językiem drabinkowym (LD). Steruje liniami produkcyjnymi i maszynami fabrycznymi.\n\n• FPGA (Bezpośrednio Programowalna Macierz Bramek): Układ rekonfigurowalny sprzętowo za pomocą kodu HDL. Zapewnia równoległe przetwarzanie w czasie rzeczywistym i brak opóźnień programowych (radary, telekomunikacja 5G, kryptografia).\n\n• Raspberry Pi (SBC): Komputer jednopłytkowy z procesorem ARM i systemem Linux. W IoT pełni rolę bramki brzegowej (Gateway) agregującej dane z czujników do chmury."
   },
   {
