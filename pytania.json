@@ -112,13 +112,13 @@
     "body": "• VR (Virtual Reality): Całkowite odcięcie wzrokowe od otoczenia i pełna immersja w cyfrowo wygenerowanym świecie 3D za pomocą nieprzezroczystych gogli (Meta Quest, HTC Vive). Zastosowania: symulatory medyczne, szkolenia wojskowe/BHP, wirtualna prezentacja i digitalizacja zabytków (np. Fortify3D z wykorzystaniem 3D Gaussian Splatting).\n\n• AR (Augmented Reality): Nakładanie obiektów cyfrowych i wskaźników na obraz rzeczywistego otoczenia (smartfony, okulary HoloLens). Zastosowania: instrukcje serwisowe dla mechaników wyświetlane wprost na maszynie, nawigacja piesza.\n\n• Wartość dla dziedzictwa: Bezpieczne udostępnianie trudno dostępnych przestrzeni bez ryzyka degradacji zabytku."
   },
   {
-    "id": "inf_13",
-    "module": "inf2",
-    "category": "Informatyka | Pytanie 13",
-    "title": "13. Wykluczenie cyfrowe w ujęciu tradycyjnym oraz w kontekście nowoczesnych technologii „Internetu Rzeczy”",
-    "prompt": "W jaki sposób technologie IoT pogłębiają tradycyjne bariery społeczne?",
-    "body": "• Ujęcie tradycyjne: Brak fizycznego komputera, brak łącza internetowego lub brak podstawowych kompetencji obsługi przeglądarki (szczególnie u osób starszych).\n\n• W dobie IoT: Przymus technologiczny – tradycyjne usługi są zastępowane aplikacjami mobilnymi i automatyką (np. parkometry tylko przez aplikację, bilety miejskie, systemy opieki zdrowotnej). Brak smartfona oznacza wykluczenie z podstawowych usług miejskich.\n\n• Wykluczenie ekonomiczne: Korzyści z dynamicznych taryf energii i inteligentnego zarządzania domem są dostępne tylko dla osób posiadających kapitał na drogie instalacje smart-grid."
-  },
+    "id": "fiz_13",
+    "module": "fiz2",
+    "category": "Fizyka | Pytanie 13",
+    "title": "13. Metody rozpoznawania wzorca w obrazie nieruchomym",
+    "prompt": "Jak komputer znajduje i rozpoznaje obiekty na pojedynczym zdjęciu?",
+    "body": "1. Dopasowanie wycinka (Template Matching):\n• Przesuwanie małego wzorca po zdjęciu piksel po pikselu i liczenie zgodności.\n• Wada: Działa tylko wtedy, gdy obiekt ma dokładnie taki sam rozmiar i kąt jak wzorzec.\n\n2. Punkty charakterystyczne (SIFT, ORB):\n• Szukanie unikalnych narożników i ostrych krawędzi obiektu.\n• Zaleta: Działa nawet wtedy, gdy obiekt na zdjęciu jest obrócony, powiększony lub zrobiony pod kątem.\n\n3. Kaskady cech (Haar Cascades):\n• Bardzo szybkie sprawdzanie prostych różnic jasności (np. oczy są ciemniejsze od czoła – klasyczne wykrywanie twarzy w aparatach).\n\n4. Głębokie sieci neuronowe (CNN, np. YOLO):\n• Nowoczesny standard – sieć wytrenowana na tysiącach zdjęć sama uczy się cech i potrafi natychmiast znaleźć oraz podpisać obiekty w ułamku sekundy."
+  }
   {
     "id": "inf_14",
     "module": "inf2",
