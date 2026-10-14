@@ -112,12 +112,12 @@
     "body": "• VR (Virtual Reality): Całkowite odcięcie wzrokowe od otoczenia i pełna immersja w cyfrowo wygenerowanym świecie 3D za pomocą nieprzezroczystych gogli (Meta Quest, HTC Vive). Zastosowania: symulatory medyczne, szkolenia wojskowe/BHP, wirtualna prezentacja i digitalizacja zabytków (np. Fortify3D z wykorzystaniem 3D Gaussian Splatting).\n\n• AR (Augmented Reality): Nakładanie obiektów cyfrowych i wskaźników na obraz rzeczywistego otoczenia (smartfony, okulary HoloLens). Zastosowania: instrukcje serwisowe dla mechaników wyświetlane wprost na maszynie, nawigacja piesza.\n\n• Wartość dla dziedzictwa: Bezpieczne udostępnianie trudno dostępnych przestrzeni bez ryzyka degradacji zabytku."
   },
   {
-    "id": "fiz_13",
-    "module": "fiz2",
-    "category": "Fizyka | Pytanie 13",
-    "title": "13. Metody rozpoznawania wzorca w obrazie nieruchomym",
-    "prompt": "Jak komputer znajduje i rozpoznaje obiekty na pojedynczym zdjęciu?",
-    "body": "1. Dopasowanie wycinka (Template Matching):\n• Przesuwanie małego wzorca po zdjęciu piksel po pikselu i liczenie zgodności.\n• Wada: Działa tylko wtedy, gdy obiekt ma dokładnie taki sam rozmiar i kąt jak wzorzec.\n\n2. Punkty charakterystyczne (SIFT, ORB):\n• Szukanie unikalnych narożników i ostrych krawędzi obiektu.\n• Zaleta: Działa nawet wtedy, gdy obiekt na zdjęciu jest obrócony, powiększony lub zrobiony pod kątem.\n\n3. Kaskady cech (Haar Cascades):\n• Bardzo szybkie sprawdzanie prostych różnic jasności (np. oczy są ciemniejsze od czoła – klasyczne wykrywanie twarzy w aparatach).\n\n4. Głębokie sieci neuronowe (CNN, np. YOLO):\n• Nowoczesny standard – sieć wytrenowana na tysiącach zdjęć sama uczy się cech i potrafi natychmiast znaleźć oraz podpisać obiekty w ułamku sekundy."
+    "id": "inf_13",
+    "module": "inf2",
+    "category": "Informatyka | Pytanie 13",
+    "title": "13. Wykluczenie cyfrowe w ujęciu tradycyjnym oraz w kontekście nowoczesnych technologii „Internetu Rzeczy”",
+    "prompt": "Czym różni się tradycyjne wykluczenie cyfrowe od barier powstających w dobie Internetu Rzeczy (IoT)?",
+    "body": "1. Wykluczenie tradycyjne (brak sprzętu lub wiedzy):\n• Bariera sprzętowa/infrastrukturalna: Brak fizycznego komputera w domu lub brak dostępu do łącza internetowego (np. tereny wiejskie bez światłowodu).\n• Bariera kompetencyjna: Brak umiejętności obsługi systemu, poczty e-mail czy przeglądarki (głównie u osób starszych lub wykluczonych edukacyjnie).\n\n2. Wykluczenie w dobie IoT (przymus technologiczny):\n• Likwidacja tradycyjnej obsługi: Zastępowanie fizycznych okienek i urządzeń aplikacjami mobilnymi (np. parkometry, w których nie zapłacisz gotówką bez aplikacji, bilety komunikacji miejskiej, rejestracja do lekarza tylko przez system).\n• Bariera ekonomiczna: Dynamiczne, tańsze taryfy energii czy inteligentne zarządzanie zużyciem mediów są dostępne tylko dla osób, które stać na drogie instalacje Smart Home / Smart Grid.\n• Niezrozumiałość działania: Użytkownicy nie mają świadomości, jak sensory zbierają ich dane i jak algorytmy podejmują decyzje (np. automatyczna wycena ubezpieczenia na podstawie stylu jazdy z telemetrii auta)."
   },
   {
     "id": "inf_14",
