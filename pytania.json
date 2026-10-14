@@ -4,6 +4,7 @@
     "module": "inf1",
     "category": "Informatyka | Pytanie 1",
     "title": "1. Rodzaje i przeznaczenie mikrokontrolerów (PIC, PLC, FPGA, AVR, XMega, Raspberry, ...)",
+    "prompt": "",
     "body": "• AVR / XMega: 8- i 16-bitowe układy RISC (Microchip/Atmel). Prosta architektura, baza platformy Arduino. Tanie i łatwe w programowaniu, idealne do prostego odczytu czujników i automatyki domowej.\n\n• PIC (Peripheral Interface Controller): Rodzina mikrokontrolerów Microchip. Charakteryzują się wysoką odpornością na zakłócenia elektromagnetyczne (EMC) i niskim poborem prądu w uśpieniu. Powszechne w motoryzacji i AGD.\n\n• PLC (Programowalny Sterownik Logiczny): Przemysłowy komputer sterujący w obudowie na szynę DIN. Odporny na pył, wibracje i napięcia 24 V. Programowany m.in. językiem drabinkowym (LD). Steruje liniami produkcyjnymi i maszynami fabrycznymi.\n\n• FPGA (Bezpośrednio Programowalna Macierz Bramek): Układ rekonfigurowalny sprzętowo za pomocą kodu HDL. Zapewnia równoległe przetwarzanie w czasie rzeczywistym i brak opóźnień programowych (radary, telekomunikacja 5G, kryptografia).\n\n• Raspberry Pi (SBC): Komputer jednopłytkowy z procesorem ARM i systemem Linux. W IoT pełni rolę bramki brzegowej (Gateway) agregującej dane z czujników do chmury."
   },
   {
@@ -11,7 +12,7 @@
     "module": "inf1",
     "category": "Informatyka | Pytanie 2 (a)",
     "title": "2 (a). Typy układów cyfrowych: o ustalonej strukturze, o programowalnej strukturze, układy mikroprocesorowe",
-    "prompt": "Czym różnią się te trzy podejścia pod względem architektury, kosztów i elastyczności?",
+    "prompt": "",
     "body": "• Układy o ustalonej strukturze (np. ASIC / bramki logiczne): Architektura połączeń wykonana na stałe w krzemie. Najwyższa wydajność i najniższy koszt jednostkowy przy masowej produkcji, brak możliwości zmian po wyprodukowaniu.\n\n• Układy o programowalnej strukturze (PLD, CPLD, FPGA): Struktura połączeń logicznych definiowana programowo przez użytkownika za pomocą kodu HDL. Pozwalają na wielokrotne przeprogramowanie i aktualizację logiki sprzętowej.\n\n• Układy mikroprocesorowe (CPU, MCU): Stała budowa sprzętowa (ALU, rejestry, dekoder rozkazów), która realizuje zmienny program wgrany do pamięci (sekwencyjne wykonywanie instrukcji)."
   },
   {
@@ -19,7 +20,7 @@
     "module": "inf1",
     "category": "Informatyka | Pytanie 2 (b)",
     "title": "2 (b). Wirtualizacja w informatyce: sposoby realizacji, korzyści i obszary zastosowań",
-    "prompt": "Na czym polega wirtualizacja, jak się ją wdraża i co daje w praktyce?",
+    "prompt": "",
     "body": "• Istota: Uruchamianie wielu niezależnych środowisk logicznych (maszyn wirtualnych/kontenerów) na jednym fizycznym zasobie sprzętowym.\n\n• Sposoby realizacji:\n  - Hiperwizor Typu 1 (Bare-metal: Proxmox, VMware ESXi): Instalowany bezpośrednio na sprzęcie serwera; najwyższa wydajność.\n  - Hiperwizor Typu 2 (Hosted: VirtualBox): Program działający wewnątrz tradycyjnego systemu operacyjnego.\n  - Konteneryzacja (Docker): Aplikacje współdzielą jedno jądro systemu operacyjnego, izolując tylko swoje procesy (lekkość i natychmiastowy start).\n\n• Korzyści i zastosowanie: Lepsze wykorzystanie zasobów sprzętowych (oszczędność prądu i maszyn), łatwe kopie zapasowe (migawki/snapshots), izolacja awarii; fundament chmur obliczeniowych (AWS, Azure) i środowisk testowych."
   },
   {
@@ -27,7 +28,7 @@
     "module": "inf1",
     "category": "Informatyka | Pytanie 3",
     "title": "3. Modelowanie 3D - zasady redagowania i edycji dokumentacji CAD/CAM",
-    "prompt": "Jakie są role systemów CAD i CAM oraz kluczowe zasady tworzenia rysunku wykonawczego?",
+    "prompt": "",
     "body": "• CAD (Computer-Aided Design): Komputerowe wspomaganie projektowania – modelowanie geometrii części 3D oraz tworzenie rysunków technicznych.\n\n• CAM (Computer-Aided Manufacturing): Przekształcenie geometrii CAD w ścieżki narzędzi i kod maszynowy (G-Code) sterujący obrabiarkami CNC i drukarkami 3D.\n\n• Zasady redagowania dokumentacji:\n  - Jednoznaczność wymiarowa: każdy wymiar podaje się tylko raz (brak przewymiarowania).\n  - Określenie tolerancji wymiarowych, geometrycznych i chropowatości powierzchni.\n  - Stosowanie ujednoliconych norm rzutowania (rzutowanie europejskie kąta pierwszego).\n  - Parametryczność: wiązanie wymiarów relacjami ułatwiającymi modyfikacje modelu."
   },
   {
@@ -35,7 +36,7 @@
     "module": "inf1",
     "category": "Informatyka | Pytanie 4",
     "title": "4. Standardy sieci personalnych i bardzo krótkiego zasięgu",
-    "prompt": "Jakie technologie tworzą łączność osobistą (PAN) i bardzo krótkiego zasięgu?",
+    "prompt": "",
     "body": "• NFC (Near Field Communication): Zasięg do kilku centymetrów, pasmo 13,56 MHz. Płatności zbliżeniowe, parowanie Bluetooth jednym dotknięciem, tagi zbliżeniowe RFID.\n\n• Bluetooth / BLE (Bluetooth Low Energy): Zasięg 10–50 m, pasmo 2,4 GHz. Wersja BLE przesyła małe pakiety danych przy znikomym poborze prądu (praca na baterii pastylkowej przez lata).\n\n• Zigbee (IEEE 802.15.4): Pasmo 2,4 GHz, energooszczędna topologia siatki (Mesh). Standard inteligentnego domu.\n\n• Z-Wave: Pasmo sub-GHz (~868 MHz w UE), topologia Mesh. Brak zakłóceń z Wi-Fi 2,4 GHz.\n\n• UWB (Ultra-Wideband): Pasmo >500 MHz, impulsowa transmisja fal. Precyzyjny pomiar odległości metodą Time of Flight z centymetrową dokładnością (np. Apple AirTag)."
   },
   {
@@ -43,7 +44,7 @@
     "module": "inf1",
     "category": "Informatyka | Pytanie 5 (a)",
     "title": "5 (a). Metody i techniki geolokalizacji radiowej: w otwartej przestrzeni",
-    "prompt": "Jak wyznacza się pozycję na zewnątrz za pomocą systemów satelitarnych i komórkowych?",
+    "prompt": "",
     "body": "• GNSS (GPS, Galileo, GLONASS): Satelity nadają sygnał czasu z pokładowych zegarów atomowych. Odbiornik mierzy czas dotarcia sygnału (Time of Arrival) i metodą trilateracji wyznacza pozycję.\n\n• Wymóg 4 satelitów: Minimum 3 satelity są niezbędne do wyznaczenia współrzędnych przestrzennych (X, Y, Z), a 4. satelita służy do zniwelowania błędu niedokładnego zegara kwarcowego w odbiorniku.\n\n• Sieci komórkowe (GSM/LTE): Lokalizacja na podstawie identyfikatora stacji bazowej (Cell-ID) lub triangulacji/trilateracji z wykorzystaniem opóźnień i siły sygnału z kilku wież BTS."
   },
   {
@@ -51,7 +52,7 @@
     "module": "inf1",
     "category": "Informatyka | Pytanie 5 (b)",
     "title": "5 (b). Metody i techniki geolokalizacji radiowej: wewnątrz budynków",
-    "prompt": "Jak realizuje się Indoor Positioning w miejscach pozbawionych sygnału satelitarnego?",
+    "prompt": "",
     "body": "• RSSI (Received Signal Strength Indication): Szacowanie odległości na podstawie tłumienia mocy sygnału Wi-Fi lub Bluetooth. Proste, lecz mało dokładne przez tłumienie i odbicia fal od ścian.\n\n• Fingerprinting: Wcześniejsze sporządzenie bazy pomiarowej („mapy radiowej”) sygnałów w budynku i późniejsze dopasowywanie bieżącego odczytu urządzenia do wzorców.\n\n• UWB (Time of Flight / TDoA): Precyzyjny pomiar różnicy czasu nadejścia nanosekundowych impulsów radiowych – centymetrowa dokładność w halach i magazynach.\n\n• AoA / AoD (Angle of Arrival / Departure): Wyznaczanie kąta nadejścia fali radiowej za pomocą macierzy anten (standard Bluetooth 5.1)."
   },
   {
@@ -59,7 +60,7 @@
     "module": "inf1",
     "category": "Informatyka | Pytanie 6",
     "title": "6. Obszar zastosowań sieci personalnych, w szczególności wykorzystujących technologie BT/BLE",
-    "prompt": "Gdzie w praktyce inżynierskiej wykorzystuje się Bluetooth oraz Bluetooth Low Energy?",
+    "prompt": "",
     "body": "• Elektronika noszona (Wearables): Smartwatche, monitory tętna, opaski sportowe, glukometry – przesył danych telemetrycznych przy minimalnym zużyciu baterii.\n\n• Inteligentny dom (Smart Home): Bezprzewodowe głowice termostatyczne, inteligentne zamki do drzwi, sterowanie oświetleniem w standardzie Bluetooth Mesh.\n\n• Mikrolokalizacja i Beacony: Nadajniki w muzeach i sklepach przesyłające informacje kontekstowe przy zbliżeniu się użytkownika ze smartfonem.\n\n• Śledzenie zasobów (Asset Tracking): Breloki lokalizacyjne do kluczy, narzędzi i bagażu."
   },
   {
